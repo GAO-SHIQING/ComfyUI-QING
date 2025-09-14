@@ -7,7 +7,7 @@ ComfyUI-Shing 是一个为 ComfyUI 打造的扩展节点集合，专注于增强
 
 ### 1. SVG 全流程处理
 - **加载 SVG**：通过 `LoadSVG` 节点直接加载本地 SVG 文件，支持绝对路径和相对路径，自动验证 SVG 格式有效性。
-- **图像加载（含 SVG）**：`CustomLoadImageWithFormat` 节点支持加载 PNG、JPG、GIF 等常见图像格式，同时特别支持 SVG 格式，输出图像、遮罩、SVG 内容及格式信息。
+- **图像加载（支持SVG）**：`CustomLoadImageWithFormat` 节点支持加载 PNG、JPG、GIF 等常见图像格式，同时特别支持 SVG 格式，输出图像、遮罩、SVG 内容及格式信息。
 - **SVG 转图像**：`SVGToImage` 节点实现 SVG 到 PNG/JPG 的高质量转换，支持自定义尺寸、缩放方式（长边、短边、宽度、高度、总像素数）、插值方法、背景色等参数，精准控制转换效果。
 
 
