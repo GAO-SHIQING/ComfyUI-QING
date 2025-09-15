@@ -514,14 +514,17 @@ def ensure_directory_exists(path):
         print(f"Error creating directory {path}: {e}")
         return False
 
+
+
 def get_safe_path(base_path, filename_prefix, is_output=True):
     """
     获取安全的文件保存路径
     如果base_path存在且可写，则使用base_path
     否则使用ComfyUI的默认目录
     """
-    if base_path and os.path.isdir(base_path) and os.access(base_path, os.W_OK):
+    if base_path and base_path.strip() and os.path.isdir(base_path) and os.access(base_path, os.W_OK):
         # 使用自定义路径
+        print(f"使用自定义保存路径: {base_path}")
         full_output_folder = base_path
         filename = filename_prefix
         subfolder = ""
@@ -539,10 +542,11 @@ def get_safe_path(base_path, filename_prefix, is_output=True):
             subfolder,
             _,
         ) = folder_paths.get_save_image_path(filename_prefix, output_dir)
+        print(f"使用默认保存路径: {full_output_folder}")
     
     return full_output_folder, filename, subfolder
 
-class VideoCombine:
+class SyntheticVideo:
     @classmethod
     def INPUT_TYPES(s):
         # 修复格式列表定义 - 使用字符串列表而不是元组列表
@@ -573,7 +577,6 @@ class VideoCombine:
                 "pingpong": ("BOOLEAN", {"default": False}),
                 "save_output": ("BOOLEAN", {"default": True}),
                 "save_metadata": ("BOOLEAN", {"default": True, "display_name": "保存元数据"}),
-                "create_preview": ("BOOLEAN", {"default": True, "display_name": "创建预览"}),
             },
             "optional": {
                 "custom_save_path": ("STRING", {"default": "", "display_name": "自定义保存路径"}),
@@ -622,7 +625,6 @@ class VideoCombine:
         pingpong=False,
         save_output=True,
         save_metadata=True,
-        create_preview=True,
         prompt=None,
         extra_pnginfo=None,
         custom_save_path="",
@@ -632,7 +634,14 @@ class VideoCombine:
         **kwargs
     ):
         try:
+            print(f"SyntheticVideo: 开始处理视频合成...")
+            print(f"输入参数: frame_rate={frame_rate}, loop_count={loop_count}, skip_frames={skip_frames}")
+            print(f"图像数量: {len(images) if images is not None else 'None'}")
+            print(f"格式: {format}, 文件名前缀: {filename_prefix}")
+            print(f"自定义保存路径: '{custom_save_path}'")
+            
             if images is None:
+                print("错误: 没有输入图像")
                 return ("",)
                 
             # 跳过指定数量的帧
@@ -643,7 +652,12 @@ class VideoCombine:
                 raise ValueError(f"跳过的帧数 ({skip_frames}) 不能大于或等于总帧数 ({len(images)})")
                 
             # 查找ffmpeg路径
+            print(f"正在查找FFmpeg...")
             ffmpeg_path = find_ffmpeg_path()
+            print(f"FFmpeg路径: {ffmpeg_path}")
+            
+            if ffmpeg_path is None or not os.path.exists(ffmpeg_path):
+                print("警告: FFmpeg未找到，视频格式可能无法生成")
             
             # 只有在需要gif格式时才查找gifski
             gifski_path = None
@@ -666,9 +680,12 @@ class VideoCombine:
             images_iter = image_generator()
             
             # 获取输出信息 - 使用自定义路径或默认路径
+            print(f"正在获取保存路径...")
             full_output_folder, filename, subfolder = get_safe_path(
                 custom_save_path, filename_prefix, save_output
             )
+            print(f"最终保存路径: {full_output_folder}")
+            print(f"文件名: {filename}")
             
             # 确保输出目录存在
             if not ensure_directory_exists(full_output_folder):
@@ -703,12 +720,16 @@ class VideoCombine:
             # comfy counter workaround
             max_counter = 0
             matcher = re.compile(f"{re.escape(filename)}_(\\d+)\\D*\\..+", re.IGNORECASE)
-            for existing_file in os.listdir(full_output_folder):
-                match = matcher.fullmatch(existing_file)
-                if match:
-                    file_counter = int(match.group(1))
-                    if file_counter > max_counter:
-                        max_counter = file_counter
+            try:
+                if os.path.exists(full_output_folder) and os.path.isdir(full_output_folder):
+                    for existing_file in os.listdir(full_output_folder):
+                        match = matcher.fullmatch(existing_file)
+                        if match:
+                            file_counter = int(match.group(1))
+                            if file_counter > max_counter:
+                                max_counter = file_counter
+            except Exception as e:
+                print(f"Warning: Could not scan directory for existing files: {e}")
             counter = max_counter + 1
 
             # 保存第一帧为PNG以保留元数据（如果启用）
@@ -723,37 +744,7 @@ class VideoCombine:
                 output_files.append(file_path)
 
             format_type, format_ext = format.split("/")
-            preview_path = ""
             final_file_path = ""
-            
-            # 创建预览GIF
-            preview_gif_path = ""
-            if create_preview:
-                # 创建预览GIF（最多30帧以避免文件过大）
-                preview_frames = min(30, len(images))
-                preview_images = images[:preview_frames]
-                
-                preview_file = f"preview_{filename}_{counter:05}.gif"
-                preview_gif_path = os.path.join(full_output_folder, preview_file)
-                
-                # 保存为高质量GIF
-                frames = []
-                for img in preview_images:
-                    pil_img = Image.fromarray(tensor_to_bytes(img))
-                    frames.append(pil_img)
-                
-                if frames:
-                    frames[0].save(
-                        preview_gif_path,
-                        format="GIF",
-                        save_all=True,
-                        append_images=frames[1:],
-                        duration=round(1000 / frame_rate),
-                        loop=0,  # 无限循环
-                        optimize=False,
-                        quality=100  # 最高质量
-                    )
-                    print(f"已创建预览GIF: {preview_gif_path}")
             
             if format_type == "image":
                 image_kwargs = {}
@@ -789,7 +780,9 @@ class VideoCombine:
                 final_file_path = file_path
                 
             else:
+                print(f"开始处理视频格式: {format_ext}")
                 if ffmpeg_path is None or not os.path.exists(ffmpeg_path):
+                    print(f"错误: FFmpeg未找到，路径: {ffmpeg_path}")
                     raise ProcessLookupError(f"ffmpeg is required for video outputs and could not be found.")
 
                 # 获取选择的编码器
@@ -978,12 +971,12 @@ class VideoCombine:
                         os.remove(file_path)
                     raise e
 
-            # 在节点内显示预览
-            if create_preview and preview_gif_path and os.path.exists(preview_gif_path):
-                # 在ComfyUI中显示预览
-                print(f"预览GIF已创建: {preview_gif_path}")
-                # 这里可以添加代码将预览GIF显示在节点界面上
-                # 由于ComfyUI的限制，我们只能通过打印消息来提示用户
+            # 显示最终视频信息
+            if final_file_path and os.path.exists(final_file_path):
+                video_size = os.path.getsize(final_file_path) / (1024 * 1024)  # MB
+                print(f"🎥 视频已生成: {final_file_path}")
+                print(f"📊 文件大小: {video_size:.1f} MB")
+                print(f"🎬 视频信息: {len(images)}帧, {frame_rate}fps, 时长{len(images)/frame_rate:.1f}秒")
 
             return (final_file_path,)
             
@@ -996,9 +989,9 @@ class VideoCombine:
 
 # For ComfyUI node registration
 NODE_CLASS_MAPPINGS = {
-    "VHS_VideoCombine": VideoCombine,
+    "VHS_SyntheticVideo": SyntheticVideo,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "VHS_VideoCombine": "合成视频",
+    "VHS_SyntheticVideo": "Synthetic video",
 }
