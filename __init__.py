@@ -5,6 +5,7 @@ from .nodes.svg_to_image import SVGToImage
 from .nodes.custom_load_image import CustomLoadImageWithFormat
 from .nodes.mask_scale import MaskScale
 from .nodes.text_compare import TextCompare
+from .nodes.video_combine import SyntheticVideo
 
 NODE_CLASS_MAPPINGS = {
     "Load SVG": LoadSVG,
@@ -13,6 +14,7 @@ NODE_CLASS_MAPPINGS = {
     "CustomLoadImageWithFormat": CustomLoadImageWithFormat,
     "MaskScale": MaskScale,
     "TextCompare": TextCompare,
+    "SyntheticVideo": SyntheticVideo,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -22,6 +24,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "CustomLoadImageWithFormat": "加载图像(支持SVG)",
     "MaskScale": "遮罩缩放",
     "TextCompare":"文本比较",
+    "SyntheticVideo": "合成视频",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
