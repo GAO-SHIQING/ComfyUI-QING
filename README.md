@@ -1,88 +1,3 @@
-# 🎨 ComfyUI-QING: Unlock Full-Scenario Media Processing Capabilities for ComfyUI  
-[切换至中文介绍](#chinese-intro)  
-
-![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
-
-A powerful all-in-one media processing extension tailored for ComfyUI, simplifying complex workflows involving images, SVG, text, and video. Whether for creative design, animation production, or batch processing, it provides precise toolchain support to unleash your creative potential.  
-
-
-## ✨ Core Highlights  
-- **Full SVG Workflow Solution**  
-  Seamless management of SVG materials from local file loading to high-quality format conversion, perfectly integrating with image generation workflows.  
-
-- **Precision Mask Engineering**  
-  Intelligently split complex masks containing text/graphics, supporting multi-strategy scaling (by long side/short side/pixel count, etc.) while preserving details.  
-
-- **Text Interaction Engine**  
-  Multi-group text comparison and conditional judgment enable workflows to branch intelligently based on content, easily implementing scenarios like template switching and content review.  
-
-- **Professional Video Synthesis**  
-  Supports formats including mp4/webm/avi/gif/mkv/flv, with built-in encoders (H.264/H.265/AV1/ProRes, etc.) and customizable compression rates and quality parameters.  
-
-
-## 🎯 Use Cases  
-- **Creative Design Workflows**: Integrate SVG materials into image generation for seamless vector-raster integration.  
-- **Fine Mask Processing**: Split complex text-containing masks for image editing and region replacement.  
-- **Smart Text Branching**: Automatically switch workflows based on text matching results (e.g., content compliance review, template selection).  
-- **Video Creation Pipelines**: Sequence frame animation synthesis, multi-format export, and encoder optimization, covering needs from draft to publication.  
-
-
-## 🛠️ Feature Modules  
-### 1. SVG Full-Process Toolchain  
-| Node Name               | Core Function                                                                 |  
-|-------------------------|-------------------------------------------------------------------------------|  
-| `Load SVG`              | Reads local SVG files (supports absolute/relative paths) and outputs raw SVG content. |  
-| `CustomLoadImageWithFormat` | Unified handling of PNG/JPG/SVG formats, outputting images, masks, and metadata. |  
-| `SVG To Image`          | Lossless SVG-to-PNG/JPG conversion with customizable size, scaling strategies, and background color. |  
-
-
-### 2. Advanced Mask Processing Suite  
-| Node Name               | Core Function                                                                 |  
-|-------------------------|-------------------------------------------------------------------------------|  
-| `MaskSplitterPro`       | Intelligently splits complex masks, preserving text/graphic integrity with auto-grouping and aggressive merging modes. |  
-| `MaskScale`             | Scales masks by width/height/longest side/shortest side/total pixels, with interpolation algorithms (nearest/bilinear/lanczos) for clear details. |  
-
-
-### 3. Text & Video Processing Engine  
-| Node Name               | Core Function                                                                 |  
-|-------------------------|-------------------------------------------------------------------------------|  
-| `TextCompare`           | Supports 3 groups of text comparison with case sensitivity configuration, outputting precise matching results for conditional branching. |  
-| `SyntheticVideo`        | Professional sequence frame to video tool supporting formats (mp4/webm/avi/gif/mkv/flv) and encoders (H.264/H.265/AV1/ProRes/VP9, etc.), with customizable compression, frame rate, and quality. |  
-
-
-## 🚀 Quick Start  
-### Installation Steps  
-1. Clone the repository to ComfyUI's `custom_nodes` directory:  
-   ```bash  
-   cd ComfyUI/custom_nodes  
-   git clone https://github.com/GAOSHI-QING/ComfyUI-QING.git  
-   ```  
-
-2. Install dependencies:  
-   ```bash  
-   cd ComfyUI-QING  
-   pip install -r requirements.txt  
-   ```  
-
-3. Restart ComfyUI. Nodes will load automatically, found under "Custom Nodes" or "Image" categories.  
-
-
-## 📦 Dependencies  
-- Image Processing: `numpy`, `opencv-python`, `scipy`, `scikit-image`  
-- Format Conversion: `Pillow`, `cairosvg` (core for SVG-to-image conversion)  
-- Tensor Operations: `torch` (compatible with ComfyUI's core computing)  
-
-
-## 🌟 Contribute  
-Welcome to submit Issues for feedback or PRs to contribute new features! Whether node optimization, format support expansion, or documentation improvement, your participation makes this tool more powerful.  
-
-Let ComfyUI-QING be your media processing tool, simplifying workflows and unlocking creativity! 🚀  
-
-
----
-
-
-<a id="chinese-intro"></a>
 # 🎨 ComfyUI-QING：解锁ComfyUI媒体处理全场景能力  
 [切换至英文介绍](#english-intro)  
 
@@ -163,4 +78,89 @@ Let ComfyUI-QING be your media processing tool, simplifying workflows and unlock
 ## 🌟 参与共建  
 欢迎提交Issues反馈问题，或通过PR贡献新功能！无论是节点优化、格式支持扩展还是文档完善，你的参与都能让这个工具更强大。  
 
-让ComfyUI-QING成为你的媒体处理利器，简化流程，释放创意！ 🚀
+让ComfyUI-QING成为你的媒体处理利器，简化流程，释放创意！ 🚀  
+
+
+---
+
+
+<a id="english-intro"></a>
+# 🎨 ComfyUI-QING: Unlock Full-Scenario Media Processing Capabilities for ComfyUI  
+[切换至中文介绍](#chinese-intro)  
+
+![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
+
+A powerful all-in-one media processing extension tailored for ComfyUI, simplifying complex workflows involving images, SVG, text, and video. Whether for creative design, animation production, or batch processing, it provides precise toolchain support to unleash your creative potential.  
+
+
+## ✨ Core Highlights  
+- **Full SVG Workflow Solution**  
+  Seamless management of SVG materials from local file loading to high-quality format conversion, perfectly integrating with image generation workflows.  
+
+- **Precision Mask Engineering**  
+  Intelligently split complex masks containing text/graphics, supporting multi-strategy scaling (by long side/short side/pixel count, etc.) while preserving details.  
+
+- **Text Interaction Engine**  
+  Multi-group text comparison and conditional judgment enable workflows to branch intelligently based on content, easily implementing scenarios like template switching and content review.  
+
+- **Professional Video Synthesis**  
+  Supports formats including mp4/webm/avi/gif/mkv/flv, with built-in encoders (H.264/H.265/AV1/ProRes, etc.) and customizable compression rates and quality parameters.  
+
+
+## 🎯 Use Cases  
+- **Creative Design Workflows**: Integrate SVG materials into image generation for seamless vector-raster integration.  
+- **Fine Mask Processing**: Split complex text-containing masks for image editing and region replacement.  
+- **Smart Text Branching**: Automatically switch workflows based on text matching results (e.g., content compliance review, template selection).  
+- **Video Creation Pipelines**: Sequence frame animation synthesis, multi-format export, and encoder optimization, covering needs from draft to publication.  
+
+
+## 🛠️ Feature Modules  
+### 1. SVG Full-Process Toolchain  
+| Node Name               | Core Function                                                                 |  
+|-------------------------|-------------------------------------------------------------------------------|  
+| `Load SVG`              | Reads local SVG files (supports absolute/relative paths) and outputs raw SVG content. |  
+| `CustomLoadImageWithFormat` | Unified handling of PNG/JPG/SVG formats, outputting images, masks, and metadata. |  
+| `SVG To Image`          | Lossless SVG-to-PNG/JPG conversion with customizable size, scaling strategies, and background color. |  
+
+
+### 2. Advanced Mask Processing Suite  
+| Node Name               | Core Function                                                                 |  
+|-------------------------|-------------------------------------------------------------------------------|  
+| `MaskSplitterPro`       | Intelligently splits complex masks, preserving text/graphic integrity with auto-grouping and aggressive merging modes. |  
+| `MaskScale`             | Scales masks by width/height/longest side/shortest side/total pixels, with interpolation algorithms (nearest/bilinear/lanczos) for clear details. |  
+
+
+### 3. Text & Video Processing Engine  
+| Node Name               | Core Function                                                                 |  
+|-------------------------|-------------------------------------------------------------------------------|  
+| `TextCompare`           | Supports 3 groups of text comparison with case sensitivity configuration, outputting precise matching results for conditional branching. |  
+| `SyntheticVideo`        | Professional sequence frame to video tool supporting formats (mp4/webm/avi/gif/mkv/flv) and encoders (H.264/H.265/AV1/ProRes/VP9, etc.), with customizable compression, frame rate, and quality. |  
+
+
+## 🚀 Quick Start  
+### Installation Steps  
+1. Clone the repository to ComfyUI's `custom_nodes` directory:  
+   ```bash  
+   cd ComfyUI/custom_nodes  
+   git clone https://github.com/GAOSHI-QING/ComfyUI-QING.git  
+   ```  
+
+2. Install dependencies:  
+   ```bash  
+   cd ComfyUI-QING  
+   pip install -r requirements.txt  
+   ```  
+
+3. Restart ComfyUI. Nodes will load automatically, found under "Custom Nodes" or "Image" categories.  
+
+
+## 📦 Dependencies  
+- Image Processing: `numpy`, `opencv-python`, `scipy`, `scikit-image`  
+- Format Conversion: `Pillow`, `cairosvg` (core for SVG-to-image conversion)  
+- Tensor Operations: `torch` (compatible with ComfyUI's core computing)  
+
+
+## 🌟 Contribute  
+Welcome to submit Issues for feedback or PRs to contribute new features! Whether node optimization, format support expansion, or documentation improvement, your participation makes this tool more powerful.  
+
+Let ComfyUI-QING be your media processing tool, simplifying workflows and unlocking creativity! 🚀
