@@ -23,8 +23,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SVG To Image": "SVG到图像",
     "CustomLoadImageWithFormat": "加载图像(支持SVG)",
     "MaskScale": "遮罩缩放",
-    "TextCompare":"文本比较",
+    "TextCompare":"文本对比",
     "SyntheticVideo": "合成视频",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
+
