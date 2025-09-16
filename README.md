@@ -1,5 +1,5 @@
 # 🎨 ComfyUI-QING: Unlock Full-Scenario Media Processing Capabilities for ComfyUI  
-[查看中文介绍](#-comfyui-qING-解锁comfyui媒体处理全场景能力)  
+[切换至中文介绍](#chinese-intro)  
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
@@ -11,7 +11,7 @@ A powerful all-in-one media processing extension tailored for ComfyUI, simplifyi
   Seamless management of SVG materials from local file loading to high-quality format conversion, perfectly integrating with image generation workflows.  
 
 - **Precision Mask Engineering**  
-  Intelligently split complex masks containing text/graphics, supporting multi-strategy scaling (by long side/short side/pixel count, etc.) while preserving details无损保留。  
+  Intelligently split complex masks containing text/graphics, supporting multi-strategy scaling (by long side/short side/pixel count, etc.) while preserving details.  
 
 - **Text Interaction Engine**  
   Multi-group text comparison and conditional judgment enable workflows to branch intelligently based on content, easily implementing scenarios like template switching and content review.  
@@ -76,14 +76,15 @@ A powerful all-in-one media processing extension tailored for ComfyUI, simplifyi
 ## 🌟 Contribute  
 Welcome to submit Issues for feedback or PRs to contribute new features! Whether node optimization, format support expansion, or documentation improvement, your participation makes this tool more powerful.  
 
-Let ComfyUI-QING be your media processing利器, simplifying workflows and unlocking creativity! 🚀  
+Let ComfyUI-QING be your media processing tool, simplifying workflows and unlocking creativity! 🚀  
 
 
 ---
 
 
+<a id="chinese-intro"></a>
 # 🎨 ComfyUI-QING：解锁ComfyUI媒体处理全场景能力  
-[View English Introduction](#-comfyui-qING-unlock-full-scenario-media-processing-capabilities-for-comfyui)  
+[切换至英文介绍](#english-intro)  
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
