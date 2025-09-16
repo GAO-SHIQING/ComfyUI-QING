@@ -86,7 +86,6 @@
 
 <a id="english-intro"></a>
 # 🎨 ComfyUI-QING: Unlock Full-Scenario Media Processing Capabilities for ComfyUI  
-[切换至中文介绍](#chinese-intro)  
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
