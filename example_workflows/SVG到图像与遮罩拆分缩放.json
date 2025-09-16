@@ -1,0 +1,495 @@
+{
+  "id": "3675c778-af87-4bc4-af70-4fdfb5da1653",
+  "revision": 0,
+  "last_node_id": 17,
+  "last_link_id": 16,
+  "nodes": [
+    {
+      "id": 11,
+      "type": "Load SVG",
+      "pos": [
+        206.00460815429688,
+        91.27308654785156
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SVG内容",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "GAOSHI-QING/ComfyUI-QING",
+        "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
+        "Node name for S&R": "Load SVG",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "svg_path": true
+          },
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 12,
+      "type": "CustomLoadImageWithFormat",
+      "pos": [
+        206.00460815429688,
+        213.06431579589844
+      ],
+      "size": [
+        270,
+        354
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "图像",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "遮罩",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "SVG",
+          "type": "STRING",
+          "links": [
+            10
+          ]
+        },
+        {
+          "name": "格式信息",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "GAOSHI-QING/ComfyUI-QING",
+        "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
+        "Node name for S&R": "CustomLoadImageWithFormat",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "image": true,
+            "upload": true
+          },
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": [
+        "1.svg",
+        "image"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "PreviewImage",
+      "pos": [
+        1229.1136474609375,
+        167.27732849121094
+      ],
+      "size": [
+        256.9990539550781,
+        338.654541015625
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.59",
+        "Node name for S&R": "PreviewImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 10,
+      "type": "SVG To Image",
+      "pos": [
+        723.6512451171875,
+        168.10086059570312
+      ],
+      "size": [
+        400,
+        388
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "svg_input",
+          "type": "STRING",
+          "widget": {
+            "name": "svg_input"
+          },
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            11,
+            13
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "GAOSHI-QING/ComfyUI-QING",
+        "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
+        "Node name for S&R": "SVG To Image",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "svg_input": true,
+            "adjust_size": true,
+            "keep_aspect_ratio": true,
+            "scale_definition": true,
+            "scale_method": true,
+            "dpi": true,
+            "output_format": true,
+            "quality": true,
+            "background_color": true,
+            "multiple_of": true,
+            "target_pixels": true
+          },
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": [
+        "<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' fill='red'/></svg>",
+        "1024",
+        "true",
+        "longest_side",
+        "lanczos",
+        100,
+        "png",
+        95,
+        "",
+        0,
+        1048576
+      ]
+    },
+    {
+      "id": 15,
+      "type": "MaskPreview+",
+      "pos": [
+        1660.5709228515625,
+        601.4697265625
+      ],
+      "size": [
+        140,
+        246
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "遮罩",
+          "name": "mask",
+          "type": "MASK",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfyui_essentials",
+        "ver": "9d9f4bedfc9f0321c19faf71855e228c93bd0dc9",
+        "Node name for S&R": "MaskPreview+",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 14,
+      "type": "MaskSplitterPro",
+      "pos": [
+        1229.1136474609375,
+        601.4697265625
+      ],
+      "size": [
+        297.412109375,
+        222
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 12
+        },
+        {
+          "name": "reference_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "masks",
+          "shape": 6,
+          "type": "MASK",
+          "links": [
+            14,
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "GAOSHI-QING/ComfyUI-QING",
+        "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
+        "Node name for S&R": "MaskSplitterPro",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "min_component_size": true,
+            "small_region_handling": true,
+            "merge_distance_ratio": true,
+            "text_preservation": true,
+            "structure_preservation": true,
+            "output_all_components": true,
+            "preserve_original_values": true
+          },
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": [
+        100,
+        "merge",
+        2,
+        "auto",
+        "auto",
+        true,
+        true
+      ]
+    },
+    {
+      "id": 17,
+      "type": "MaskPreview+",
+      "pos": [
+        2297.86279296875,
+        601.4697265625
+      ],
+      "size": [
+        140,
+        246
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "遮罩",
+          "name": "mask",
+          "type": "MASK",
+          "link": 16
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfyui_essentials",
+        "ver": "9d9f4bedfc9f0321c19faf71855e228c93bd0dc9",
+        "Node name for S&R": "MaskPreview+",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 16,
+      "type": "MaskScale",
+      "pos": [
+        1952.7196044921875,
+        601.4697265625
+      ],
+      "size": [
+        270,
+        218
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            16
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "aux_id": "GAOSHI-QING/ComfyUI-QING",
+        "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
+        "Node name for S&R": "MaskScale",
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "scale_by": true,
+            "target_value": true,
+            "interpolation": true,
+            "keep_proportions": true,
+            "target_width": true,
+            "target_height": true
+          },
+          "version": "7.0.1"
+        }
+      },
+      "widgets_values": [
+        "longest_side",
+        1280,
+        "lanczos",
+        true,
+        0,
+        0
+      ]
+    }
+  ],
+  "links": [
+    [
+      10,
+      12,
+      2,
+      10,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      10,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      10,
+      1,
+      14,
+      0,
+      "MASK"
+    ],
+    [
+      13,
+      10,
+      0,
+      14,
+      1,
+      "IMAGE"
+    ],
+    [
+      14,
+      14,
+      0,
+      15,
+      0,
+      "MASK"
+    ],
+    [
+      15,
+      14,
+      0,
+      16,
+      0,
+      "MASK"
+    ],
+    [
+      16,
+      16,
+      0,
+      17,
+      0,
+      "MASK"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5989500000000019,
+      "offset": [
+        185.85619017303455,
+        145.08903634722003
+      ]
+    },
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "frontendVersion": "1.26.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
