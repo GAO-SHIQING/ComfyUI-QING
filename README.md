@@ -1,5 +1,5 @@
 # 🎨 ComfyUI-QING：解锁ComfyUI媒体处理全场景能力  
-[切换至英文介绍](#english-intro)  
+[English](#english-intro)  
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
