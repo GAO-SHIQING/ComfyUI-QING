@@ -611,7 +611,7 @@ class SyntheticVideo:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("file_path",)
     OUTPUT_NODE = True
-    CATEGORY = "Video Helper Suite 🎥🅥🅗🅢"
+    CATEGORY = "视频/合成"
     FUNCTION = "combine_video"
 
     def combine_video(
@@ -831,7 +831,7 @@ class SyntheticVideo:
                     images_iter = map(pad, images_iter)
                     dimensions = (-first_image.shape[1] % dim_alignment + first_image.shape[1],
                                   -first_image.shape[0] % dim_alignment + first_image.shape[0])
-                    print("Output images were not of valid resolution and have had padding applied")
+                    print("输出图像分辨率不符合要求，已自动填充对齐")
                 else:
                     dimensions = (first_image.shape[1], first_image.shape[0])
                     
@@ -974,9 +974,9 @@ class SyntheticVideo:
             # 显示最终视频信息
             if final_file_path and os.path.exists(final_file_path):
                 video_size = os.path.getsize(final_file_path) / (1024 * 1024)  # MB
-                print(f"🎥 视频已生成: {final_file_path}")
-                print(f"📊 文件大小: {video_size:.1f} MB")
-                print(f"🎬 视频信息: {len(images)}帧, {frame_rate}fps, 时长{len(images)/frame_rate:.1f}秒")
+                print(f"视频已生成: {final_file_path}")
+                print(f"文件大小: {video_size:.1f} MB")
+                print(f"视频信息: {len(images)}帧, {frame_rate}fps, 时长{len(images)/frame_rate:.1f}秒")
 
             return (final_file_path,)
             
@@ -993,5 +993,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "VHS_SyntheticVideo": "Synthetic video",
+    "VHS_SyntheticVideo": "Synthetic Video",
 }

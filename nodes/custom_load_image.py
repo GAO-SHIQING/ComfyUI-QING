@@ -38,8 +38,10 @@ SUPPORTED_FORMATS = {
 
 class CustomLoadImageWithFormat:
     """
-    自定义图像加载器 - 支持多种格式包括SVG
-    输出端口：图像、遮罩、SVG、格式信息
+    自定义图像加载器：支持多种格式（含SVG）
+    - 对于位图格式，输出 图像/遮罩，SVG口置为占位符
+    - 对于SVG格式，输出 SVG 文本，图像/遮罩口置为占位符
+    - 额外输出格式信息
     """
     
     @classmethod
@@ -63,12 +65,14 @@ class CustomLoadImageWithFormat:
     RETURN_TYPES = ("IMAGE", "MASK", "STRING", "STRING")
     RETURN_NAMES = ("图像", "遮罩", "SVG", "格式信息")
     FUNCTION = "load_image"
-    CATEGORY = "image"
+    CATEGORY = "输入/图像"
     OUTPUT_NODE = True
     
     def load_image(self, image):
         """
-        加载图像，根据文件类型智能选择输出
+        加载图像并根据文件类型决定输出端口
+        - 位图：返回(IMAGE, MASK, NO_OUTPUT, FORMAT)
+        - SVG：返回(NO_OUTPUT, NO_OUTPUT, SVG_STRING, "SVG")
         """
         try:
             # 获取图像完整路径
@@ -226,5 +230,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "CustomLoadImageWithFormat": "加载图像(支持SVG)"
+    "CustomLoadImageWithFormat": "Load Image (SVG Supported)"
 }

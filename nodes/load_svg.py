@@ -15,10 +15,11 @@ class LoadSVG:
             },
         }
 
+    # 返回类型与显示名称（中文统一）
     RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("SVG内容",)  # 添加返回值的显示名称
+    RETURN_NAMES = ("SVG内容",)
     FUNCTION = "load_svg"
-    CATEGORY = "input"
+    CATEGORY = "输入/文件"
     TITLE = "加载SVG文件"
     DESCRIPTION = "加载SVG文件内容，支持绝对路径"
 
@@ -98,5 +99,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "LoadSVG": "加载SVG文件"
+    "LoadSVG": "Load SVG"
 }

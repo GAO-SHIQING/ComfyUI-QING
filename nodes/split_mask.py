@@ -7,7 +7,10 @@ from skimage import measure
 
 class MaskSplitterPro:
     """
-    遮罩拆分Q：高效可靠的遮罩拆分工具，特别优化文字和图形完整性保护
+    遮罩拆分Q：高效可靠的遮罩拆分工具
+    - 支持最小组件过滤、小区域合并/移除/保留
+    - 提供文字/结构保护的智能合并
+    - 输出组件遮罩列表（可保留原始像素值）
     """
     
     @classmethod
@@ -75,10 +78,10 @@ class MaskSplitterPro:
     }
 
     RETURN_TYPES = ("MASK",)
-    RETURN_NAMES = ("masks",)
+    RETURN_NAMES = ("遮罩列表",)
     FUNCTION = "split"
     OUTPUT_IS_LIST = (True,)
-    CATEGORY = "Custom Mask Processing/遮罩处理"
+    CATEGORY = "图像/遮罩"
 
     def split(self, mask, min_component_size=100, small_region_handling="merge", 
               merge_distance_ratio=2.0, text_preservation="auto", 
@@ -521,5 +524,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "MaskSplitterPro": "遮罩拆分Q"
+    "MaskSplitterPro": "Mask Splitter Pro"
 }

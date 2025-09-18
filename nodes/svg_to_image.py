@@ -12,7 +12,10 @@ import re
 
 class SVGToImage:
     """
-    SVG to PNG/JPG conversion node for ComfyUI with advanced scaling options and dimension output
+    SVG 转图片（PNG/JPG）节点：提供高级缩放方式与尺寸输出
+    - 支持按最长边/最短边/宽/高/总像素定义缩放
+    - 支持设置DPI、输出质量、背景色、尺寸对齐倍数
+    - 输出图片张量、遮罩、最终宽高
     """
     
     @classmethod
@@ -24,15 +27,15 @@ class SVGToImage:
                     "default": "<svg width='100' height='100' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' fill='red'/></svg>"
                 }),
                 "adjust_size": ("STRING", {
-                    "default": "1024",  # Changed from "512x512" to "1024"
-                    "description": "Target size in format WxH (e.g. 1024x768) or single number for square"
+                    "default": "1024",
+                    "description": "目标尺寸，WxH 或单个数值（正方形）"
                 }),
                 "keep_aspect_ratio": (["true", "false"], {
                     "default": "true"
                 }),
                 "scale_definition": (["longest_side", "shortest_side", "width", "height", "total_pixels"], {
                     "default": "longest_side",
-                    "description": "How to define the scaling reference"
+                    "description": "缩放参考定义"
                 }),
                 "scale_method": (["lanczos", "bicubic", "hamming", "bilinear", "box", "nearest"], {
                     "default": "lanczos"
@@ -55,7 +58,7 @@ class SVGToImage:
                 }),
                 "background_color": ("STRING", {
                     "default": "",
-                    "description": "Hex color code for background (e.g. #FFFFFF). Empty for transparent."
+                    "description": "背景色十六进制，如#FFFFFF；留空为透明"
                 }),
             },
             "optional": {
@@ -64,25 +67,26 @@ class SVGToImage:
                     "min": 0,
                     "max": 256,
                     "step": 8,
-                    "description": "Make dimensions multiple of this value (0 to disable)"
+                    "description": "将宽高约束为该整数倍（0为禁用）"
                 }),
                 "target_pixels": ("INT", {
-                    "default": 1048576,  # Changed from 262144 (512x512) to 1048576 (1024x1024)
+                    "default": 1048576,
                     "min": 256,
                     "max": 16777216,  # 4096x4096
                     "step": 1024,
-                    "description": "Target total pixels (used with total_pixels scale definition)"
+                    "description": "目标总像素（用于 total_pixels 缩放定义）"
                 }),
             }
         }
 
+    # 返回类型与中文显示名
     RETURN_TYPES = ("IMAGE", "MASK", "INT", "INT")
-    RETURN_NAMES = ("image", "mask", "width", "height")
+    RETURN_NAMES = ("图像", "遮罩", "宽度", "高度")
     FUNCTION = "convert_svg"
-    CATEGORY = "image/conversion"
+    CATEGORY = "图像/转换"
 
     def parse_size_string(self, size_str):
-        """Parse size string in format WxH and return width, height"""
+        """解析尺寸字符串（WxH 或单个数值），返回宽和高"""
         try:
             # Handle empty string
             if not size_str or not size_str.strip():
@@ -130,7 +134,7 @@ class SVGToImage:
         return 1024, 1024  # Changed from 512, 512
 
     def parse_svg_dimensions(self, svg_content):
-        """Parse SVG to get original dimensions without rendering"""
+        """直接解析SVG获取原始尺寸（不渲染）"""
         try:
             # Try to parse SVG as XML to get dimensions
             # Remove any XML declarations or doctypes that might cause issues
@@ -184,7 +188,7 @@ class SVGToImage:
 
     def calculate_target_dimensions(self, original_width, original_height, width, height, 
                                   keep_aspect_ratio, scale_definition, target_pixels=None):
-        """Calculate target dimensions based on scaling definition"""
+        """依据缩放定义计算目标尺寸"""
         if not keep_aspect_ratio == "true":
             return max(1, width), max(1, height)
         
@@ -258,7 +262,7 @@ class SVGToImage:
             return target_width, target_height
 
     def parse_background_color(self, color_str):
-        """Parse background color string into RGBA tuple"""
+        """解析背景色字符串为RGBA元组"""
         if not color_str or not color_str.strip():
             return None
             
@@ -304,35 +308,35 @@ class SVGToImage:
 
     def convert_svg(self, svg_input, adjust_size, keep_aspect_ratio, scale_definition, 
                    scale_method, dpi, output_format, quality, background_color="", 
-                   multiple_of=0, target_pixels=1048576):  # Changed default from 262144 to 1048576
-        # Validate input parameters
+                   multiple_of=0, target_pixels=1048576):
+        # 参数校验
         if not svg_input or not svg_input.strip():
-            raise ValueError("SVG input cannot be empty")
+            raise ValueError("SVG输入不能为空")
             
-        # Parse the size string
+        # 解析尺寸字符串
         width, height = self.parse_size_string(adjust_size)
         
-        # Validate and clamp parameters
+        # 限定参数范围
         dpi = max(10, min(1200, dpi))
         quality = max(1, min(100, quality))
         target_pixels = max(256, min(16777216, target_pixels))
 
-        # Handle multiple of constraint (optional parameter)
+        # 尺寸对齐倍数（可选）
         if multiple_of > 0:
             multiple_of = max(1, min(256, multiple_of))
             width = max(multiple_of, (width // multiple_of) * multiple_of)
             height = max(multiple_of, (height // multiple_of) * multiple_of)
 
-        # Get original SVG dimensions without rendering
+        # 获取原始SVG尺寸（不渲染）
         original_width, original_height = self.parse_svg_dimensions(svg_content=svg_input)
         
-        # Calculate target dimensions based on scaling definition
+        # 计算目标尺寸
         target_width, target_height = self.calculate_target_dimensions(
             original_width, original_height, width, height, 
             keep_aspect_ratio, scale_definition, target_pixels
         )
 
-        # Convert SVG string to PNG bytes
+        # 将SVG字符串转换为PNG字节流
         try:
             png_data = cairosvg.svg2png(
                 bytestring=svg_input.encode('utf-8'),
@@ -343,28 +347,28 @@ class SVGToImage:
         except Exception as e:
             raise Exception(f"SVG conversion failed: {str(e)}")
 
-        # Convert PNG bytes to PIL Image
+        # PNG字节流转PIL图像
         try:
             image = Image.open(BytesIO(png_data))
         except Exception as e:
             raise Exception(f"Failed to parse SVG conversion result: {str(e)}")
         
-        # Check if image has alpha channel
+        # 判断是否有Alpha通道
         has_alpha = image.mode == 'RGBA'
         
-        # Parse and apply background color if specified
+        # 解析并应用背景色（若提供）
         bg_color = self.parse_background_color(background_color)
         if bg_color and has_alpha:
             try:
-                # Create background image
+                # 创建背景图
                 background = Image.new('RGBA', image.size, bg_color)
-                # Composite the SVG over the background
+                # 覆盖合成
                 image = Image.alpha_composite(background, image)
                 has_alpha = False  # After compositing, alpha is no longer needed
             except Exception as e:
                 print(f"Failed to apply background color: {str(e)}")
         
-        # Convert to appropriate format
+        # 转为目标输出模式
         try:
             if output_format == "jpg" or not has_alpha:
                 rgb_image = image.convert("RGB")
@@ -373,31 +377,31 @@ class SVGToImage:
         except Exception as e:
             raise Exception(f"Image format conversion failed: {str(e)}")
         
-        # Get final dimensions
+        # 最终尺寸
         final_width, final_height = rgb_image.size
         
-        # Create mask based on alpha channel if available
+        # 基于Alpha生成遮罩（若有）
         try:
             if has_alpha:
                 alpha_channel = image.getchannel("A")
                 mask_np = np.array(alpha_channel).astype(np.float32) / 255.0
                 mask = torch.from_numpy(mask_np)
             else:
-                # White mask for images without transparency
+                # 无透明则输出白遮罩
                 mask = torch.ones((final_height, final_width), dtype=torch.float32)
         except Exception as e:
-            # If mask creation fails, use white mask as fallback
+            # 兜底：失败则使用白遮罩
             print(f"Mask creation failed, using white mask: {str(e)}")
             mask = torch.ones((final_height, final_width), dtype=torch.float32)
         
-        # Convert to ComfyUI format
+        # 转为ComfyUI张量格式
         try:
             image_np = np.array(rgb_image.convert("RGB")).astype(np.float32) / 255.0
             image_tensor = torch.from_numpy(image_np)[None,]
         except Exception as e:
             raise Exception(f"Image conversion failed: {str(e)}")
         
-        # Save output image
+        # 尝试保存输出图像（非必需）
         try:
             output_dir = folder_paths.get_output_directory()
             if not os.path.exists(output_dir):
@@ -419,7 +423,7 @@ class SVGToImage:
             print(f"Failed to save image: {str(e)}")
             # Don't raise exception as main function (returning tensors) still succeeds
         
-        # Return image, mask, width and height
+        # 返回图像、遮罩与宽高
         return (image_tensor, mask.unsqueeze(0), final_width, final_height)
 
 # Node registration

@@ -3,7 +3,9 @@ import torch
 
 class TextCompare:
     """
-    Text comparison node with fixed 3 modules and global case sensitivity setting
+    文本比较节点：固定3组对比，支持全局是否区分大小写
+    - 输入 textN 与 subtextN（N=1..3）
+    - 输出每组对比的布尔结果
     """
     
     MODULE_COUNT = 3
@@ -25,7 +27,7 @@ class TextCompare:
             "optional": {}
         }
         
-        # 使用更友好的显示名称
+        # 使用更友好的显示名称（中文）
         for i in range(cls.MODULE_COUNT):
             module_num = i + 1
             input_types["optional"][f"text_{module_num}"] = ("STRING", {
@@ -45,7 +47,7 @@ class TextCompare:
     # 输出名称去掉下划线，使用更简洁的中文
     RETURN_NAMES = tuple([f"结果{i+1}" for i in range(MODULE_COUNT)])
     FUNCTION = "compare_texts"
-    CATEGORY = "自定义节点/文本处理"
+    CATEGORY = "文本/处理"
     OUTPUT_NODE = True
     
     def compare_texts(self, case_sensitive=False, **kwargs):
@@ -85,5 +87,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "TextCompare": "文本比较"
+    "TextCompare": "Text Compare"
 }

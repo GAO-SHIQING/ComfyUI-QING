@@ -40,13 +40,24 @@ class MaskScale:
             }
         }
     
+    # 返回类型与名称（统一中文显示）
     RETURN_TYPES = ("MASK", "INT", "INT")
-    RETURN_NAMES = ("mask", "width", "height")
+    RETURN_NAMES = ("遮罩", "宽度", "高度")
     FUNCTION = "scale_mask"
-    CATEGORY = "image/mask"
+    CATEGORY = "图像/遮罩"
     
     def scale_mask(self, mask, scale_by, target_value, interpolation, keep_proportions, target_width=0, target_height=0):
-        # Input validation
+        """
+        缩放遮罩尺寸
+        - mask: 输入遮罩 (Tensor: [B,H,W])
+        - scale_by: 缩放依据：width/height/longest_side/shortest_side/total_pixels
+        - target_value: 目标数值（与 scale_by 对应）
+        - interpolation: 插值方式：nearest/bilinear/bicubic/lanczos
+        - keep_proportions: 是否保持纵横比
+        - target_width/target_height: 指定目标尺寸（优先于 scale_by）
+        返回：缩放后的遮罩，以及目标宽高
+        """
+        # 输入校验
         if mask is None:
             raise ValueError("Input mask cannot be None")
         
@@ -56,15 +67,15 @@ class MaskScale:
         elif mask.dim() != 3:
             raise ValueError(f"Mask dimension should be 2 or 3, got {mask.dim()}")
         
-        # Get current mask dimensions
+        # 获取当前遮罩尺寸
         batch_size, orig_height, orig_width = mask.shape
         
-        # If explicit target dimensions are provided, use them
+        # 若显式提供目标尺寸，则优先使用
         if target_width > 0 and target_height > 0:
             target_width = max(1, target_width)
             target_height = max(1, target_height)
         else:
-            # Calculate target dimensions based on scaling method
+            # 根据缩放方式计算目标尺寸
             orig_pixels = orig_height * orig_width
             
             if scale_by == "width":
@@ -110,12 +121,12 @@ class MaskScale:
                         target_height = orig_height
                         
             elif scale_by == "total_pixels":
-                # Calculate scaling factor to achieve target pixel count
+                # 依据总像素计算缩放因子
                 scale_factor = (target_value / orig_pixels) ** 0.5
                 target_width = max(1, int(round(orig_width * scale_factor)))
                 target_height = max(1, int(round(orig_height * scale_factor)))
                 
-                # If keeping proportions, fine-tune to get closer to target
+                # 若保持比例，细调以更接近目标像素
                 if keep_proportions:
                     actual_pixels = target_width * target_height
                     if abs(actual_pixels - target_value) / target_value > 0.1:
@@ -124,33 +135,33 @@ class MaskScale:
                         if abs(alternative_width * alternative_height - target_value) < abs(actual_pixels - target_value):
                             target_width, target_height = alternative_width, alternative_height
         
-        # Ensure dimensions are at least 1x1
+        # 保证目标尺寸至少为 1x1
         target_width = max(1, target_width)
         target_height = max(1, target_height)
         
-        # Get original device and dtype
+        # 记录原始设备与数据类型
         device = mask.device
         dtype = mask.dtype
         
-        # Use PIL for high-quality scaling, especially for Lanczos
+        # 当选择 Lanczos 时，使用 PIL 获得更高质量
         if interpolation == "lanczos":
             scaled_masks = []
             for i in range(batch_size):
-                # Convert to PIL image
+                # 转为 PIL 图像
                 mask_np = mask[i].cpu().numpy() * 255
                 mask_pil = Image.fromarray(mask_np.astype(np.uint8), mode='L')
                 
-                # Resize with Lanczos interpolation
+                # Lanczos 插值缩放
                 mask_pil = mask_pil.resize((target_width, target_height), Image.LANCZOS)
                 
-                # Convert back to tensor
+                # 转回张量
                 mask_np = np.array(mask_pil).astype(np.float32) / 255.0
                 mask_tensor = torch.from_numpy(mask_np).to(device=device, dtype=dtype)
                 scaled_masks.append(mask_tensor)
             
             scaled_mask = torch.stack(scaled_masks)
         else:
-            # Choose PyTorch interpolation mode
+            # 选择 PyTorch 的插值模式
             if interpolation == "nearest":
                 mode = "nearest"
             elif interpolation == "bilinear":
@@ -158,10 +169,10 @@ class MaskScale:
             else:  # bicubic
                 mode = "bicubic"
             
-            # Ensure data type is suitable for interpolation
+            # 转为 float 以便插值
             mask_float = mask.float()
             
-            # Resize mask
+            # 进行尺寸变换
             scaled_mask = torch.nn.functional.interpolate(
                 mask_float.unsqueeze(1),
                 size=(target_height, target_width),
@@ -169,11 +180,11 @@ class MaskScale:
                 align_corners=False if mode != "nearest" else None
             ).squeeze(1)
             
-            # Convert back to original dtype
+            # 转回原 dtype
             if dtype != torch.float32:
                 scaled_mask = scaled_mask.to(dtype)
         
-        # Ensure mask values are in 0-1 range
+        # 保证数值在 0-1 范围
         scaled_mask = torch.clamp(scaled_mask, 0.0, 1.0)
         
         return (scaled_mask, target_width, target_height)
