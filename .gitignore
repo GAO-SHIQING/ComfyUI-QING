@@ -1,3 +1,8 @@
 "__pycache__/" 
 "*.pyc" 
 "*.pyo" 
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+nodes/__pycache__/
