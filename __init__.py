@@ -8,6 +8,8 @@ from .nodes.text_compare import TextCompare
 from .nodes.video_combine import SyntheticVideo
 from .nodes.svg_saver import SVGSaver
 from .nodes.image_to_svg import ImageToSVG
+from .nodes.mask_judgment import MaskJudgment
+from .nodes.MaskBlend import MaskBlend
 
 NODE_CLASS_MAPPINGS = {
     "Load SVG": LoadSVG,
@@ -19,6 +21,8 @@ NODE_CLASS_MAPPINGS = {
     "SyntheticVideo": SyntheticVideo,
     "SVGSaver": SVGSaver,
     "ImageToSVG": ImageToSVG,
+    "MaskJudgment":MaskJudgment,
+    "MaskBlend":MaskBlend,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -31,6 +35,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SyntheticVideo": "合成视频",
     "SVGSaver": "保存SVG",
     "ImageToSVG": "图像到SVG",
+    "MaskJudgment":"遮罩判断",
+    "MaskBlend":"遮罩混合",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
