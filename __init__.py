@@ -1,17 +1,17 @@
 # 从 node 子目录中的文件导入节点类
-from .nodes.load_svg import LoadSVG
-from .nodes.split_mask import MaskSplitterPro
-from .nodes.svg_to_image import SVGToImage
-from .nodes.custom_load_image import CustomLoadImageWithFormat
-from .nodes.mask_scale import MaskScale
-from .nodes.text_compare import TextCompare
-from .nodes.video_combine import SyntheticVideo
-from .nodes.svg_saver import SVGSaver
-from .nodes.image_to_svg import ImageToSVG
-from .nodes.mask_judgment import MaskJudgment
-from .nodes.MaskBlend import MaskBlend
-from .nodes.MaskExpansion import MaskExpansion
-from .nodes.ImageMaskConverter import ImageMaskConverter
+from .nodes.Load_svg import LoadSVG
+from .nodes.Split_mask import MaskSplitterPro
+from .nodes.Svg_to_image import SVGToImage
+from .nodes.Custom_load_image import CustomLoadImageWithFormat
+from .nodes.Mask_scale import MaskScale
+from .nodes.Text_compare import TextCompare
+from .nodes.Video_combine import SyntheticVideo
+from .nodes.Svg_saver import SVGSaver
+from .nodes.Image_to_svg import ImageToSVG
+from .nodes.Mask_judgment import MaskJudgment
+from .nodes.Mask_blend import MaskBlend
+from .nodes.Mask_expansion import MaskExpansion
+from .nodes.Image_mask_converter import ImageMaskConverter
 
 NODE_CLASS_MAPPINGS = {
     "Load SVG": LoadSVG,
