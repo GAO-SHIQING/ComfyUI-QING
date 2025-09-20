@@ -10,6 +10,8 @@ from .nodes.svg_saver import SVGSaver
 from .nodes.image_to_svg import ImageToSVG
 from .nodes.mask_judgment import MaskJudgment
 from .nodes.MaskBlend import MaskBlend
+from .nodes.MaskExpansion import MaskExpansion
+from .nodes.ImageMaskConverter import ImageMaskConverter
 
 NODE_CLASS_MAPPINGS = {
     "Load SVG": LoadSVG,
@@ -21,8 +23,10 @@ NODE_CLASS_MAPPINGS = {
     "SyntheticVideo": SyntheticVideo,
     "SVGSaver": SVGSaver,
     "ImageToSVG": ImageToSVG,
-    "MaskJudgment":MaskJudgment,
-    "MaskBlend":MaskBlend,
+    "MaskJudgment": MaskJudgment,
+    "MaskBlend": MaskBlend,
+    "MaskExpansion": MaskExpansion,
+    "ImageMaskConverter": ImageMaskConverter,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -31,12 +35,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SVG To Image": "SVG到图像",
     "CustomLoadImageWithFormat": "加载图像(支持SVG)",
     "MaskScale": "遮罩缩放",
-    "TextCompare":"文本对比",
+    "TextCompare": "文本对比",
     "SyntheticVideo": "合成视频",
     "SVGSaver": "保存SVG",
     "ImageToSVG": "图像到SVG",
-    "MaskJudgment":"遮罩判断",
-    "MaskBlend":"遮罩混合",
+    "MaskJudgment": "遮罩判断",
+    "MaskBlend": "遮罩混合",
+    "MaskExpansion": "遮罩扩张",
+    "ImageMaskConverter": "图像遮罩转换",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
