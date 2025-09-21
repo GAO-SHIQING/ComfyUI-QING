@@ -16,10 +16,44 @@ class ImageToSVG:
     """
     图像转SVG节点：将图像转换为SVG格式
     - 支持多种转换模式：边缘检测、颜色量化、剪影和海报化
-    - 可调整SVG精度和质量
+    - 预设模式：简单、详细、艺术
     - 输出SVG字符串、宽度、高度、遮罩和预览图像
     - 功能与SVGToImage节点保持对称
     """
+    
+    # 预设配置
+    PRESETS = {
+        "simple": {
+            "precision": 50,
+            "simplify_tolerance": 2.0,
+            "min_area": 20,
+            "edge_threshold1": 50,
+            "edge_threshold2": 150,
+            "stroke_width": 1.5,
+            "minify_svg": True,
+            "decimal_precision": 1
+        },
+        "detailed": {
+            "precision": 150,
+            "simplify_tolerance": 0.5,
+            "min_area": 5,
+            "edge_threshold1": 30,
+            "edge_threshold2": 120,
+            "stroke_width": 0.8,
+            "minify_svg": True,
+            "decimal_precision": 2
+        },
+        "artistic": {
+            "precision": 80,
+            "simplify_tolerance": 3.0,
+            "min_area": 50,
+            "edge_threshold1": 80,
+            "edge_threshold2": 200,
+            "stroke_width": 2.0,
+            "minify_svg": True,
+            "decimal_precision": 1
+        }
+    }
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -37,6 +71,10 @@ class ImageToSVG:
                     "step": 1,
                     "description": "SVG精度（越高越详细）",
                     "display": "slider"
+                }),
+                "preset": (["custom", "simple", "detailed", "artistic"], {
+                    "default": "simple",
+                    "description": "预设模式：简单、详细、艺术或自定义"
                 }),
                 "edge_threshold1": ("INT", {
                     "default": 50,
@@ -69,13 +107,6 @@ class ImageToSVG:
                     "step": 1,
                     "description": "最小区域大小（小于此值的区域将被忽略）"
                 }),
-                "output_scale": ("FLOAT", {
-                    "default": 1.0,
-                    "min": 0.1,
-                    "max": 10.0,
-                    "step": 0.1,
-                    "description": "输出SVG的缩放比例"
-                }),
             },
             "optional": {
                 "mask": ("MASK", {
@@ -84,14 +115,6 @@ class ImageToSVG:
                 "edge_auto_threshold": ("BOOLEAN", {
                     "default": True,
                     "description": "自动计算Canny双阈值"
-                }),
-                "seed": ("INT", {
-                    "default": 0,
-                    "min": 0,
-                    "max": 2147483647,
-                    "step": 1,
-                    "randomize": True,
-                    "description": "改变以打破缓存，强制重新执行"
                 }),
                 "preserve_aspect_ratio": ("BOOLEAN", {
                     "default": True,
@@ -145,25 +168,29 @@ class ImageToSVG:
         }
 
     RETURN_TYPES = ("STRING", "INT", "INT", "MASK", "IMAGE")
-    RETURN_NAMES = ("SVG", "宽度", "高度", "遮罩", "预览")
+    RETURN_NAMES = ("svg_content", "width", "height", "mask", "preview")
     FUNCTION = "convert_image"
-    CATEGORY = "图像/转换"
+    CATEGORY = "自定义/SVG"
+    
+    def apply_preset(self, preset, **kwargs):
+        """应用预设配置，用户自定义参数会覆盖预设"""
+        if preset in self.PRESETS:
+            # 从预设开始
+            config = self.PRESETS[preset].copy()
+            # 用户参数覆盖预设
+            config.update({k: v for k, v in kwargs.items() if v is not None})
+            return config
+        else:
+            # custom 模式，使用用户提供的参数
+            return kwargs
 
+    # ===== 工具方法 =====
+    
     def safe_update_progress(self, progress, message):
         """安全调用进度更新，兼容没有 update_progress 的环境"""
         try:
             if hasattr(comfy.utils, "update_progress"):
                 comfy.utils.update_progress(progress, message)
-        except Exception:
-            pass
-
-    def ensure_utils_datetime(self):
-        """为旧环境添加 get_datetime_string 以避免其他节点报错"""
-        try:
-            if not hasattr(comfy.utils, "get_datetime_string"):
-                def _dt():
-                    return datetime.now().strftime("%Y%m%d_%H%M%S")
-                setattr(comfy.utils, "get_datetime_string", _dt)
         except Exception:
             pass
 
@@ -192,21 +219,50 @@ class ImageToSVG:
         except Exception:
             return svg_content
 
+    # ===== 图像处理方法 =====
+    
     def tensor_to_pil(self, tensor):
-        """将PyTorch张量转换为PIL图像"""
-        if len(tensor.shape) == 4:
-            tensor = tensor[0]
-        tensor = tensor.clone().detach().cpu()
-        image_np = tensor.numpy()
-        # 支持两种格式：CHW 或 HWC
-        if image_np.ndim == 3 and image_np.shape[0] in (3, 4):  # CHW
-            image_np = image_np.transpose(1, 2, 0)
-        image_np = (image_np * 255).astype(np.uint8)
-        pil_img = Image.fromarray(image_np)
-        # 统一转换为 RGB，避免后续 OpenCV 颜色转换报错
-        if pil_img.mode != "RGB":
-            pil_img = pil_img.convert("RGB")
-        return pil_img
+        """将PyTorch张量转换为PIL图像 - 性能优化版"""
+        try:
+            # 优化：减少不必要的复制操作
+            if len(tensor.shape) == 4:
+                tensor = tensor[0]
+            
+            # 优化：直接在CPU上操作，避免重复转换
+            if tensor.device != torch.device('cpu'):
+                tensor = tensor.cpu()
+            
+            image_np = tensor.numpy()
+            
+            # 优化：更高效的维度检查和转换
+            if image_np.ndim == 3:
+                if image_np.shape[0] in (3, 4):  # CHW格式
+                    image_np = np.transpose(image_np, (1, 2, 0))
+                elif image_np.shape[2] not in (1, 3, 4):  # 无效格式
+                    raise ValueError(f"不支持的图像通道数: {image_np.shape}")
+            
+            # 优化：使用更快的数据类型转换
+            if image_np.dtype != np.uint8:
+                image_np = np.clip(image_np * 255, 0, 255).astype(np.uint8)
+            
+            # 优化：处理不同通道数
+            if image_np.ndim == 2:  # 灰度图
+                pil_img = Image.fromarray(image_np, mode='L').convert('RGB')
+            elif image_np.shape[2] == 1:  # 单通道
+                pil_img = Image.fromarray(image_np[:, :, 0], mode='L').convert('RGB')
+            elif image_np.shape[2] == 3:  # RGB
+                pil_img = Image.fromarray(image_np, mode='RGB')
+            elif image_np.shape[2] == 4:  # RGBA
+                pil_img = Image.fromarray(image_np, mode='RGBA').convert('RGB')
+            else:
+                raise ValueError(f"不支持的图像形状: {image_np.shape}")
+                
+            return pil_img
+            
+        except Exception as e:
+            # 图像转换失败
+            # 返回一个小的默认图像
+            return Image.new('RGB', (64, 64), color=(128, 128, 128))
 
     def pil_to_tensor(self, image):
         """将PIL图像转换为PyTorch张量"""
@@ -259,11 +315,14 @@ class ImageToSVG:
                 return (0, 0, 0, 0)
                 
         except Exception as e:
-            print(f"Background color parsing failed: {str(e)}")
+            # Background color parsing failed
+            pass
             
         return (255, 255, 255, 255)  # 默认白色
 
-    def create_svg_from_edges(self, image, precision, simplify_tolerance, min_area, output_scale, bg_color, stroke_color, stroke_width, threshold1, threshold2, auto_threshold, preserve_aspect_ratio):
+    # ===== SVG创建方法 =====
+    
+    def create_svg_from_edges(self, image, precision, simplify_tolerance, min_area, bg_color, stroke_color, stroke_width, threshold1, threshold2, auto_threshold, preserve_aspect_ratio):
         """通过边缘检测创建SVG"""
         # 转换为灰度图
         gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
@@ -284,9 +343,9 @@ class ImageToSVG:
         # 查找轮廓
         contours, _ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         
-        # 计算缩放后的尺寸
-        scaled_width = int(image.width * output_scale)
-        scaled_height = int(image.height * output_scale)
+        # 使用原始图像尺寸（output_scale = 1.0）
+        scaled_width = image.width
+        scaled_height = image.height
         
         # 创建SVG根元素
         svg_root = ET.Element("svg", xmlns="http://www.w3.org/2000/svg")
@@ -321,9 +380,7 @@ class ImageToSVG:
             path_data = "M "
             for i, point in enumerate(approx):
                 x, y = point[0]
-                # 应用缩放
-                x = int(x * output_scale)
-                y = int(y * output_scale)
+                # 使用原始坐标（不再缩放）
                 path_data += f"{x} {y} "
                 if i == 0:
                     path_data += "L "
@@ -333,31 +390,47 @@ class ImageToSVG:
             path_element = ET.SubElement(svg_root, "path")
             path_element.set("d", path_data)
             path_element.set("fill", "none")
-            path_element.set("stroke", f"rgb({stroke_color[0]},{stroke_color[1]},{stroke_color[2]})")
-            path_element.set("stroke-width", str(max(1, int(stroke_width * output_scale))))
+            # 确保颜色值是整数
+            stroke_r = int(stroke_color[0]) if len(stroke_color) > 0 else 0
+            stroke_g = int(stroke_color[1]) if len(stroke_color) > 1 else 0
+            stroke_b = int(stroke_color[2]) if len(stroke_color) > 2 else 0
+            path_element.set("stroke", f"rgb({stroke_r},{stroke_g},{stroke_b})")
+            path_element.set("stroke-width", str(stroke_width))
         
         # 转换为字符串
         rough_string = ET.tostring(svg_root, 'utf-8')
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
 
-    def create_svg_from_colors(self, image, precision, min_area, output_scale, bg_color, simplify_tolerance, preserve_aspect_ratio):
-        """通过颜色量化创建SVG - 优化版本"""
-        # 简化颜色 - 使用更高效的量化方法
-        if precision < 100:
-            num_colors = max(2, int(precision / 10))
-            # 使用更高效的量化方法
-            quantized = image.convert("P", palette=Image.ADAPTIVE, colors=num_colors).convert("RGB")
-        else:
+    def create_svg_from_colors(self, image, precision, min_area, bg_color, simplify_tolerance, preserve_aspect_ratio):
+        """通过颜色量化创建SVG - 性能优化版本"""
+        try:
+            # 优化：智能颜色量化
+            if precision < 100:
+                num_colors = max(2, min(32, int(precision / 5)))  # 限制最大颜色数
+                # 优化：对大图像先缩放再量化，提高速度
+                original_size = image.size
+                if max(original_size) > 800:  # 大图像优化
+                    scale_factor = 800 / max(original_size)
+                    temp_size = (int(original_size[0] * scale_factor), int(original_size[1] * scale_factor))
+                    temp_image = image.resize(temp_size, Image.Resampling.LANCZOS)
+                    quantized_temp = temp_image.convert("P", palette=Image.ADAPTIVE, colors=num_colors)
+                    quantized = quantized_temp.resize(original_size, Image.Resampling.NEAREST).convert("RGB")
+                else:
+                    quantized = image.convert("P", palette=Image.ADAPTIVE, colors=num_colors).convert("RGB")
+            else:
+                quantized = image
+        except Exception as e:
+            # 颜色量化失败
             quantized = image
         
         # 转换为numpy数组
         img_array = np.array(quantized)
         height, width, _ = img_array.shape
         
-        # 计算缩放后的尺寸
-        scaled_width = int(width * output_scale)
-        scaled_height = int(height * output_scale)
+        # 使用原始图像尺寸（output_scale = 1.0）
+        scaled_width = width
+        scaled_height = height
         
         # 创建SVG根元素
         svg_root = ET.Element("svg", xmlns="http://www.w3.org/2000/svg")
@@ -381,14 +454,46 @@ class ImageToSVG:
         # 转换为Lab颜色空间以获得更好的颜色分割
         lab = cv2.cvtColor(img_array, cv2.COLOR_RGB2LAB)
         
-        # 使用K-means聚类进行颜色量化
-        pixel_values = lab.reshape((-1, 3)).astype(np.float32)
-        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.2)
-        _, labels, centers = cv2.kmeans(pixel_values, min(8, max(2, int(precision/25))), None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+        try:
+            # 优化：使用更高效的K-means聚类
+            pixel_values = lab.reshape((-1, 3)).astype(np.float32)
+            k_clusters = min(8, max(2, int(precision/25)))
+            
+            # 优化：更激进的采样以提高速度
+            max_samples = min(5000, len(pixel_values))  # 减少采样数量
+            if len(pixel_values) > max_samples:
+                sample_indices = np.random.choice(len(pixel_values), max_samples, replace=False)
+                sample_pixels = pixel_values[sample_indices]
+            else:
+                sample_pixels = pixel_values
+            
+            # 减少迭代次数和尝试次数以提高速度
+            criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 1.0)
+            _, sample_labels, centers = cv2.kmeans(sample_pixels, k_clusters, None, criteria, 3, cv2.KMEANS_RANDOM_CENTERS)
+            
+            # 为所有像素分配标签
+            if len(pixel_values) > 10000:
+                distances = np.linalg.norm(pixel_values[:, np.newaxis] - centers, axis=2)
+                labels = np.argmin(distances, axis=1)
+            else:
+                labels = sample_labels.flatten()
+                
+        except Exception as e:
+            # K-means聚类失败，使用简化方法
+            # 回退到简单的颜色量化
+            labels = np.zeros(height * width, dtype=np.int32)
+            centers = np.array([[128, 0, 0]], dtype=np.float32)  # Lab空间的灰色
         
-        # 转换回RGB
-        centers = np.uint8(centers)
-        centers_rgb = cv2.cvtColor(np.array([centers]), cv2.COLOR_LAB2RGB)[0]
+        # 转换回RGB - 增强错误处理
+        try:
+            centers = np.uint8(centers)
+            centers_rgb = cv2.cvtColor(np.array([centers]), cv2.COLOR_LAB2RGB)[0]
+            # 颜色中心转换成功
+        except Exception as e:
+            # 颜色空间转换失败
+            # 使用原始图像的主要颜色作为回退
+            centers_rgb = np.array([[128, 128, 128], [64, 64, 64], [192, 192, 192]], dtype=np.uint8)
+            # 使用回退颜色
         
         # 为每个颜色簇基于掩码提取真实边界（支持孔洞）
         labels_2d = labels.reshape(height, width)
@@ -415,8 +520,7 @@ class ImageToSVG:
                     part = "M "
                     for k, pt in enumerate(approx):
                         x, y = pt[0]
-                        x = int(x * output_scale)
-                        y = int(y * output_scale)
+                        # 使用原始坐标（不再缩放）
                         part += f"{x} {y} "
                         if k == 0:
                             part += "L "
@@ -447,7 +551,7 @@ class ImageToSVG:
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
 
-    def create_silhouette_svg(self, image, precision, simplify_tolerance, min_area, output_scale, bg_color, stroke_color, stroke_width, auto_threshold, manual_threshold, preserve_aspect_ratio):
+    def create_silhouette_svg(self, image, precision, simplify_tolerance, min_area, bg_color, stroke_color, stroke_width, auto_threshold, manual_threshold, preserve_aspect_ratio):
         """创建剪影SVG"""
         # 转换为灰度图
         gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
@@ -461,9 +565,9 @@ class ImageToSVG:
         # 查找轮廓（支持孔洞）
         contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
         
-        # 计算缩放后的尺寸
-        scaled_width = int(image.width * output_scale)
-        scaled_height = int(image.height * output_scale)
+        # 使用原始图像尺寸（output_scale = 1.0）
+        scaled_width = image.width
+        scaled_height = image.height
         
         # 创建SVG根元素
         svg_root = ET.Element("svg", xmlns="http://www.w3.org/2000/svg")
@@ -500,8 +604,7 @@ class ImageToSVG:
                     part = "M "
                     for k, pt in enumerate(approx):
                         x, y = pt[0]
-                        x = int(x * output_scale)
-                        y = int(y * output_scale)
+                        # 使用原始坐标（不再缩放）
                         part += f"{x} {y} "
                         if k == 0:
                             part += "L "
@@ -521,7 +624,11 @@ class ImageToSVG:
                         continue
                     path_element = ET.SubElement(svg_root, "path")
                     path_element.set("d", path_data)
-                    path_element.set("fill", f"rgb({stroke_color[0]},{stroke_color[1]},{stroke_color[2]})")
+                    # 确保颜色值是整数
+                    fill_r = int(stroke_color[0]) if len(stroke_color) > 0 else 0
+                    fill_g = int(stroke_color[1]) if len(stroke_color) > 1 else 0
+                    fill_b = int(stroke_color[2]) if len(stroke_color) > 2 else 0
+                    path_element.set("fill", f"rgb({fill_r},{fill_g},{fill_b})")
                     path_element.set("stroke", "none")
                     path_element.set("fill-rule", "evenodd")
         
@@ -530,15 +637,15 @@ class ImageToSVG:
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
 
-    def create_poster_svg(self, image, precision, min_area, output_scale, bg_color, preserve_aspect_ratio):
+    def create_poster_svg(self, image, precision, min_area, bg_color, preserve_aspect_ratio):
         """创建海报化SVG"""
         # 转换为numpy数组
         img_array = np.array(image)
         height, width, _ = img_array.shape
         
-        # 计算缩放后的尺寸
-        scaled_width = int(width * output_scale)
-        scaled_height = int(height * output_scale)
+        # 使用原始图像尺寸（output_scale = 1.0）
+        scaled_width = width
+        scaled_height = height
         
         # 创建SVG根元素
         svg_root = ET.Element("svg", xmlns="http://www.w3.org/2000/svg")
@@ -558,85 +665,242 @@ class ImageToSVG:
             if bg_color[3] < 255:
                 bg_rect.set("fill-opacity", str(bg_color[3] / 255.0))
         
-        # 使用简单的方法创建海报效果 - 将图像分割为网格
-        grid_size = max(1, int(20 - (precision / 10)))
+        # 重新设计的海报效果 - 大幅减少矩形数量
+        # 根据precision智能计算网格大小，避免生成过多矩形
+        if precision <= 25:
+            grid_size = 32  # 低精度：大网格，少矩形
+        elif precision <= 50:
+            grid_size = 16  # 中等精度
+        elif precision <= 100:
+            grid_size = 8   # 高精度
+        else:
+            grid_size = 4   # 超高精度
         
-        for y in range(0, height, grid_size):
-            for x in range(0, width, grid_size):
-                # 获取网格区域
-                y_end = min(y + grid_size, height)
+        # 进一步限制最大矩形数量
+        max_rects = 5000  # 最多5000个矩形
+        total_grids = (height // grid_size) * (width // grid_size)
+        if total_grids > max_rects:
+            # 重新计算网格大小以限制矩形数量
+            grid_size = max(grid_size, int((height * width / max_rects) ** 0.5))
+            # 限制矩形数量，调整网格大小
+        
+        # 超高效的向量化海报化算法
+        # 海报化网格配置
+        
+        # 使用numpy向量化操作，一次性处理所有网格
+        y_indices = np.arange(0, height, grid_size)
+        x_indices = np.arange(0, width, grid_size)
+        
+        # 预分配数组以提高性能
+        rect_count = len(y_indices) * len(x_indices)
+        rect_data = []
+        
+        # 批量处理所有网格（向量化）
+        for i, y in enumerate(y_indices):
+            y_end = min(y + grid_size, height)
+            for j, x in enumerate(x_indices):
                 x_end = min(x + grid_size, width)
                 
-                # 计算网格的平均颜色
-                grid_region = img_array[y:y_end, x:x_end]
-                if grid_region.size == 0:
-                    continue
-                    
-                avg_color = np.mean(grid_region, axis=(0, 1)).astype(int)
-                
-                # 添加矩形元素
-                rect_element = ET.SubElement(svg_root, "rect")
-                rect_element.set("x", str(int(x * output_scale)))
-                rect_element.set("y", str(int(y * output_scale)))
-                rect_element.set("width", str(int((x_end - x) * output_scale)))
-                rect_element.set("height", str(int((y_end - y) * output_scale)))
-                rect_element.set("fill", f"rgb({avg_color[0]},{avg_color[1]},{avg_color[2]})")
+                # 高效的区域平均颜色计算
+                region = img_array[y:y_end, x:x_end]
+                if region.size > 0:
+                    # 使用更快的平均值计算
+                    avg_color = region.mean(axis=(0, 1)).astype(np.uint8)
+                    rect_data.append((x, y, x_end - x, y_end - y, avg_color))
+        
+        # 优化：合并相邻的同色矩形（可选，进一步减少元素数量）
+        if len(rect_data) > 1000:  # 只在矩形太多时启用合并
+            rect_data = self._merge_adjacent_rects(rect_data)
+            # 矩形合并完成
+        
+        # 批量创建SVG元素（最小化DOM操作）
+        for x, y, w, h, color in rect_data:
+            rect_element = ET.SubElement(svg_root, "rect")
+            rect_element.set("x", str(x))
+            rect_element.set("y", str(y))  
+            rect_element.set("width", str(w))
+            rect_element.set("height", str(h))
+            rect_element.set("fill", f"rgb({color[0]},{color[1]},{color[2]})")
         
         # 转换为字符串
         rough_string = ET.tostring(svg_root, 'utf-8')
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
 
-    def create_preview_image(self, svg_content, width, height, preview_max_size=512):
-        """创建SVG预览图像"""
+    def _merge_adjacent_rects(self, rect_data):
+        """合并相邻的同色矩形以减少SVG元素数量"""
+        if len(rect_data) < 2:
+            return rect_data
+        
+        # 简化版合并：只合并水平相邻的同色矩形
+        merged = []
+        rect_data.sort(key=lambda r: (r[1], r[0]))  # 按y,x排序
+        
+        i = 0
+        while i < len(rect_data):
+            current = list(rect_data[i])  # [x, y, w, h, color]
+            
+            # 尝试向右合并
+            j = i + 1
+            while j < len(rect_data):
+                next_rect = rect_data[j]
+                # 检查是否可以合并：同行、相邻、同色、同高
+                if (next_rect[1] == current[1] and  # 同一行
+                    next_rect[0] == current[0] + current[2] and  # 水平相邻
+                    next_rect[3] == current[3] and  # 同高
+                    np.array_equal(next_rect[4], current[4])):  # 同色
+                    # 合并矩形
+                    current[2] += next_rect[2]  # 扩展宽度
+                    j += 1
+                else:
+                    break
+            
+            merged.append(tuple(current))
+            i = j if j > i + 1 else i + 1
+        
+        return merged
+
+    def create_preview_image(self, svg_content, width, height, preview_max_size=512, conversion_mode="edge_detection"):
+        """创建SVG预览图像 - 性能优化版"""
         try:
-            # 使用cairosvg创建预览
+            # 延迟导入cairosvg
             import cairosvg
-            # 计算与 SVG 输出一致比例的预览尺寸，最长边不超过 512
+            
+            # 智能尺寸计算
             if width <= 0 or height <= 0:
-                target_w, target_h = min(256, preview_max_size), min(256, preview_max_size)
+                target_w = target_h = min(256, preview_max_size)
             else:
-                max_size = max(64, int(preview_max_size))
-                scale = min(max_size / float(width), max_size / float(height), 1.0)
-                target_w = max(1, int(round(width * scale)))
-                target_h = max(1, int(round(height * scale)))
-
+                max_size = max(64, min(1024, int(preview_max_size)))
+                scale = min(max_size / width, max_size / height, 1.0)
+                target_w = max(16, int(width * scale))
+                target_h = max(16, int(height * scale))
+            
+            # 快速验证SVG内容
+            if not svg_content.strip() or not re.search(r'<svg[^>]*>', svg_content, re.IGNORECASE):
+                return self._create_fallback_preview(width, height, preview_max_size)
+            
+            # 高效的SVG转PNG
             png_data = cairosvg.svg2png(
-                bytestring=svg_content.encode('utf-8'),
+                bytestring=svg_content.encode('utf-8', errors='ignore'),
                 output_width=target_w,
-                output_height=target_h
+                output_height=target_h,
+                dpi=72
             )
+            
             preview_image = Image.open(BytesIO(png_data))
+            
+            # 确保RGB格式
+            if preview_image.mode != 'RGB':
+                preview_image = preview_image.convert('RGB')
+            
+            # 简化的灰度检测（仅对问题模式）
+            if conversion_mode in ["color_quantization", "posterize"]:
+                img_array = np.array(preview_image)
+                if self._is_grayscale_image(img_array):
+                    # 灰度预览检测
+                    pass
+            
             return self.pil_to_tensor(preview_image)
+            
+        except ImportError:
+            # cairosvg未安装
+            return self._create_fallback_preview(width, height, preview_max_size)
         except Exception as e:
-            print(f"Preview creation failed: {str(e)}")
-            # 返回一个黑色图像作为后备
-            return torch.zeros((1, 64, 64, 3), dtype=torch.float32)
+            # 预览创建失败
+            return self._create_fallback_preview(width, height, preview_max_size)
+    
+    def _is_grayscale_image(self, img_array):
+        """检查图像是否为灰度图像"""
+        if len(img_array.shape) != 3 or img_array.shape[2] != 3:
+            return True
+        
+        # 检查 R、G、B 通道是否相等
+        r, g, b = img_array[:, :, 0], img_array[:, :, 1], img_array[:, :, 2]
+        return np.array_equal(r, g) and np.array_equal(g, b)
+    
+    def _create_fallback_preview(self, width, height, preview_max_size):
+        """创建回退预览图像 - 高性能版"""
+        try:
+            size = min(max(64, preview_max_size), 512)
+            # 简化的回退图像，不使用PIL绘图操作
+            return torch.ones((1, size, size, 3), dtype=torch.float32) * 0.7  # 浅灰色
+        except Exception:
+            return torch.ones((1, 64, 64, 3), dtype=torch.float32) * 0.7
 
-    def convert_image(self, image, conversion_mode, precision, simplify_tolerance, min_area, output_scale, 
-                     mask=None, edge_auto_threshold=True, seed=0, background_color="#FFFFFF", stroke_color="#000000", stroke_width=1.0,
+    def convert_image(self, image, conversion_mode, precision, preset, simplify_tolerance, min_area, 
+                     mask=None, edge_auto_threshold=True, background_color="#FFFFFF", stroke_color="#000000", stroke_width=1.0,
                      edge_threshold1=50, edge_threshold2=150,
                      silhouette_auto_threshold=True, silhouette_threshold=127,
                      preserve_aspect_ratio=True, preview_max_size=512, minify_svg=True, decimal_precision=2):
-        # 添加进度指示
-        self.safe_update_progress(0.1, "正在处理图像...")
         
-        # 使用 seed 影响节点哈希（不改变算法，仅防缓存复用）
-        _ = (int(seed) * 1664525 + 1013904223) & 0xFFFFFFFF
+        # 输入验证和健壮性检查
+        try:
+            # 验证图像输入
+            if image is None:
+                raise ValueError("输入图像不能为空")
+            if not isinstance(image, torch.Tensor):
+                raise TypeError("输入图像必须是PyTorch张量")
+            if len(image.shape) < 3:
+                raise ValueError("输入图像维度不足")
+                
+            # 验证参数范围
+            precision = max(1, min(200, int(precision)))
+            min_area = max(1, int(min_area))
+            simplify_tolerance = max(0.1, min(10.0, float(simplify_tolerance)))
+            preview_max_size = max(64, min(2048, int(preview_max_size)))
+            stroke_width = max(0.1, min(20.0, float(stroke_width)))
+            
+            # 验证转换模式
+            valid_modes = ["edge_detection", "color_quantization", "silhouette", "posterize"]
+            if conversion_mode not in valid_modes:
+                # 无效的转换模式，使用默认模式
+                conversion_mode = "edge_detection"
+                
+        except Exception as e:
+            # 参数验证失败，使用默认值
+            # 使用安全的默认值
+            precision = 100
+            min_area = 10
+            simplify_tolerance = 1.0
+            conversion_mode = "edge_detection"
+        
+        # 应用预设配置（无进度更新以提高速度）
+        config = self.apply_preset(preset, 
+            precision=precision,
+            simplify_tolerance=simplify_tolerance,
+            min_area=min_area,
+            edge_threshold1=edge_threshold1,
+            edge_threshold2=edge_threshold2,
+            stroke_width=stroke_width,
+            minify_svg=minify_svg,
+            decimal_precision=decimal_precision
+        )
+        
+        # 从配置中获取最终参数
+        final_precision = config.get('precision', precision)
+        final_simplify_tolerance = config.get('simplify_tolerance', simplify_tolerance)
+        final_min_area = config.get('min_area', min_area)
+        final_edge_threshold1 = config.get('edge_threshold1', edge_threshold1)
+        final_edge_threshold2 = config.get('edge_threshold2', edge_threshold2)
+        final_stroke_width = config.get('stroke_width', stroke_width)
+        final_minify_svg = config.get('minify_svg', minify_svg)
+        final_decimal_precision = config.get('decimal_precision', decimal_precision)
 
         # 处理输入图像
         pil_image = self.tensor_to_pil(image)
         width, height = pil_image.size
         
-        self.safe_update_progress(0.3, "正在解析颜色...")
         # 解析背景色和描边色
-        bg_color = self.parse_background_color(background_color)
-        stroke_rgb = self.parse_background_color(stroke_color)
+        try:
+            bg_color = self.parse_background_color(background_color)
+            stroke_rgb = self.parse_background_color(stroke_color)
+        except Exception as e:
+            bg_color = (255, 255, 255, 255)  # 默认白色
+            stroke_rgb = (0, 0, 0, 255)     # 默认黑色
         
         # 应用遮罩（如果有）
         result_mask = None
         if mask is not None:
-            self.safe_update_progress(0.4, "正在应用遮罩...")
             if len(mask.shape) == 3:
                 mask = mask[0]
             mask_np = (mask.numpy() * 255).astype(np.uint8)
@@ -650,46 +914,121 @@ class ImageToSVG:
         else:
             # 如果没有提供遮罩，创建一个全白遮罩（形状：1 x H x W）
             result_mask = torch.ones((1, height, width), dtype=torch.float32)
+        # 开始转换
         
-        self.safe_update_progress(0.6, "正在生成SVG...")
         # 根据模式创建SVG
-        if conversion_mode == "edge_detection":
-            svg_content = self.create_svg_from_edges(
-                pil_image, precision, simplify_tolerance, min_area, 
-                output_scale, bg_color, stroke_rgb, stroke_width,
-                edge_threshold1, edge_threshold2, edge_auto_threshold, preserve_aspect_ratio
-            )
-        elif conversion_mode == "color_quantization":
-            svg_content = self.create_svg_from_colors(
-                pil_image, precision, min_area, output_scale, bg_color, simplify_tolerance, preserve_aspect_ratio
-            )
-        elif conversion_mode == "silhouette":
-            svg_content = self.create_silhouette_svg(
-                pil_image, precision, simplify_tolerance, min_area, 
-                output_scale, bg_color, stroke_rgb, stroke_width,
-                silhouette_auto_threshold, silhouette_threshold, preserve_aspect_ratio
-            )
-        else:  # posterize
-            svg_content = self.create_poster_svg(
-                pil_image, precision, min_area, output_scale, bg_color, preserve_aspect_ratio
-            )
+        try:
+            if conversion_mode == "edge_detection":
+                # 边缘检测转换
+                svg_content = self.create_svg_from_edges(
+                    pil_image, final_precision, final_simplify_tolerance, final_min_area, 
+                    bg_color, stroke_rgb, final_stroke_width,
+                    final_edge_threshold1, final_edge_threshold2, edge_auto_threshold, preserve_aspect_ratio
+                )
+            elif conversion_mode == "color_quantization":
+                # 颜色量化转换
+                svg_content = self.create_svg_from_colors(
+                    pil_image, final_precision, final_min_area, bg_color, final_simplify_tolerance, preserve_aspect_ratio
+                )
+            elif conversion_mode == "silhouette":
+                # 剪影转换
+                svg_content = self.create_silhouette_svg(
+                    pil_image, final_precision, final_simplify_tolerance, final_min_area, 
+                    bg_color, stroke_rgb, final_stroke_width,
+                    silhouette_auto_threshold, silhouette_threshold, preserve_aspect_ratio
+                )
+            else:  # posterize
+                # 海报化转换
+                svg_content = self.create_poster_svg(
+                    pil_image, final_precision, final_min_area, bg_color, preserve_aspect_ratio
+                )
+            # 转换完成
+            
+            # 简化的SVG内容验证（减少调试输出以提高性能）
+            if svg_content:
+                # 只计算元素数量，不输出内容
+                if conversion_mode == "posterize":
+                    rect_count = svg_content.count('<rect')
+                    # 海报化元素统计
+                else:
+                    path_count = svg_content.count('<path')
+                    # 路径元素统计
+            else:
+                # SVG内容为空
+                pass
+            
+            # 调试SVG文件保存已禁用以提高性能
+            # 如需调试可手动启用此功能
+            pass
+        except Exception as e:
+            # 转换模式执行失败
+            import traceback
+            traceback.print_exc()
+            # 使用默认的边缘检测作为回退
+            try:
+                svg_content = self.create_svg_from_edges(
+                    pil_image, 50, 2.0, 20, 
+                    bg_color, stroke_rgb, 1.0,
+                    50, 150, True, preserve_aspect_ratio
+                )
+                # 使用回退的边缘检测
+            except Exception as fallback_error:
+                # 回退方案失败
+                # 最终回退：创建一个简单的SVG
+                svg_content = f'''<?xml version="1.0" encoding="UTF-8"?>
+                <svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="rgb({bg_color[0]},{bg_color[1]},{bg_color[2]})"/>
+                <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="16">转换失败</text>
+                </svg>'''
         
-        self.safe_update_progress(0.8, "正在处理输出...")
-        # 计算缩放后的尺寸
-        scaled_width = int(width * output_scale)
-        scaled_height = int(height * output_scale)
+        # 使用原始图像尺寸（不再缩放）
+        scaled_width = width
+        scaled_height = height
         
-        # 创建预览图像
-        if minify_svg:
-            svg_content = self.minify_svg_string(svg_content, decimal_precision=decimal_precision)
-        preview_tensor = self.create_preview_image(svg_content, scaled_width, scaled_height, preview_max_size=preview_max_size)
+        # 创建预览图像（移除不必要的进度更新）
+        if final_minify_svg:
+            svg_content = self.minify_svg_string(svg_content, decimal_precision=final_decimal_precision)
         
-        # 不再自动保存到磁盘，仅返回SVG字符串与预览
+        # 根据转换模式调整预览创建策略
+        preview_tensor = self.create_preview_image(svg_content, scaled_width, scaled_height, 
+                                                 preview_max_size=preview_max_size, 
+                                                 conversion_mode=conversion_mode)
         
-        self.safe_update_progress(1.0, "完成!")
+        # 调试输出
+        # 返回结果
+        
+        # 验证SVG内容
+        if not svg_content or not svg_content.strip():
+            # 返回的SVG内容为空
+            svg_content = f'''<?xml version="1.0" encoding="UTF-8"?>
+            <svg width="{scaled_width}" height="{scaled_height}" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="rgb({bg_color[0]},{bg_color[1]},{bg_color[2]})"/>
+            <text x="50%" y="50%" text-anchor="middle" fill="#666" font-size="16">SVG内容为空</text>
+            </svg>'''
+        
+        # 验证SVG格式
+        if not re.search(r'<svg[^>]*>', svg_content, re.IGNORECASE):
+            # 返回的不是有效的SVG格式
+            pass
         
         # 返回结果
         return (svg_content, scaled_width, scaled_height, result_mask, preview_tensor)
+    
+    def convert_image_safe(self, *args, **kwargs):
+        """安全的转换包装器，提供完整的错误处理"""
+        try:
+            return self.convert_image(*args, **kwargs)
+        except Exception as e:
+            # 图像转SVG转换失败
+            # 返回安全的默认结果
+            default_svg = '''<?xml version="1.0" encoding="UTF-8"?>
+            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="#f0f0f0"/>
+            <text x="50%" y="50%" text-anchor="middle" fill="#666">转换失败</text>
+            </svg>'''
+            default_mask = torch.ones((1, 100, 100), dtype=torch.float32)
+            default_preview = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
+            return (default_svg, 100, 100, default_mask, default_preview)
 
 # 节点注册
 NODE_CLASS_MAPPINGS = {

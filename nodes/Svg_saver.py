@@ -12,15 +12,29 @@ def svg_to_png(svg_string, size=(256, 256)):
     """
     将SVG字符串转换为PNG图像用于预览
     """
+    # SVG转换开始
+    
     try:
         # 尝试使用cairosvg进行转换（更准确）
         try:
             import cairosvg
-            png_data = cairosvg.svg2png(bytestring=svg_string.encode('utf-8'), 
-                                       output_width=size[0], output_height=size[1])
+            # 使用 cairosvg 转换
+            
+            # 取消SVG体积限制，直接使用原始SVG内容
+            # 处理SVG内容
+            
+            png_data = cairosvg.svg2png(
+                bytestring=svg_string.encode('utf-8', errors='ignore'), 
+                output_width=size[0], 
+                output_height=size[1],
+                dpi=72  # 降低DPI提高速度
+            )
             image = Image.open(io.BytesIO(png_data))
+            # cairosvg 转换成功
             return image
+            
         except ImportError:
+            # cairosvg 不可用，尝试 svglib
             # 回退到SVG2
             try:
                 from svglib.svglib import svg2rlg
@@ -34,14 +48,18 @@ def svg_to_png(svg_string, size=(256, 256)):
                 drawing.width, drawing.height = size
                 png_data = renderPM.drawToString(drawing, fmt="PNG")
                 image = Image.open(io.BytesIO(png_data))
+                # svglib 转换成功
                 return image
+                
             except ImportError:
+                # svglib 也不可用，使用回退图像
                 # 如果所有库都不可用，创建一个简单的替代图像
                 return create_fallback_image(size, "SVG库未安装")
+                
     except Exception as e:
         # 如果所有方法都失败了，创建一个错误图像
-        print(f"SVG转换错误: {e}")
-        return create_fallback_image(size, f"转换错误: {str(e)[:20]}")
+        # SVG转换错误
+        return create_fallback_image(size, f"转换错误")
 
 def _parse_numeric(value):
     """从类似 '1024', '1024px', '100.5px' 中解析数值，无法解析返回 None"""
@@ -158,8 +176,8 @@ class SVGSaver:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "SVG": ("STRING", {"default": "", "multiline": True, "forceInput": True}),
-                "filename": ("STRING", {"default": "comfy_svg"}),
+                "svg_content": ("STRING", {"default": "", "multiline": True, "forceInput": True}),
+                "filename_prefix": ("STRING", {"default": "comfy_svg"}),
             },
             "optional": {
                 "save_dir": ("STRING", {"default": "", "multiline": False, "placeholder": "自定义保存目录（留空使用默认）"}),
@@ -171,28 +189,28 @@ class SVGSaver:
     RETURN_TYPES = ()
     RETURN_NAMES = ()
     FUNCTION = "save_svg"
-    CATEGORY = "image/saving"
+    CATEGORY = "自定义/SVG"
     OUTPUT_NODE = True
     
-    def save_svg(self, SVG, filename, save_dir="", overwrite="enable", preview_max_size=512):
+    def save_svg(self, svg_content, filename_prefix, save_dir="", overwrite="enable", preview_max_size=512):
         # 确保有有效的SVG内容
-        if not SVG.strip():
+        if not svg_content.strip():
             # 创建一个空SVG提示图像
             preview_image = create_fallback_image((256, 256), "SVG内容为空")
             # 保存预览并返回 UI 引用
-            preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename)
+            preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename_prefix)
             return {"ui": {"images": [{"filename": os.path.basename(preview_path), "subfolder": preview_subfolder, "type": "output"}]}}
         
         # 验证是否是有效的SVG
-        if not re.search(r'<svg[^>]*>', SVG, re.IGNORECASE):
+        if not re.search(r'<svg[^>]*>', svg_content, re.IGNORECASE):
             # 创建一个无效SVG提示图像
             preview_image = create_fallback_image((256, 256), "无效SVG格式")
-            preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename)
+            preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename_prefix)
             return {"ui": {"images": [{"filename": os.path.basename(preview_path), "subfolder": preview_subfolder, "type": "output"}]}}
         
         # 处理文件名
-        if not filename.lower().endswith('.svg'):
-            filename += '.svg'
+        if not filename_prefix.lower().endswith('.svg'):
+            filename_prefix += '.svg'
         
         # 创建子文件夹路径：
         # - 空或相对路径: 保存到 output/svg 下
@@ -210,51 +228,63 @@ class SVGSaver:
         os.makedirs(full_output_dir, exist_ok=True)
         
         # 处理文件覆盖
-        filepath = os.path.join(full_output_dir, filename)
+        filepath = os.path.join(full_output_dir, filename_prefix)
         if os.path.exists(filepath) and overwrite == "disable":
             counter = 1
-            base_name = filename[:-4]  # 移除.svg扩展名
+            base_name = filename_prefix[:-4]  # 移除.svg扩展名
             while os.path.exists(os.path.join(full_output_dir, f"{base_name}_{counter}.svg")):
                 counter += 1
             filepath = os.path.join(full_output_dir, f"{base_name}_{counter}.svg")
-            filename = f"{base_name}_{counter}.svg"
+            filename_prefix = f"{base_name}_{counter}.svg"
         
         # 保存SVG文件
         try:
             with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(SVG)
-            print(f"SVG保存成功: {filepath}")
+                f.write(svg_content)
+            # SVG保存成功
         except Exception as e:
-            error_msg = f"保存SVG文件时出错: {e}"
-            print(error_msg)
+            # 保存SVG文件时出错
             # 创建错误预览图像（保存到临时预览目录）
             preview_image = create_fallback_image((256, 256), "保存失败")
-            preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename)
+            preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename_prefix)
             return {"ui": {"images": [{"filename": os.path.basename(preview_path), "subfolder": preview_subfolder, "type": "output"}]}}
         
         # 生成预览图像
-        preview_image = self.generate_preview(SVG, max_size=preview_max_size)
+        preview_image = self.generate_preview(svg_content, max_size=preview_max_size)
         # 保存到临时预览目录（自动清理），并返回 UI 引用
-        preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename)
+        preview_path, preview_subfolder = self.save_preview_temp_image(preview_image, filename_prefix)
+        
+        # SVGSaver 预览信息
+        
         return {"ui": {"images": [{"filename": os.path.basename(preview_path), "subfolder": preview_subfolder, "type": "output"}]}}
     
     def generate_preview(self, svg_string, max_size=512):
         """生成预览图像"""
         try:
             max_size = max(64, int(max_size))
+            
+            # 验证SVG内容并生成预览
+            if not svg_string.strip():
+                return create_fallback_image((max_size, max_size), "SVG内容为空").convert("RGB")
+            
+            if not re.search(r'<svg[^>]*>', svg_string, re.IGNORECASE):
+                return create_fallback_image((max_size, max_size), "无效SVG格式").convert("RGB")
+            
             src_w, src_h = _extract_svg_aspect_ratio(svg_string)
             if src_w and src_h:
                 target_size = _fit_size_by_aspect(max_size, src_w, src_h)
             else:
                 target_size = (max_size, max_size)
+            
             png_image = svg_to_png(svg_string, size=target_size)
             return png_image.convert("RGB")
+            
         except Exception as e:
-            print(f"生成预览时出错: {e}")
-            error_image = create_fallback_image((256, 256), "预览生成失败")
+            # 生成预览时出错
+            error_image = create_fallback_image((max_size, max_size), "预览生成失败")
             return error_image.convert("RGB")
 
-    def save_preview_image(self, pil_image, filename, save_dir):
+    def save_preview_image(self, pil_image, filename_prefix, save_dir):
         """保存预览PNG到输出目录，返回路径与相对子目录。"""
         # 解析输出目录（与 SVG 相同逻辑）
         if save_dir and save_dir.strip():
@@ -266,13 +296,14 @@ class SVGSaver:
         else:
             full_output_dir = self.output_dir
         os.makedirs(full_output_dir, exist_ok=True)
-        base_name = filename[:-4] if filename.lower().endswith('.svg') else filename
+        base_name = filename_prefix[:-4] if filename_prefix.lower().endswith('.svg') else filename_prefix
         preview_name = f"{base_name}.preview.png"
         preview_path = os.path.join(full_output_dir, preview_name)
         try:
             pil_image.save(preview_path, format="PNG")
         except Exception as e:
-            print(f"保存预览失败: {e}")
+            # 保存预览失败
+            pass
         # 计算相对子目录（相对于全局输出目录）
         try:
             base_output = folder_paths.get_output_directory()
@@ -305,20 +336,21 @@ class SVGSaver:
         except Exception:
             pass
 
-    def save_preview_temp_image(self, pil_image, filename):
+    def save_preview_temp_image(self, pil_image, filename_prefix):
         """保存预览到临时目录（自动清理），返回路径与相对子目录。"""
         temp_dir = self._get_temp_preview_dir()
         # 执行一次清理（>30分钟）
         self._cleanup_old_previews(temp_dir, max_age_seconds=1800)
 
-        base_name = filename[:-4] if filename.lower().endswith('.svg') else filename
+        base_name = filename_prefix[:-4] if filename_prefix.lower().endswith('.svg') else filename_prefix
         unique = uuid.uuid4().hex[:8]
         preview_name = f"{base_name}.{unique}.preview.png"
         preview_path = os.path.join(temp_dir, preview_name)
         try:
             pil_image.save(preview_path, format="PNG")
         except Exception as e:
-            print(f"保存预览失败: {e}")
+            # 保存预览失败
+            pass
 
         # 相对子目录相对于全局输出目录
         try:

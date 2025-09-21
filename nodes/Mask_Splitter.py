@@ -5,7 +5,7 @@ from collections import defaultdict
 from scipy import ndimage
 from skimage import measure
 
-class MaskSplitterPro:
+class MaskSplitter:
     """
     遮罩拆分Q：高效可靠的遮罩拆分工具
     - 支持最小组件过滤、小区域合并/移除/保留
@@ -23,43 +23,43 @@ class MaskSplitterPro:
                     "min": 1,
                     "max": 10000,
                     "step": 10,
-                    "display": "slider|最小组件大小 (像素数)"
+                    "display": "slider|min_component_size (像素数)"
                 }),
                 "small_region_handling": (["merge", "remove", "keep"], {
                     "default": "merge",
-                    "display": "小区域处理方式"
+                    "display": "small_region_handling"
                 }),
                 "merge_distance_ratio": ("FLOAT", {
                     "default": 2.0,
                     "min": 0.1,
                     "max": 10.0,
                     "step": 0.1,
-                    "display": "slider|合并距离比率"
+                    "display": "slider|merge_distance_ratio"
                 }),
                 "text_preservation": (["auto", "aggressive", "disabled"], {
                     "default": "auto",
-                    "display": "文字保护模式"
+                    "display": "text_preservation"
                 }),
                 "structure_preservation": (["disabled", "auto", "enhanced"], {
                     "default": "auto",
-                    "display": "结构保护模式"
+                    "display": "structure_preservation"
                 }),
                 "output_all_components": ("BOOLEAN", {
                     "default": True,
                     "label_on": "启用",
                     "label_off": "禁用",
-                    "display": "输出所有组件"
+                    "display": "output_all_components"
                 }),
                 "preserve_original_values": ("BOOLEAN", {
                     "default": True,
                     "label_on": "启用",
                     "label_off": "禁用",
-                    "display": "保持原始像素值"
+                    "display": "preserve_original_values"
                 }),
             },
             "optional": {
                 "reference_image": ("IMAGE", {
-                    "display": "参考图像 (可选)"
+                    "display": "reference_image (可选)"
                 }),
             }
         }
@@ -67,21 +67,21 @@ class MaskSplitterPro:
     # 保留 INPUT_NAMES 作为备份
     INPUT_NAMES = {
         "mask": "输入遮罩",
-        "min_component_size": "最小组件大小 (像素数)",
-        "small_region_handling": "小区域处理方式",
-        "merge_distance_ratio": "合并距离比率",
-        "text_preservation": "文字保护模式",
-        "structure_preservation": "结构保护模式",
-        "output_all_components": "输出所有组件",
-        "preserve_original_values": "保持原始像素值",
-        "reference_image": "参考图像 (可选)",
+        "min_component_size": "min_component_size (像素数)",
+        "small_region_handling": "small_region_handling",
+        "merge_distance_ratio": "merge_distance_ratio",
+        "text_preservation": "text_preservation",
+        "structure_preservation": "structure_preservation",
+        "output_all_components": "output_all_components",
+        "preserve_original_values": "preserve_original_values",
+        "reference_image": "reference_image (可选)",
     }
 
     RETURN_TYPES = ("MASK",)
-    RETURN_NAMES = ("遮罩列表",)
+    RETURN_NAMES = ("mask_list",)
     FUNCTION = "split"
     OUTPUT_IS_LIST = (True,)
-    CATEGORY = "图像/遮罩"
+    CATEGORY = "图像/mask"
 
     def split(self, mask, min_component_size=100, small_region_handling="merge", 
               merge_distance_ratio=2.0, text_preservation="auto", 
@@ -520,9 +520,9 @@ class MaskSplitterPro:
 
 # 让ComfyUI识别这个节点
 NODE_CLASS_MAPPINGS = {
-    "MaskSplitterPro": MaskSplitterPro
+    "MaskSplitter": MaskSplitter
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "MaskSplitterPro": "Mask Splitter Pro"
+    "MaskSplitter": "Mask Splitter"
 }

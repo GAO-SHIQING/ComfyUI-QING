@@ -1,0 +1,652 @@
+{
+  "LoadSVG": {
+    "display_name": "Load SVG File",
+    "description": "Load SVG file content, supports absolute paths",
+    "inputs": {
+      "svg_path": {
+        "name": "SVG Path",
+        "tooltip": "Complete path to the SVG file"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "SVG Content",
+        "tooltip": "Read SVG file content"
+      }
+    }
+  },
+  "MaskSplitter": {
+    "display_name": "Mask Splitter",
+    "description": "Efficient and reliable mask splitting tool with minimum component filtering and small region handling",
+    "inputs": {
+      "mask": {
+        "name": "Input Mask",
+        "tooltip": "Mask to be split"
+      },
+      "min_component_size": {
+        "name": "Min Component Size",
+        "tooltip": "Minimum component size (in pixels)"
+      },
+      "small_region_handling": {
+        "name": "Small Region Handling",
+        "tooltip": "Small region handling: merge, remove, or keep"
+      },
+      "merge_distance_ratio": {
+        "name": "Merge Distance Ratio",
+        "tooltip": "Merge distance ratio"
+      },
+      "text_preservation": {
+        "name": "Text Preservation",
+        "tooltip": "Text preservation mode: auto, aggressive, or disabled"
+      },
+      "structure_preservation": {
+        "name": "Structure Preservation",
+        "tooltip": "Structure preservation mode: disabled, auto, or enhanced"
+      },
+      "output_all_components": {
+        "name": "Output All Components",
+        "tooltip": "Whether to output all components"
+      },
+      "preserve_original_values": {
+        "name": "Preserve Original Values",
+        "tooltip": "Whether to preserve original pixel values"
+      },
+      "reference_image": {
+        "name": "Reference Image",
+        "tooltip": "Reference image (optional)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Mask List",
+        "tooltip": "List of split masks"
+      }
+    }
+  },
+  "SVGToImage": {
+    "display_name": "SVG to Image",
+    "description": "Convert SVG to image with advanced scaling options and dimension output",
+    "inputs": {
+      "svg_input": {
+        "name": "SVG Input",
+        "tooltip": "SVG content or code"
+      },
+      "adjust_size": {
+        "name": "Adjust Size",
+        "tooltip": "Target size, WxH or single value (square)"
+      },
+      "keep_aspect_ratio": {
+        "name": "Keep Aspect Ratio",
+        "tooltip": "Whether to maintain aspect ratio"
+      },
+      "scale_definition": {
+        "name": "Scale Definition",
+        "tooltip": "Scale reference definition"
+      },
+      "scale_method": {
+        "name": "Scale Method",
+        "tooltip": "Image scaling interpolation method"
+      },
+      "dpi": {
+        "name": "DPI",
+        "tooltip": "Image resolution DPI"
+      },
+      "output_format": {
+        "name": "Output Format",
+        "tooltip": "Output image format"
+      },
+      "quality": {
+        "name": "Quality",
+        "tooltip": "Output image quality"
+      },
+      "background_color": {
+        "name": "Background Color",
+        "tooltip": "Background color in hex, e.g., #FFFFFF; leave empty for transparent"
+      },
+      "multiple_of": {
+        "name": "Size Multiple",
+        "tooltip": "Constrain width and height to multiples of this integer (0 to disable)"
+      },
+      "target_pixels": {
+        "name": "Target Pixels",
+        "tooltip": "Target total pixels (for total_pixels scale definition)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Image",
+        "tooltip": "Converted image"
+      },
+      "1": {
+        "name": "Mask",
+        "tooltip": "Image alpha mask"
+      },
+      "2": {
+        "name": "Width",
+        "tooltip": "Final image width"
+      },
+      "3": {
+        "name": "Height",
+        "tooltip": "Final image height"
+      }
+    }
+  },
+  "MaskScale": {
+    "display_name": "Mask Scale",
+    "description": "Scale mask dimensions with multiple scaling methods",
+    "inputs": {
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Input mask"
+      },
+      "scale_by": {
+        "name": "Scale By",
+        "tooltip": "Scale basis: width, height, longest side, shortest side, or total pixels"
+      },
+      "target_value": {
+        "name": "Target Value",
+        "tooltip": "Target value (corresponding to scale basis)"
+      },
+      "interpolation": {
+        "name": "Interpolation",
+        "tooltip": "Interpolation method: nearest, bilinear, bicubic, or lanczos"
+      },
+      "keep_proportions": {
+        "name": "Keep Proportions",
+        "tooltip": "Whether to maintain aspect ratio"
+      },
+      "target_width": {
+        "name": "Target Width",
+        "tooltip": "Specified target width (overrides scale basis)"
+      },
+      "target_height": {
+        "name": "Target Height",
+        "tooltip": "Specified target height (overrides scale basis)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Mask",
+        "tooltip": "Scaled mask"
+      },
+      "1": {
+        "name": "Width",
+        "tooltip": "Final width"
+      },
+      "2": {
+        "name": "Height",
+        "tooltip": "Final height"
+      }
+    }
+  },
+  "TextCompare": {
+    "display_name": "Text Compare",
+    "description": "Text comparison node supporting 3 groups of comparison with case sensitivity option",
+    "inputs": {
+      "case_sensitive": {
+        "name": "Case Sensitive",
+        "tooltip": "Whether to be case sensitive"
+      },
+      "text_1": {
+        "name": "Text 1",
+        "tooltip": "Text for first comparison group"
+      },
+      "subtext_1": {
+        "name": "Subtext 1",
+        "tooltip": "Subtext for first comparison group"
+      },
+      "text_2": {
+        "name": "Text 2",
+        "tooltip": "Text for second comparison group"
+      },
+      "subtext_2": {
+        "name": "Subtext 2",
+        "tooltip": "Subtext for second comparison group"
+      },
+      "text_3": {
+        "name": "Text 3",
+        "tooltip": "Text for third comparison group"
+      },
+      "subtext_3": {
+        "name": "Subtext 3",
+        "tooltip": "Subtext for third comparison group"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Result 1",
+        "tooltip": "First comparison result"
+      },
+      "1": {
+        "name": "Result 2",
+        "tooltip": "Second comparison result"
+      },
+      "2": {
+        "name": "Result 3",
+        "tooltip": "Third comparison result"
+      }
+    }
+  },
+  "CustomLoadImageWithFormat": {
+    "display_name": "Load Image (SVG Support)",
+    "description": "Load image files with SVG format support",
+    "inputs": {
+      "image": {
+        "name": "Image File",
+        "tooltip": "Image file to load"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Image",
+        "tooltip": "Loaded image"
+      },
+      "1": {
+        "name": "Mask",
+        "tooltip": "Image alpha mask"
+      },
+      "2": {
+        "name": "SVG",
+        "tooltip": "SVG content (if SVG file)"
+      },
+      "3": {
+        "name": "Format Info",
+        "tooltip": "File format information"
+      }
+    }
+  },
+  "SyntheticVideo": {
+    "display_name": "Synthetic Video",
+    "description": "Synthesize image sequence into video file",
+    "inputs": {
+      "images": {
+        "name": "Image Sequence",
+        "tooltip": "Input image sequence"
+      },
+      "frame_rate": {
+        "name": "Frame Rate",
+        "tooltip": "Video frame rate"
+      },
+      "loop_count": {
+        "name": "Loop Count",
+        "tooltip": "Video loop count"
+      },
+      "skip_frames": {
+        "name": "Skip Frames",
+        "tooltip": "Number of frames to skip"
+      },
+      "filename_prefix": {
+        "name": "Filename Prefix",
+        "tooltip": "Output filename prefix"
+      },
+      "format": {
+        "name": "Output Format",
+        "tooltip": "Video output format"
+      },
+      "pingpong": {
+        "name": "Ping Pong",
+        "tooltip": "Whether to ping pong playback"
+      },
+      "save_output": {
+        "name": "Save Output",
+        "tooltip": "Whether to save output file"
+      },
+      "save_metadata": {
+        "name": "Save Metadata",
+        "tooltip": "Whether to save metadata"
+      },
+      "custom_save_path": {
+        "name": "Custom Save Path",
+        "tooltip": "Custom save path"
+      },
+      "audio": {
+        "name": "Audio",
+        "tooltip": "Audio track"
+      },
+      "custom_ffmpeg_args": {
+        "name": "Custom FFmpeg Args",
+        "tooltip": "Custom FFmpeg arguments"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "File Path",
+        "tooltip": "Generated video file path"
+      }
+    }
+  },
+  "MaskBlend": {
+    "display_name": "Mask Blend",
+    "description": "Blend multiple masks with various blend modes and advanced effects",
+    "inputs": {
+      "mask1": {
+        "name": "Mask 1",
+        "tooltip": "First mask (reference size)"
+      },
+      "blend_mode": {
+        "name": "Blend Mode",
+        "tooltip": "Mask blend mode"
+      },
+      "feather_radius": {
+        "name": "Feather Radius",
+        "tooltip": "Feather radius (pixels)"
+      },
+      "invert_mask": {
+        "name": "Invert Mask",
+        "tooltip": "Whether to invert output mask"
+      },
+      "threshold": {
+        "name": "Threshold",
+        "tooltip": "Binarization threshold (%)"
+      },
+      "expert_mode": {
+        "name": "Expert Mode",
+        "tooltip": "Enable advanced parameters when activated"
+      },
+      "mask2": {
+        "name": "Mask 2",
+        "tooltip": "Second mask (optional)"
+      },
+      "mask3": {
+        "name": "Mask 3",
+        "tooltip": "Third mask (optional)"
+      },
+      "mask4": {
+        "name": "Mask 4",
+        "tooltip": "Fourth mask (optional)"
+      },
+      "mask5": {
+        "name": "Mask 5",
+        "tooltip": "Fifth mask (optional)"
+      },
+      "gradient_type": {
+        "name": "Gradient Type",
+        "tooltip": "Gradient effect type"
+      },
+      "gradient_direction": {
+        "name": "Gradient Direction",
+        "tooltip": "Gradient direction"
+      },
+      "gradient_intensity": {
+        "name": "Gradient Intensity",
+        "tooltip": "Gradient intensity (0.0-2.0)"
+      },
+      "stroke_width": {
+        "name": "Stroke Width",
+        "tooltip": "Stroke width (pixels)"
+      },
+      "stroke_position": {
+        "name": "Stroke Position",
+        "tooltip": "Stroke position: center, inside, or outside"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Mask",
+        "tooltip": "Blended mask"
+      },
+      "1": {
+        "name": "Image",
+        "tooltip": "Image representation of mask"
+      },
+      "2": {
+        "name": "Raw Mask",
+        "tooltip": "Raw blend result"
+      }
+    }
+  },
+  "MaskJudgment": {
+    "display_name": "Mask Judgment",
+    "description": "Judge whether mask is valid",
+    "inputs": {
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Input mask"
+      },
+      "threshold": {
+        "name": "Threshold",
+        "tooltip": "Valid threshold"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Has Mask",
+        "tooltip": "Boolean value, whether valid mask exists"
+      },
+      "1": {
+        "name": "Mask Flag",
+        "tooltip": "Integer flag, 1 for valid, 0 for invalid"
+      },
+      "2": {
+        "name": "Mask Ratio",
+        "tooltip": "Ratio of valid pixels to total pixels"
+      },
+      "3": {
+        "name": "Mask Info",
+        "tooltip": "Text description of mask status"
+      }
+    }
+  },
+  "MaskExpansion": {
+    "display_name": "Mask Expansion",
+    "description": "Mask expansion and contraction operations",
+    "inputs": {
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Input mask"
+      },
+      "expansion": {
+        "name": "Expansion",
+        "tooltip": "Expansion value: positive for expansion, negative for contraction"
+      },
+      "feather": {
+        "name": "Feather",
+        "tooltip": "Feather strength"
+      },
+      "invert_mask": {
+        "name": "Invert Mask",
+        "tooltip": "Whether to invert mask"
+      },
+      "direction_up": {
+        "name": "Direction Up",
+        "tooltip": "Whether to expand upward"
+      },
+      "direction_down": {
+        "name": "Direction Down",
+        "tooltip": "Whether to expand downward"
+      },
+      "direction_left": {
+        "name": "Direction Left",
+        "tooltip": "Whether to expand leftward"
+      },
+      "direction_right": {
+        "name": "Direction Right",
+        "tooltip": "Whether to expand rightward"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Mask",
+        "tooltip": "Processed mask"
+      }
+    }
+  },
+  "SVGSaver": {
+    "display_name": "SVG Saver",
+    "description": "Save SVG content to file",
+    "inputs": {
+      "svg_content": {
+        "name": "SVG Content",
+        "tooltip": "SVG content to save"
+      },
+      "filename_prefix": {
+        "name": "Filename Prefix",
+        "tooltip": "Prefix for saved filename"
+      },
+      "save_dir": {
+        "name": "Save Directory",
+        "tooltip": "Custom save directory (leave empty for default)"
+      },
+      "overwrite": {
+        "name": "Overwrite Mode",
+        "tooltip": "Whether to overwrite existing files"
+      },
+      "preview_max_size": {
+        "name": "Preview Max Size",
+        "tooltip": "Maximum size for preview image"
+      }
+    }
+  },
+  "ImageToSVG": {
+    "display_name": "Image to SVG",
+    "description": "Convert image to SVG format with multiple conversion modes",
+    "inputs": {
+      "image": {
+        "name": "Image",
+        "tooltip": "Input image"
+      },
+      "conversion_mode": {
+        "name": "Conversion Mode",
+        "tooltip": "Conversion mode: edge detection, color quantization, silhouette, or posterize"
+      },
+      "precision": {
+        "name": "Precision",
+        "tooltip": "SVG precision (higher is more detailed)"
+      },
+      "preset": {
+        "name": "Preset Mode",
+        "tooltip": "Preset mode: simple, detailed, artistic, or custom"
+      },
+      "edge_threshold1": {
+        "name": "Edge Threshold 1",
+        "tooltip": "Edge detection threshold 1"
+      },
+      "edge_threshold2": {
+        "name": "Edge Threshold 2",
+        "tooltip": "Edge detection threshold 2"
+      },
+      "color_levels": {
+        "name": "Color Levels",
+        "tooltip": "Color quantization levels"
+      },
+      "simplify_tolerance": {
+        "name": "Simplify Tolerance",
+        "tooltip": "Path simplification tolerance"
+      },
+      "min_area": {
+        "name": "Min Area",
+        "tooltip": "Minimum area to preserve"
+      },
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Optional mask to limit conversion area"
+      },
+      "edge_auto_threshold": {
+        "name": "Auto Edge Threshold",
+        "tooltip": "Automatically calculate Canny dual thresholds"
+      },
+      "preserve_aspect_ratio": {
+        "name": "Preserve Aspect Ratio",
+        "tooltip": "Whether to preserve SVG aspect ratio"
+      },
+      "background_color": {
+        "name": "Background Color",
+        "tooltip": "SVG background color in hex, e.g., #FFFFFF"
+      },
+      "stroke_color": {
+        "name": "Stroke Color",
+        "tooltip": "Stroke color in hex, e.g., #000000"
+      },
+      "stroke_width": {
+        "name": "Stroke Width",
+        "tooltip": "Stroke width"
+      },
+      "silhouette_auto_threshold": {
+        "name": "Silhouette Auto Threshold",
+        "tooltip": "Automatic silhouette threshold (Otsu)"
+      },
+      "silhouette_threshold": {
+        "name": "Silhouette Threshold",
+        "tooltip": "Manual silhouette threshold (effective when auto is off)"
+      },
+      "preview_max_size": {
+        "name": "Preview Max Size",
+        "tooltip": "Maximum preview size in pixels"
+      },
+      "minify_svg": {
+        "name": "Minify SVG",
+        "tooltip": "Minify SVG to reduce file size"
+      },
+      "decimal_precision": {
+        "name": "Decimal Precision",
+        "tooltip": "Decimal places for coordinates and values"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "SVG Content",
+        "tooltip": "Converted SVG content"
+      },
+      "1": {
+        "name": "Width",
+        "tooltip": "SVG width"
+      },
+      "2": {
+        "name": "Height",
+        "tooltip": "SVG height"
+      },
+      "3": {
+        "name": "Mask",
+        "tooltip": "Mask from conversion process"
+      },
+      "4": {
+        "name": "Preview",
+        "tooltip": "SVG preview image"
+      }
+    }
+  },
+  "ImageMaskConverter": {
+    "display_name": "Image Mask Converter",
+    "description": "Independent bidirectional conversion: extract image channels to masks, convert masks to grayscale images",
+    "inputs": {
+      "channel": {
+        "name": "Channel",
+        "tooltip": "Color channel for image-to-mask conversion (ignored for mask-to-image)"
+      },
+      "image1": {
+        "name": "Image 1",
+        "tooltip": "Input image 1 → Output mask 1"
+      },
+      "image2": {
+        "name": "Image 2",
+        "tooltip": "Input image 2 → Output mask 2"
+      },
+      "mask1": {
+        "name": "Mask 1",
+        "tooltip": "Input mask 1 → Output image 1 (grayscale)"
+      },
+      "mask2": {
+        "name": "Mask 2",
+        "tooltip": "Input mask 2 → Output image 2 (grayscale)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Mask 1",
+        "tooltip": "From image 1's specified channel"
+      },
+      "1": {
+        "name": "Mask 2",
+        "tooltip": "From image 2's specified channel"
+      },
+      "2": {
+        "name": "Image 1",
+        "tooltip": "Grayscale image from mask 1"
+      },
+      "3": {
+        "name": "Image 2",
+        "tooltip": "Grayscale image from mask 2"
+      }
+    }
+  }
+}

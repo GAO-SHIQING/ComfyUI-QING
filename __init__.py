@@ -1,6 +1,6 @@
 # 从 node 子目录中的文件导入节点类
 from .nodes.Load_svg import LoadSVG
-from .nodes.Split_mask import MaskSplitterPro
+from .nodes.Mask_Splitter import MaskSplitter
 from .nodes.Svg_to_image import SVGToImage
 from .nodes.Custom_load_image import CustomLoadImageWithFormat
 from .nodes.Mask_scale import MaskScale
@@ -13,10 +13,22 @@ from .nodes.Mask_blend import MaskBlend
 from .nodes.Mask_expansion import MaskExpansion
 from .nodes.Image_mask_converter import ImageMaskConverter
 
+
+# 按照官方文档加载翻译系统
+# 参考：https://docs.comfy.org/zh-CN/custom-nodes/i18n
+# 官方示例：https://github.com/comfyui-wiki/ComfyUI-i18n-demo
+try:
+    from comfy.utils import load_translation
+    load_translation(__file__)
+except ImportError:
+    # 当前 ComfyUI 版本不支持官方 i18n API
+    # 使用 NODE_DISPLAY_NAME_MAPPINGS 作为回退方案
+    pass
+
 NODE_CLASS_MAPPINGS = {
-    "Load SVG": LoadSVG,
-    "MaskSplitterPro": MaskSplitterPro,
-    "SVG To Image": SVGToImage,
+    "LoadSVG": LoadSVG,
+    "MaskSplitter": MaskSplitter,
+    "SVGToImage": SVGToImage,
     "CustomLoadImageWithFormat": CustomLoadImageWithFormat,
     "MaskScale": MaskScale,
     "TextCompare": TextCompare,
@@ -29,16 +41,17 @@ NODE_CLASS_MAPPINGS = {
     "ImageMaskConverter": ImageMaskConverter,
 }
 
+# 默认显示名称（中文作为默认）
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "Load SVG": "加载SVG",
-    "MaskSplitterPro": "拆分遮罩",
-    "SVG To Image": "SVG到图像",
+    "LoadSVG": "加载SVG文件",
+    "MaskSplitter": "遮罩拆分",
+    "SVGToImage": "SVG转图像",
     "CustomLoadImageWithFormat": "加载图像(支持SVG)",
     "MaskScale": "遮罩缩放",
     "TextCompare": "文本对比",
     "SyntheticVideo": "合成视频",
     "SVGSaver": "保存SVG",
-    "ImageToSVG": "图像到SVG",
+    "ImageToSVG": "图像转SVG",
     "MaskJudgment": "遮罩判断",
     "MaskBlend": "遮罩混合",
     "MaskExpansion": "遮罩扩张",
@@ -46,4 +59,3 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
-

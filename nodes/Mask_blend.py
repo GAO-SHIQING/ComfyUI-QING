@@ -4,7 +4,7 @@ import time
 from enum import Enum
 
 class BlendMode(Enum):
-    """混合模式（精简常用）"""
+    """blend_mode（精简常用）"""
     ADD = "add"
     SUBTRACT = "subtract"
     INTERSECT = "intersect"
@@ -148,7 +148,7 @@ class MaskBlend:
                 # 混合设置
                 "blend_mode": (blend_modes, {
                     "default": BlendMode.ADD.value,
-                    "description": "混合模式"
+                    "description": "blend_mode"
                 }),
                 "feather_radius": ("INT", {
                     "default": 0,
@@ -156,7 +156,7 @@ class MaskBlend:
                     "max": 100,
                     "step": 1,
                     "display": "slider",
-                    "description": "羽化半径（像素）"
+                    "description": "feather_radius（像素）"
                 }),
                 "invert_mask": (["false", "true"], {
                     "default": "false",
@@ -231,8 +231,7 @@ class MaskBlend:
     RETURN_TYPES = ("MASK", "IMAGE", "MASK")  # 返回遮罩、图像和原始混合结果
     RETURN_NAMES = ("mask", "image", "raw_mask")
     FUNCTION = "blend_masks"
-    CATEGORY = "Custom/Mask Processing"
-    DESCRIPTION = "混合多个遮罩并提供多种边缘过渡效果"
+    CATEGORY = "自定义/遮罩"
 
     def blend_masks(self, mask1, blend_mode, feather_radius, invert_mask, threshold, 
                    mask2=None, mask3=None, mask4=None, mask5=None, gradient_type=GradientType.NONE.value, 
@@ -244,8 +243,8 @@ class MaskBlend:
         
         参数:
             mask1: 第一个遮罩张量
-            blend_mode: 混合模式
-            feather_radius: 羽化半径
+            blend_mode: blend_mode
+            feather_radius: feather_radius
             invert_mask: 是否反转遮罩
             threshold: 混合阈值(0-100)
             mask2: 可选第二个遮罩
@@ -255,8 +254,6 @@ class MaskBlend:
             gradient_intensity: 渐变强度
             stroke_width: 描边宽度
             stroke_position: 描边位置
-            bevel_depth: 斜面深度
-            texture_intensity: 纹理强度
             
         返回:
             tuple: 处理后的遮罩、图像和原始混合结果
@@ -268,6 +265,14 @@ class MaskBlend:
         # 验证输入
         if mask1 is None:
             raise ValueError("至少需要提供一个遮罩输入")
+        
+        # 检查遮罩尺寸
+        if mask1.numel() == 0:
+            raise ValueError("输入遮罩不能为空")
+        
+        # 检查遮罩维度
+        if mask1.dim() < 2 or mask1.dim() > 4:
+            raise ValueError(f"遮罩维度必须在2-4之间，当前为{mask1.dim()}")
 
         # 规范化参数
         params = self._validate_and_normalize_params(
@@ -351,8 +356,9 @@ class MaskBlend:
         
         blended_mask = self.apply_edge_effects(blended_mask, effect_params)
         
-        # 应用阈值
-        if threshold != 50:  # 默认阈值是50%
+        # 应用阈值（二值化）
+        # 注意：如果用户想要保持原始灰度值，可以设置阈值为0
+        if threshold > 0:
             threshold_value = threshold / 100.0
             blended_mask = (blended_mask > threshold_value).float()
         
@@ -386,7 +392,13 @@ class MaskBlend:
             result = torch.clamp(torch.sum(stacked, dim=0), 0, 1)
 
         elif mode == BlendMode.SUBTRACT.value:
-            result = torch.clamp(stacked[0] - torch.sum(stacked[1:], dim=0), 0, 1)
+            if stacked.shape[0] == 1:
+                result = stacked[0]
+            else:
+                result = stacked[0]
+                for i in range(1, stacked.shape[0]):
+                    result = torch.clamp(result - stacked[i], 0, 1)
+                result = torch.clamp(result, 0, 1)
 
         elif mode == BlendMode.INTERSECT.value:
             result = torch.min(stacked, dim=0)[0]
@@ -394,10 +406,15 @@ class MaskBlend:
         elif mode == BlendMode.XOR.value:
             if stacked.shape[0] == 1:
                 result = stacked[0]
-            else:
+            elif stacked.shape[0] == 2:
+                # 标准XOR：两个遮罩的异或
                 result = torch.abs(stacked[0] - stacked[1])
-                for i in range(2, stacked.shape[0]):
-                    result = torch.abs(result - stacked[i])
+            else:
+                # 多个遮罩的XOR：使用奇偶性规则
+                result = stacked[0]
+                for i in range(1, stacked.shape[0]):
+                    # 使用逻辑XOR：(A + B) - 2*(A * B)
+                    result = result + stacked[i] - 2 * result * stacked[i]
 
         elif mode == BlendMode.INVERT.value:
             result = 1 - stacked[0]
@@ -504,35 +521,25 @@ class MaskBlend:
         self.precomputed_kernels[cache_key] = kernel
         return kernel
 
-    def apply_gradient(self, mask, gradient_type, gradient_direction, intensity=1.0):
-        """
-        应用渐变效果，支持多种类型和方向
-        """
-        height, width = mask.shape[-2:]
-        device = mask.device
-        
+    def _compute_gradient(self, gradient_type, gradient_direction, height, width, device):
+        """计算渐变矩阵"""
         if gradient_type == GradientType.LINEAR.value:
             if gradient_direction == GradientDirection.HORIZONTAL.value:
-                # 水平渐变
                 gradient = torch.linspace(0, 1, width, device=device)
                 gradient = gradient.unsqueeze(0).repeat(height, 1)
             elif gradient_direction == GradientDirection.VERTICAL.value:
-                # 垂直渐变
                 gradient = torch.linspace(0, 1, height, device=device)
                 gradient = gradient.unsqueeze(1).repeat(1, width)
             elif gradient_direction == GradientDirection.DIAGONAL.value:
-                # 对角线渐变
                 x = torch.linspace(0, 1, width, device=device)
                 y = torch.linspace(0, 1, height, device=device)
                 X, Y = torch.meshgrid(x, y, indexing='xy')
                 gradient = (X + Y) / 2
             else:
-                # 默认水平渐变
                 gradient = torch.linspace(0, 1, width, device=device)
                 gradient = gradient.unsqueeze(0).repeat(height, 1)
                 
         elif gradient_type == GradientType.RADIAL.value:
-            # 创建径向渐变
             center_x, center_y = width // 2, height // 2
             x = torch.arange(width, device=device).float() - center_x
             y = torch.arange(height, device=device).float() - center_y
@@ -543,22 +550,20 @@ class MaskBlend:
             if gradient_direction == GradientDirection.RADIAL_IN.value:
                 gradient = torch.sqrt(X**2 + Y**2)
                 gradient = gradient / gradient.max()
-                gradient = 1 - gradient  # 从中心向外渐变
-            else:  # RADIAL_OUT
+                gradient = 1 - gradient
+            else:
                 gradient = torch.sqrt(X**2 + Y**2)
-                gradient = gradient / gradient.max()  # 从外向中心渐变
+                gradient = gradient / gradient.max()
                 
         elif gradient_type == GradientType.ANGULAR.value:
-            # 角度渐变
             center_x, center_y = width // 2, height // 2
             x = torch.arange(width, device=device).float() - center_x
             y = torch.arange(height, device=device).float() - center_y
             X, Y = torch.meshgrid(x, y, indexing='xy')
-            gradient = torch.atan2(Y, X)  # 角度值 -π 到 π
-            gradient = (gradient + torch.pi) / (2 * torch.pi)  # 归一化到 0-1
+            gradient = torch.atan2(Y, X)
+            gradient = (gradient + torch.pi) / (2 * torch.pi)
             
         elif gradient_type == GradientType.DIAMOND.value:
-            # 菱形渐变
             center_x, center_y = width // 2, height // 2
             x = torch.arange(width, device=device).float() - center_x
             y = torch.arange(height, device=device).float() - center_y
@@ -567,9 +572,36 @@ class MaskBlend:
             X, Y = torch.meshgrid(x, y, indexing='xy')
             gradient = X + Y
             gradient = gradient / gradient.max()
-            
         else:
+            gradient = torch.ones(height, width, device=device)
+            
+        return gradient
+
+    def apply_gradient(self, mask, gradient_type, gradient_direction, intensity=1.0):
+        """
+        应用渐变效果，支持多种类型和方向
+        """
+        if mask.numel() == 0:
             return mask
+            
+        height, width = mask.shape[-2:]
+        if height <= 0 or width <= 0:
+            return mask
+            
+        device = mask.device
+        
+        # 如果没有渐变效果，直接返回
+        if gradient_type == GradientType.NONE.value:
+            return mask
+        
+        # 检查是否有缓存的渐变
+        gradient_key = (gradient_type, gradient_direction, height, width, str(device))
+        if gradient_key in self.precomputed_gradients:
+            gradient = self.precomputed_gradients[gradient_key]
+        else:
+            # 计算并缓存渐变
+            gradient = self._compute_gradient(gradient_type, gradient_direction, height, width, device)
+            self.precomputed_gradients[gradient_key] = gradient
         
         # 应用渐变强度
         gradient = gradient ** intensity
@@ -597,13 +629,15 @@ class MaskBlend:
         kernel_size = stroke_width * 2 + 1
         kernel = torch.ones(1, 1, kernel_size, kernel_size, device=mask.device)
         
-        # 应用膨胀获取外部边缘
+        # 使用形态学操作：膨胀和腐蚀
+        # 膨胀：卷积后判断是否大于0
         dilated = F.conv2d(mask, kernel, padding=stroke_width)
         dilated = (dilated > 0).float()
         
-        # 应用腐蚀获取内部边缘
-        eroded = F.conv2d(mask, kernel, padding=stroke_width)
-        eroded = (eroded >= kernel.numel()).float()
+        # 腐蚀：先反转遮罩，膨胀后再反转
+        inverted_mask = 1 - mask
+        eroded_inv = F.conv2d(inverted_mask, kernel, padding=stroke_width)
+        eroded = 1 - (eroded_inv > 0).float()
         
         # 根据位置计算描边
         if stroke_position == StrokePosition.CENTER.value:

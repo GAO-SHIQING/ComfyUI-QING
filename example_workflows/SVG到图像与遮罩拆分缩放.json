@@ -6,7 +6,7 @@
   "nodes": [
     {
       "id": 11,
-      "type": "Load SVG",
+      "type": "LoadSVG",
       "pos": [
         206.00460815429688,
         91.27308654785156
@@ -29,7 +29,7 @@
       "properties": {
         "aux_id": "GAOSHI-QING/ComfyUI-QING",
         "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
-        "Node name for S&R": "Load SVG",
+        "Node name for S&R": "LoadSVG",
         "ue_properties": {
           "widget_ue_connectable": {
             "svg_path": true
@@ -132,7 +132,7 @@
     },
     {
       "id": 10,
-      "type": "SVG To Image",
+      "type": "SVGToImage",
       "pos": [
         723.6512451171875,
         168.10086059570312
@@ -184,7 +184,7 @@
       "properties": {
         "aux_id": "GAOSHI-QING/ComfyUI-QING",
         "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
-        "Node name for S&R": "SVG To Image",
+        "Node name for S&R": "SVGToImage",
         "ue_properties": {
           "widget_ue_connectable": {
             "svg_input": true,
@@ -252,7 +252,7 @@
     },
     {
       "id": 14,
-      "type": "MaskSplitterPro",
+      "type": "MaskSplitter",
       "pos": [
         1229.1136474609375,
         601.4697265625
@@ -291,7 +291,7 @@
       "properties": {
         "aux_id": "GAOSHI-QING/ComfyUI-QING",
         "ver": "c1941c4b8365b8d084dddb6a621f410ef91d1147",
-        "Node name for S&R": "MaskSplitterPro",
+        "Node name for S&R": "MaskSplitter",
         "ue_properties": {
           "widget_ue_connectable": {
             "min_component_size": true,

@@ -231,7 +231,7 @@ def get_video_formats():
     
     # 检查外部格式文件是否存在
     if not os.path.exists(video_formats_path):
-        print(f"Info: Using built-in video formats only, external config not found at {video_formats_path}")
+        # Info: Using built-in video formats only
         return formats, format_widgets
     
     try:
@@ -253,7 +253,8 @@ def get_video_formats():
                 format_widgets["video/"+ format_name] = widgets
                 
     except Exception as e:
-        print(f"Error loading external video formats: {e}")
+        # Error loading external video formats
+        pass
     
     return formats, format_widgets
 
@@ -387,7 +388,8 @@ def ffmpeg_process(args, video_format, video_metadata, file_path, env, save_meta
                             + res.decode(*ENCODE_ARGS))
         yield total_frames_output
         if len(res) > 0:
-            print(res.decode(*ENCODE_ARGS), end="", file=sys.stderr)
+            # FFmpeg output
+            pass
     finally:
         # 清理临时目录
         shutil.rmtree(temp_dir, ignore_errors=True)
@@ -423,11 +425,14 @@ def gifski_process(args, dimensions, video_format, file_path, env, gifski_path):
                             + "Make sure you are using gifski --version >=1.32.0\nffmpeg: " \
                             + resff.decode(*ENCODE_ARGS) + '\ngifski: ' + resgs.decode(*ENCODE_ARGS))
         if len(resff) > 0:
-            print(resff.decode(*ENCODE_ARGS), end="", file=sys.stderr)
+            # FFmpeg format output
+            pass
         if len(resgs) > 0:
-            print(resgs.decode(*ENCODE_ARGS), end="", file=sys.stderr)
+            # FFmpeg stream output
+            pass
         if len(outgs) > 0:
-            print(outgs.decode(*ENCODE_ARGS))
+            # FFmpeg general output
+            pass
     except Exception as e:
         if os.path.exists(file_path):
             os.remove(file_path)  # 清理失败的文件
@@ -511,7 +516,7 @@ def ensure_directory_exists(path):
         os.makedirs(path, exist_ok=True)
         return True
     except Exception as e:
-        print(f"Error creating directory {path}: {e}")
+        # Error creating directory
         return False
 
 
@@ -524,7 +529,7 @@ def get_safe_path(base_path, filename_prefix, is_output=True):
     """
     if base_path and base_path.strip() and os.path.isdir(base_path) and os.access(base_path, os.W_OK):
         # 使用自定义路径
-        print(f"使用自定义保存路径: {base_path}")
+        # 使用自定义保存路径
         full_output_folder = base_path
         filename = filename_prefix
         subfolder = ""
@@ -542,7 +547,7 @@ def get_safe_path(base_path, filename_prefix, is_output=True):
             subfolder,
             _,
         ) = folder_paths.get_save_image_path(filename_prefix, output_dir)
-        print(f"使用默认保存路径: {full_output_folder}")
+        # 使用默认保存路径
     
     return full_output_folder, filename, subfolder
 
@@ -571,15 +576,15 @@ class SyntheticVideo:
                     {"default": 16, "min": 1, "step": 1},
                 ),
                 "loop_count": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1}),
-                "skip_frames": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1, "display_name": "跳过前X帧"}),
+                "skip_frames": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1}),
                 "filename_prefix": ("STRING", {"default": "QING"}),
                 "format": (format_choices, {"default": "video/mp4"}),
                 "pingpong": ("BOOLEAN", {"default": False}),
                 "save_output": ("BOOLEAN", {"default": True}),
-                "save_metadata": ("BOOLEAN", {"default": True, "display_name": "保存元数据"}),
+                "save_metadata": ("BOOLEAN", {"default": True}),
             },
             "optional": {
-                "custom_save_path": ("STRING", {"default": "", "display_name": "自定义保存路径"}),
+                "custom_save_path": ("STRING", {"default": ""}),
                 "audio": ("AUDIO",),
                 "custom_ffmpeg_args": ("STRING", {"default": "", "multiline": True}),
             },
@@ -634,37 +639,34 @@ class SyntheticVideo:
         **kwargs
     ):
         try:
-            print(f"SyntheticVideo: 开始处理视频合成...")
-            print(f"输入参数: frame_rate={frame_rate}, loop_count={loop_count}, skip_frames={skip_frames}")
-            print(f"图像数量: {len(images) if images is not None else 'None'}")
-            print(f"格式: {format}, 文件名前缀: {filename_prefix}")
-            print(f"自定义保存路径: '{custom_save_path}'")
+            # 开始处理视频合成
             
             if images is None:
-                print("错误: 没有输入图像")
+                # 错误: 没有输入图像
                 return ("",)
                 
             # 跳过指定数量的帧
             if skip_frames > 0 and skip_frames < len(images):
                 images = images[skip_frames:]
-                print(f"已跳过前 {skip_frames} 帧，剩余 {len(images)} 帧")
+                # 已跳过前n帧
             elif skip_frames >= len(images):
                 raise ValueError(f"跳过的帧数 ({skip_frames}) 不能大于或等于总帧数 ({len(images)})")
                 
             # 查找ffmpeg路径
-            print(f"正在查找FFmpeg...")
+            # 查找FFmpeg
             ffmpeg_path = find_ffmpeg_path()
-            print(f"FFmpeg路径: {ffmpeg_path}")
             
             if ffmpeg_path is None or not os.path.exists(ffmpeg_path):
-                print("警告: FFmpeg未找到，视频格式可能无法生成")
+                # 警告: FFmpeg未找到
+                pass
             
             # 只有在需要gif格式时才查找gifski
             gifski_path = None
             if format == "image/gif" or format.startswith("video/gif"):
                 gifski_path = find_gifski_path()
                 if gifski_path is None:
-                    print("Warning: gifski not found, GIF quality may be lower")
+                    # Warning: gifski not found
+                    pass
 
             if isinstance(images, torch.Tensor) and images.size(0) == 0:
                 return ("",)
@@ -680,12 +682,12 @@ class SyntheticVideo:
             images_iter = image_generator()
             
             # 获取输出信息 - 使用自定义路径或默认路径
-            print(f"正在获取保存路径...")
+            # 正在获取保存路径
             full_output_folder, filename, subfolder = get_safe_path(
                 custom_save_path, filename_prefix, save_output
             )
-            print(f"最终保存路径: {full_output_folder}")
-            print(f"文件名: {filename}")
+            # 最终保存路径
+            # 文件名
             
             # 确保输出目录存在
             if not ensure_directory_exists(full_output_folder):
@@ -729,7 +731,8 @@ class SyntheticVideo:
                             if file_counter > max_counter:
                                 max_counter = file_counter
             except Exception as e:
-                print(f"Warning: Could not scan directory for existing files: {e}")
+                # Warning: Could not scan directory for existing files
+                pass
             counter = max_counter + 1
 
             # 保存第一帧为PNG以保留元数据（如果启用）
@@ -780,9 +783,9 @@ class SyntheticVideo:
                 final_file_path = file_path
                 
             else:
-                print(f"开始处理视频格式: {format_ext}")
+                # 开始处理视频格式
                 if ffmpeg_path is None or not os.path.exists(ffmpeg_path):
-                    print(f"错误: FFmpeg未找到，路径: {ffmpeg_path}")
+                    # 错误: FFmpeg未找到
                     raise ProcessLookupError(f"ffmpeg is required for video outputs and could not be found.")
 
                 # 获取选择的编码器
@@ -808,7 +811,7 @@ class SyntheticVideo:
                             video_format = apply_format_widgets(format_ext, kwargs)
                         except Exception:
                             # 回退到mp4格式
-                            print(f"Warning: Format {format_ext} not found, using MP4 as fallback")
+                            # Warning: Format not found, using MP4 as fallback
                             format_ext = "mp4"
                             kwargs["encoder"] = encoder_name
                             video_format = apply_format_widgets("mp4", kwargs)
@@ -831,7 +834,7 @@ class SyntheticVideo:
                     images_iter = map(pad, images_iter)
                     dimensions = (-first_image.shape[1] % dim_alignment + first_image.shape[1],
                                   -first_image.shape[0] % dim_alignment + first_image.shape[0])
-                    print("输出图像分辨率不符合要求，已自动填充对齐")
+                    # 输出图像分辨率不符合要求，已自动填充对齐
                 else:
                     dimensions = (first_image.shape[1], first_image.shape[0])
                     
@@ -957,7 +960,8 @@ class SyntheticVideo:
                                     os.remove(output_file_with_audio_path)
                                 raise Exception("An error occurred in the ffmpeg subprocess:\n" + e.stderr.decode(*ENCODE_ARGS))
                             if res.stderr:
-                                print(res.stderr.decode(*ENCODE_ARGS), end="", file=sys.stderr)
+                                # FFmpeg stderr output
+                                pass
                             
                             # 删除原始无音频文件，并将带音频文件重命名为原始文件名
                             if os.path.exists(file_path):
@@ -973,25 +977,45 @@ class SyntheticVideo:
 
             # 显示最终视频信息
             if final_file_path and os.path.exists(final_file_path):
-                video_size = os.path.getsize(final_file_path) / (1024 * 1024)  # MB
-                print(f"视频已生成: {final_file_path}")
-                print(f"文件大小: {video_size:.1f} MB")
-                print(f"视频信息: {len(images)}帧, {frame_rate}fps, 时长{len(images)/frame_rate:.1f}秒")
+                try:
+                    # 获取文件大小
+                    file_size_bytes = os.path.getsize(final_file_path)
+                    if file_size_bytes >= 1024 * 1024:
+                        file_size_str = f"{file_size_bytes / (1024 * 1024):.2f}MB"
+                    elif file_size_bytes >= 1024:
+                        file_size_str = f"{file_size_bytes / 1024:.2f}KB"
+                    else:
+                        file_size_str = f"{file_size_bytes}B"
+                    
+                    # 计算视频信息
+                    total_frames = len(images)
+                    duration = total_frames / frame_rate
+                    
+                    # 打印视频生成信息
+                    print(f"🎬 视频已生成: {os.path.basename(final_file_path)}")
+                    print(f"📁 文件大小: {file_size_str}")
+                    print(f"🎞️ 视频信息: {total_frames}帧，时长{duration:.2f}秒")
+                    print(f"📊 分辨率: {images[0].shape[2]}x{images[0].shape[1]}，帧率: {frame_rate}fps")
+                    
+                except Exception as e:
+                    # 如果获取视频信息失败，不影响主要功能
+                    print(f"✅ 视频已生成: {os.path.basename(final_file_path)}")
+                    pass
 
             return (final_file_path,)
             
         except Exception as e:
             # 捕获所有异常并提供更友好的错误信息
             error_msg = f"视频合成失败: {str(e)}"
-            print(f"Error: {error_msg}")
+            # Error occurred
             # 返回空路径而不是抛出异常，以避免中断整个工作流
             return ("",)
 
 # For ComfyUI node registration
 NODE_CLASS_MAPPINGS = {
-    "VHS_SyntheticVideo": SyntheticVideo,
+    "SyntheticVideo": SyntheticVideo,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "VHS_SyntheticVideo": "Synthetic Video",
+    "SyntheticVideo": "Synthetic Video",
 }

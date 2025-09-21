@@ -7,7 +7,7 @@ from scipy import ndimage
 class MaskExpansion:
     """
     遮罩扩张节点
-    功能：遮罩的扩张和收缩，支持方向性扩张、羽化、反转等操作
+    功能：遮罩的扩张和收缩，支持方向性扩张、feather、反转等操作
     """
     
     @classmethod
@@ -21,7 +21,7 @@ class MaskExpansion:
                     "max": 100,
                     "step": 1,
                     "display": "slider",
-                    "tooltip": "扩张值：正数扩张，负数收缩"
+                    "tooltip": "expansion：正数扩张，负数收缩"
                 }),
                 "feather": ("INT", {
                     "default": 8,
@@ -33,7 +33,7 @@ class MaskExpansion:
                 }),
                 "invert_mask": ("BOOLEAN", {
                     "default": False,
-                    "tooltip": "反转遮罩：处理前后反转遮罩"
+                    "tooltip": "invert_mask：处理前后反转遮罩"
                 }),
             },
             "optional": {
@@ -56,12 +56,11 @@ class MaskExpansion:
             }
         }
 
-    CATEGORY = "mask/processing"
+    CATEGORY = "自定义/遮罩"
     RETURN_TYPES = ("MASK",)
     RETURN_NAMES = ("mask",)
     FUNCTION = "expand_mask"
     OUTPUT_NODE = False
-    DESCRIPTION = "遮罩扩张与收缩处理，支持方向性扩张、羽化、反转等操作"
 
     def expand_mask(self, mask, expansion, feather, invert_mask, 
                    direction_up=True, direction_down=True, direction_left=True, direction_right=True):
@@ -101,7 +100,7 @@ class MaskExpansion:
         """
         处理单个遮罩
         """
-        # 反转遮罩
+        # invert_mask
         if invert_mask:
             mask = 1.0 - mask
         

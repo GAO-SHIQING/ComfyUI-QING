@@ -55,7 +55,7 @@ class CustomLoadImageWithFormat:
                 },
             }
         except Exception as e:
-            print(f"Error getting input files: {str(e)}")
+            # Error getting input files
             return {
                 "required": {
                     "image": ([], {"image_upload": True}),
@@ -63,10 +63,11 @@ class CustomLoadImageWithFormat:
             }
     
     RETURN_TYPES = ("IMAGE", "MASK", "STRING", "STRING")
-    RETURN_NAMES = ("图像", "遮罩", "SVG", "格式信息")
+    RETURN_NAMES = ("image", "mask", "svg_content", "format_info")
     FUNCTION = "load_image"
     CATEGORY = "输入/图像"
     OUTPUT_NODE = True
+    
     
     def load_image(self, image):
         """
@@ -99,7 +100,7 @@ class CustomLoadImageWithFormat:
                     # 对于SVG，SVG端口输出内容，图像和遮罩端口输出特殊占位符
                     return (NO_OUTPUT, NO_OUTPUT, svg_content, format_info)
                 except Exception as e:
-                    print(f"Failed to read SVG file: {str(e)}")
+                    # Failed to read SVG file
                     return self._create_error_result(f"Failed to read SVG file: {str(e)}", format_info)
             else:
                 # 处理其他图像格式
@@ -116,12 +117,12 @@ class CustomLoadImageWithFormat:
                     # 对于非SVG格式，图像和遮罩端口输出内容，SVG端口输出特殊占位符
                     return (image_tensor, mask_tensor, NO_OUTPUT, actual_format)
                 except Exception as e:
-                    print(f"Failed to load image: {str(e)}")
+                    # Failed to load image
                     return self._create_error_result(f"Failed to load image: {str(e)}", format_info)
         
         except Exception as e:
             error_msg = f"Unexpected error: {str(e)}"
-            print(error_msg)
+            # Error occurred
             traceback.print_exc()
             return self._create_error_result(error_msg, "UNKNOWN")
     
@@ -149,7 +150,7 @@ class CustomLoadImageWithFormat:
     
     def _create_error_result(self, error_msg, format_info="ERROR"):
         """创建错误结果"""
-        print(error_msg)
+        # Error occurred
         return (NO_OUTPUT, NO_OUTPUT, NO_OUTPUT, format_info)
     
     def _load_other_formats(self, img):
@@ -201,7 +202,7 @@ class CustomLoadImageWithFormat:
             return (output_image, output_mask)
         
         except Exception as e:
-            print(f"Error in _load_other_formats: {str(e)}")
+            # Error in _load_other_formats
             traceback.print_exc()
             # 返回默认的空张量
             return (torch.zeros((1, 64, 64, 3), dtype=torch.float32), 

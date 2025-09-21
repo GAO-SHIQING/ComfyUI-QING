@@ -42,19 +42,20 @@ class MaskScale:
     
     # 返回类型与名称（统一中文显示）
     RETURN_TYPES = ("MASK", "INT", "INT")
-    RETURN_NAMES = ("遮罩", "宽度", "高度")
+    RETURN_NAMES = ("mask", "width", "height")
     FUNCTION = "scale_mask"
     CATEGORY = "图像/遮罩"
+    
     
     def scale_mask(self, mask, scale_by, target_value, interpolation, keep_proportions, target_width=0, target_height=0):
         """
         缩放遮罩尺寸
-        - mask: 输入遮罩 (Tensor: [B,H,W])
-        - scale_by: 缩放依据：width/height/longest_side/shortest_side/total_pixels
-        - target_value: 目标数值（与 scale_by 对应）
-        - interpolation: 插值方式：nearest/bilinear/bicubic/lanczos
+        - 遮罩: 输入遮罩 (Tensor: [B,H,W])
+        - scale_by: scale_by：width/height/longest_side/shortest_side/total_pixels
+        - target_value: target_value（与 scale_by 对应）
+        - interpolation: interpolation：nearest/bilinear/bicubic/lanczos
         - keep_proportions: 是否保持纵横比
-        - target_width/target_height: 指定目标尺寸（优先于 scale_by）
+        - 目标宽度/目标高度: 指定目标尺寸（优先于 scale_by）
         返回：缩放后的遮罩，以及目标宽高
         """
         # 输入校验
@@ -126,7 +127,7 @@ class MaskScale:
                 target_width = max(1, int(round(orig_width * scale_factor)))
                 target_height = max(1, int(round(orig_height * scale_factor)))
                 
-                # 若保持比例，细调以更接近目标像素
+                # 若keep_proportions，细调以更接近目标像素
                 if keep_proportions:
                     actual_pixels = target_width * target_height
                     if abs(actual_pixels - target_value) / target_value > 0.1:

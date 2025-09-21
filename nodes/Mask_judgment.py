@@ -22,8 +22,7 @@ class MaskJudgment:
     RETURN_TYPES = ("BOOLEAN", "INT", "FLOAT", "STRING")
     RETURN_NAMES = ("has_mask", "mask_flag", "mask_ratio", "mask_info")
     FUNCTION = "judge_mask"
-    CATEGORY = "custom/mask"
-    DESCRIPTION = "判断遮罩是否存在"
+    CATEGORY = "自定义/遮罩"
 
     def judge_mask(self, mask, threshold=0.01):
         """

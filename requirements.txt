@@ -1,7 +1,22 @@
-numpy>=1.21.0
+# 核心依赖 (ComfyUI已包含)
+# torch - ComfyUI核心依赖，无需重复安装
+# numpy - ComfyUI核心依赖，无需重复安装
+
+# 图像处理核心库
+Pillow>=9.0.0
 opencv-python>=4.5.0
 scipy>=1.7.0
 scikit-image>=0.18.0
-Pillow>=9.0.0
+
+# SVG处理专用库
 cairosvg>=2.5.0
-torch
+
+# 可选依赖 (用于SVG处理的备用方案)
+# svglib>=1.4.0  # 取消注释以启用SVG备用转换器
+# reportlab>=3.6.0  # svglib的依赖
+
+# 视频处理依赖
+# 注意：FFmpeg需要单独安装系统级依赖
+# Windows: 从 https://ffmpeg.org/download.html 下载
+# Linux: sudo apt-get install ffmpeg
+# macOS: brew install ffmpeg

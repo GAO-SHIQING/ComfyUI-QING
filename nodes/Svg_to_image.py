@@ -14,7 +14,7 @@ class SVGToImage:
     """
     SVG 转图片（PNG/JPG）节点：提供高级缩放方式与尺寸输出
     - 支持按最长边/最短边/宽/高/总像素定义缩放
-    - 支持设置DPI、输出质量、背景色、尺寸对齐倍数
+    - 支持设置DPI、输出质量、background_color、尺寸对齐倍数
     - 输出图片张量、遮罩、最终宽高
     """
     
@@ -74,16 +74,17 @@ class SVGToImage:
                     "min": 256,
                     "max": 16777216,  # 4096x4096
                     "step": 1024,
-                    "description": "目标总像素（用于 total_pixels 缩放定义）"
+                    "description": "目标总像素（用于 total_pixels scale_definition）"
                 }),
             }
         }
 
     # 返回类型与中文显示名
     RETURN_TYPES = ("IMAGE", "MASK", "INT", "INT")
-    RETURN_NAMES = ("图像", "遮罩", "宽度", "高度")
+    RETURN_NAMES = ("image", "mask", "width", "height")
     FUNCTION = "convert_svg"
     CATEGORY = "图像/转换"
+    
 
     def parse_size_string(self, size_str):
         """解析尺寸字符串（WxH 或单个数值），返回宽和高"""
@@ -128,7 +129,8 @@ class SVGToImage:
                 pass
                 
         except Exception as e:
-            print(f"Size parsing failed: {str(e)}")
+            # Size parsing failed
+            pass
             
         # Fallback to default size
         return 1024, 1024  # Changed from 512, 512
@@ -183,7 +185,7 @@ class SVGToImage:
             
         except Exception as e:
             # Fallback: return default dimensions if parsing fails
-            print(f"SVG dimension parsing failed, using defaults: {str(e)}")
+            # SVG dimension parsing failed, using defaults
             return 100, 100
 
     def calculate_target_dimensions(self, original_width, original_height, width, height, 
@@ -254,7 +256,7 @@ class SVGToImage:
             return target_width, target_height
             
         except Exception as e:
-            print(f"Dimension calculation failed, using fallback: {str(e)}")
+            # Dimension calculation failed, using fallback
             # Fallback to standard method
             ratio = min(width / original_width, height / original_height)
             target_width = max(1, int(original_width * ratio))
@@ -302,7 +304,8 @@ class SVGToImage:
                 return None
                 
         except Exception as e:
-            print(f"Background color parsing failed: {str(e)}")
+            # Background color parsing failed
+            pass
             
         return None
 
@@ -366,7 +369,8 @@ class SVGToImage:
                 image = Image.alpha_composite(background, image)
                 has_alpha = False  # After compositing, alpha is no longer needed
             except Exception as e:
-                print(f"Failed to apply background color: {str(e)}")
+                # Failed to apply background color
+                pass
         
         # 转为目标输出模式
         try:
@@ -391,7 +395,7 @@ class SVGToImage:
                 mask = torch.ones((final_height, final_width), dtype=torch.float32)
         except Exception as e:
             # 兜底：失败则使用白遮罩
-            print(f"Mask creation failed, using white mask: {str(e)}")
+            # Mask creation failed, using white mask
             mask = torch.ones((final_height, final_width), dtype=torch.float32)
         
         # 转为ComfyUI张量格式
@@ -418,10 +422,11 @@ class SVGToImage:
                 else:
                     rgb_image.convert("RGB").save(output_path, "PNG", optimize=True)
                     
-            print(f"SVG converted and saved to: {output_path}")
+            # SVG converted and saved
         except Exception as e:
-            print(f"Failed to save image: {str(e)}")
+            # Failed to save image
             # Don't raise exception as main function (returning tensors) still succeeds
+            pass
         
         # 返回图像、遮罩与宽高
         return (image_tensor, mask.unsqueeze(0), final_width, final_height)

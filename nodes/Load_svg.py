@@ -17,11 +17,10 @@ class LoadSVG:
 
     # 返回类型与显示名称（中文统一）
     RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("SVG内容",)
+    RETURN_NAMES = ("svg_content",)
     FUNCTION = "load_svg"
     CATEGORY = "输入/文件"
-    TITLE = "加载SVG文件"
-    DESCRIPTION = "加载SVG文件内容，支持绝对路径"
+    
 
     def clean_path(self, path):
         """清理路径字符串，移除不可见字符和多余空格"""
@@ -99,5 +98,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "LoadSVG": "Load SVG"
+    "LoadSVG": "Load SVG File"
 }

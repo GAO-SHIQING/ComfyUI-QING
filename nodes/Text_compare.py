@@ -20,32 +20,29 @@ class TextCompare:
                 "case_sensitive": ("BOOLEAN", {
                     "default": False, 
                     "label_on": "开启", 
-                    "label_off": "关闭",
-                    "display_name": "区分大小写"
+                    "label_off": "关闭"
                 }),
             },
             "optional": {}
         }
         
-        # 使用更友好的显示名称（中文）
+        # 使用英文参数名
         for i in range(cls.MODULE_COUNT):
             module_num = i + 1
             input_types["optional"][f"text_{module_num}"] = ("STRING", {
                 "default": "", 
-                "multiline": False,
-                "display_name": f"文本{module_num}"  # 去掉空格和下划线
+                "multiline": False
             })
             input_types["optional"][f"subtext_{module_num}"] = ("STRING", {
                 "default": "", 
-                "multiline": False,
-                "display_name": f"子文本{module_num}"  # 去掉空格和下划线
+                "multiline": False
             })
         
         return input_types
     
     RETURN_TYPES = tuple(["BOOLEAN"] * MODULE_COUNT)
     # 输出名称去掉下划线，使用更简洁的中文
-    RETURN_NAMES = tuple([f"结果{i+1}" for i in range(MODULE_COUNT)])
+    RETURN_NAMES = tuple([f"result_{i+1}" for i in range(MODULE_COUNT)])
     FUNCTION = "compare_texts"
     CATEGORY = "文本/处理"
     OUTPUT_NODE = True
@@ -71,7 +68,7 @@ class TextCompare:
                 else:
                     result = (text.lower() == subtext.lower())
             except Exception as e:
-                print(f"Error comparing texts in module {i+1}: {e}")
+                # Error comparing texts in module
                 result = False
                 
             results.append(result)

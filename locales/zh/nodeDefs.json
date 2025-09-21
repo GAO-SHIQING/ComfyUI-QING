@@ -1,0 +1,652 @@
+{
+  "LoadSVG": {
+    "display_name": "加载SVG文件",
+    "description": "加载SVG文件内容，支持绝对路径",
+    "inputs": {
+      "svg_path": {
+        "name": "SVG路径",
+        "tooltip": "SVG文件的完整路径"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "SVG内容",
+        "tooltip": "读取的SVG文件内容"
+      }
+    }
+  },
+  "MaskSplitter": {
+    "display_name": "遮罩拆分",
+    "description": "高效可靠的遮罩拆分工具，支持最小组件过滤、小区域合并/移除/保留",
+    "inputs": {
+      "mask": {
+        "name": "输入遮罩",
+        "tooltip": "需要拆分的遮罩"
+      },
+      "min_component_size": {
+        "name": "最小组件大小",
+        "tooltip": "最小组件大小（像素数）"
+      },
+      "small_region_handling": {
+        "name": "小区域处理方式",
+        "tooltip": "小区域处理方式：合并、移除或保留"
+      },
+      "merge_distance_ratio": {
+        "name": "合并距离比率",
+        "tooltip": "合并距离比率"
+      },
+      "text_preservation": {
+        "name": "文字保护模式",
+        "tooltip": "文字保护模式：自动、激进或禁用"
+      },
+      "structure_preservation": {
+        "name": "结构保护模式",
+        "tooltip": "结构保护模式：禁用、自动或增强"
+      },
+      "output_all_components": {
+        "name": "输出所有组件",
+        "tooltip": "是否输出所有组件"
+      },
+      "preserve_original_values": {
+        "name": "保持原始像素值",
+        "tooltip": "是否保持原始像素值"
+      },
+      "reference_image": {
+        "name": "参考图像",
+        "tooltip": "参考图像（可选）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "遮罩列表",
+        "tooltip": "拆分后的遮罩列表"
+      }
+    }
+  },
+  "SVGToImage": {
+    "display_name": "SVG转图像",
+    "description": "将SVG转换为图像，支持高级缩放方式与尺寸输出",
+    "inputs": {
+      "svg_input": {
+        "name": "SVG输入",
+        "tooltip": "SVG内容或代码"
+      },
+      "adjust_size": {
+        "name": "调整尺寸",
+        "tooltip": "目标尺寸，WxH 或单个数值（正方形）"
+      },
+      "keep_aspect_ratio": {
+        "name": "保持宽高比",
+        "tooltip": "是否保持宽高比"
+      },
+      "scale_definition": {
+        "name": "缩放定义",
+        "tooltip": "缩放参考定义"
+      },
+      "scale_method": {
+        "name": "缩放方法",
+        "tooltip": "图像缩放插值方法"
+      },
+      "dpi": {
+        "name": "DPI",
+        "tooltip": "图像分辨率DPI"
+      },
+      "output_format": {
+        "name": "输出格式",
+        "tooltip": "输出图像格式"
+      },
+      "quality": {
+        "name": "质量",
+        "tooltip": "输出图像质量"
+      },
+      "background_color": {
+        "name": "背景色",
+        "tooltip": "背景色十六进制，如#FFFFFF；留空为透明"
+      },
+      "multiple_of": {
+        "name": "尺寸倍数",
+        "tooltip": "将宽高约束为该整数倍（0为禁用）"
+      },
+      "target_pixels": {
+        "name": "目标像素",
+        "tooltip": "目标总像素（用于total_pixels缩放定义）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "图像",
+        "tooltip": "转换后的图像"
+      },
+      "1": {
+        "name": "遮罩",
+        "tooltip": "图像的Alpha遮罩"
+      },
+      "2": {
+        "name": "宽度",
+        "tooltip": "最终图像宽度"
+      },
+      "3": {
+        "name": "高度",
+        "tooltip": "最终图像高度"
+      }
+    }
+  },
+  "MaskScale": {
+    "display_name": "遮罩缩放",
+    "description": "缩放遮罩尺寸，支持多种缩放方式",
+    "inputs": {
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "输入遮罩"
+      },
+      "scale_by": {
+        "name": "缩放依据",
+        "tooltip": "缩放依据：宽度、高度、最长边、最短边或总像素"
+      },
+      "target_value": {
+        "name": "目标数值",
+        "tooltip": "目标数值（与缩放依据对应）"
+      },
+      "interpolation": {
+        "name": "插值方式",
+        "tooltip": "插值方式：最近邻、双线性、双三次或Lanczos"
+      },
+      "keep_proportions": {
+        "name": "保持比例",
+        "tooltip": "是否保持纵横比"
+      },
+      "target_width": {
+        "name": "目标宽度",
+        "tooltip": "指定目标宽度（优先于缩放依据）"
+      },
+      "target_height": {
+        "name": "目标高度",
+        "tooltip": "指定目标高度（优先于缩放依据）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "遮罩",
+        "tooltip": "缩放后的遮罩"
+      },
+      "1": {
+        "name": "宽度",
+        "tooltip": "最终宽度"
+      },
+      "2": {
+        "name": "高度",
+        "tooltip": "最终高度"
+      }
+    }
+  },
+  "TextCompare": {
+    "display_name": "文本对比",
+    "description": "文本比较节点，支持3组对比，可设置是否区分大小写",
+    "inputs": {
+      "case_sensitive": {
+        "name": "区分大小写",
+        "tooltip": "是否区分大小写"
+      },
+      "text_1": {
+        "name": "文本1",
+        "tooltip": "第一组比较的文本"
+      },
+      "subtext_1": {
+        "name": "子文本1",
+        "tooltip": "第一组比较的子文本"
+      },
+      "text_2": {
+        "name": "文本2",
+        "tooltip": "第二组比较的文本"
+      },
+      "subtext_2": {
+        "name": "子文本2",
+        "tooltip": "第二组比较的子文本"
+      },
+      "text_3": {
+        "name": "文本3",
+        "tooltip": "第三组比较的文本"
+      },
+      "subtext_3": {
+        "name": "子文本3",
+        "tooltip": "第三组比较的子文本"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "结果1",
+        "tooltip": "第一组比较结果"
+      },
+      "1": {
+        "name": "结果2",
+        "tooltip": "第二组比较结果"
+      },
+      "2": {
+        "name": "结果3",
+        "tooltip": "第三组比较结果"
+      }
+    }
+  },
+  "CustomLoadImageWithFormat": {
+    "display_name": "加载图像(支持SVG)",
+    "description": "加载图像文件，支持SVG格式",
+    "inputs": {
+      "image": {
+        "name": "图像文件",
+        "tooltip": "要加载的图像文件"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "图像",
+        "tooltip": "加载的图像"
+      },
+      "1": {
+        "name": "遮罩",
+        "tooltip": "图像的Alpha遮罩"
+      },
+      "2": {
+        "name": "SVG",
+        "tooltip": "SVG内容（如果是SVG文件）"
+      },
+      "3": {
+        "name": "格式信息",
+        "tooltip": "文件格式信息"
+      }
+    }
+  },
+  "SyntheticVideo": {
+    "display_name": "合成视频",
+    "description": "将图像序列合成为视频文件",
+    "inputs": {
+      "images": {
+        "name": "图像序列",
+        "tooltip": "输入的图像序列"
+      },
+      "frame_rate": {
+        "name": "帧率",
+        "tooltip": "视频帧率"
+      },
+      "loop_count": {
+        "name": "循环次数",
+        "tooltip": "视频循环次数"
+      },
+      "skip_frames": {
+        "name": "跳过帧数",
+        "tooltip": "跳过的帧数"
+      },
+      "filename_prefix": {
+        "name": "文件名前缀",
+        "tooltip": "输出文件名前缀"
+      },
+      "format": {
+        "name": "输出格式",
+        "tooltip": "视频输出格式"
+      },
+      "pingpong": {
+        "name": "来回播放",
+        "tooltip": "是否来回播放"
+      },
+      "save_output": {
+        "name": "保存输出",
+        "tooltip": "是否保存输出文件"
+      },
+      "save_metadata": {
+        "name": "保存元数据",
+        "tooltip": "是否保存元数据"
+      },
+      "custom_save_path": {
+        "name": "自定义保存路径",
+        "tooltip": "自定义保存路径"
+      },
+      "audio": {
+        "name": "音频",
+        "tooltip": "音频轨道"
+      },
+      "custom_ffmpeg_args": {
+        "name": "自定义FFmpeg参数",
+        "tooltip": "自定义FFmpeg参数"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "文件路径",
+        "tooltip": "生成的视频文件路径"
+      }
+    }
+  },
+  "MaskBlend": {
+    "display_name": "遮罩混合",
+    "description": "混合多个遮罩，支持多种混合模式和高级效果",
+    "inputs": {
+      "mask1": {
+        "name": "遮罩1",
+        "tooltip": "第一个遮罩（基准尺寸）"
+      },
+      "blend_mode": {
+        "name": "混合模式",
+        "tooltip": "遮罩混合模式"
+      },
+      "feather_radius": {
+        "name": "羽化半径",
+        "tooltip": "羽化半径（像素）"
+      },
+      "invert_mask": {
+        "name": "反转遮罩",
+        "tooltip": "是否反转输出遮罩"
+      },
+      "threshold": {
+        "name": "阈值",
+        "tooltip": "二值化阈值（%）"
+      },
+      "expert_mode": {
+        "name": "专家模式",
+        "tooltip": "开启后显示并启用进阶参数"
+      },
+      "mask2": {
+        "name": "遮罩2",
+        "tooltip": "第二个遮罩（可选）"
+      },
+      "mask3": {
+        "name": "遮罩3",
+        "tooltip": "第三个遮罩（可选）"
+      },
+      "mask4": {
+        "name": "遮罩4",
+        "tooltip": "第四个遮罩（可选）"
+      },
+      "mask5": {
+        "name": "遮罩5",
+        "tooltip": "第五个遮罩（可选）"
+      },
+      "gradient_type": {
+        "name": "渐变类型",
+        "tooltip": "渐变效果类型"
+      },
+      "gradient_direction": {
+        "name": "渐变方向",
+        "tooltip": "渐变方向"
+      },
+      "gradient_intensity": {
+        "name": "渐变强度",
+        "tooltip": "渐变强度（0.0-2.0）"
+      },
+      "stroke_width": {
+        "name": "描边宽度",
+        "tooltip": "描边宽度（像素）"
+      },
+      "stroke_position": {
+        "name": "描边位置",
+        "tooltip": "描边位置：中心、内侧或外侧"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "遮罩",
+        "tooltip": "混合后的遮罩"
+      },
+      "1": {
+        "name": "图像",
+        "tooltip": "遮罩的图像表示"
+      },
+      "2": {
+        "name": "原始遮罩",
+        "tooltip": "原始混合结果"
+      }
+    }
+  },
+  "MaskJudgment": {
+    "display_name": "遮罩判断",
+    "description": "判断遮罩是否有效",
+    "inputs": {
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "输入遮罩"
+      },
+      "threshold": {
+        "name": "阈值",
+        "tooltip": "有效阈值"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "存在遮罩",
+        "tooltip": "布尔值，是否存在有效遮罩"
+      },
+      "1": {
+        "name": "遮罩标志",
+        "tooltip": "整数标志，1为有效，0为无效"
+      },
+      "2": {
+        "name": "遮罩比例",
+        "tooltip": "有效像素占总像素的比例"
+      },
+      "3": {
+        "name": "遮罩信息",
+        "tooltip": "遮罩状态的文字描述"
+      }
+    }
+  },
+  "MaskExpansion": {
+    "display_name": "遮罩扩张",
+    "description": "遮罩的扩张和收缩操作",
+    "inputs": {
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "输入遮罩"
+      },
+      "expansion": {
+        "name": "扩张值",
+        "tooltip": "扩张值：正数扩张，负数收缩"
+      },
+      "feather": {
+        "name": "羽化",
+        "tooltip": "羽化强度"
+      },
+      "invert_mask": {
+        "name": "反转遮罩",
+        "tooltip": "是否反转遮罩"
+      },
+      "direction_up": {
+        "name": "向上扩张",
+        "tooltip": "是否向上扩张"
+      },
+      "direction_down": {
+        "name": "向下扩张",
+        "tooltip": "是否向下扩张"
+      },
+      "direction_left": {
+        "name": "向左扩张",
+        "tooltip": "是否向左扩张"
+      },
+      "direction_right": {
+        "name": "向右扩张",
+        "tooltip": "是否向右扩张"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "遮罩",
+        "tooltip": "处理后的遮罩"
+      }
+    }
+  },
+  "SVGSaver": {
+    "display_name": "保存SVG",
+    "description": "保存SVG内容到文件",
+    "inputs": {
+      "svg_content": {
+        "name": "SVG内容",
+        "tooltip": "要保存的SVG内容"
+      },
+      "filename_prefix": {
+        "name": "文件名前缀",
+        "tooltip": "保存文件的前缀名"
+      },
+      "save_dir": {
+        "name": "保存目录",
+        "tooltip": "自定义保存目录（留空使用默认）"
+      },
+      "overwrite": {
+        "name": "覆盖模式",
+        "tooltip": "是否覆盖同名文件"
+      },
+      "preview_max_size": {
+        "name": "预览最大尺寸",
+        "tooltip": "预览图像的最大尺寸"
+      }
+    }
+  },
+  "ImageToSVG": {
+    "display_name": "图像转SVG",
+    "description": "将图像转换为SVG格式，支持多种转换模式",
+    "inputs": {
+      "image": {
+        "name": "图像",
+        "tooltip": "输入图像"
+      },
+      "conversion_mode": {
+        "name": "转换模式",
+        "tooltip": "转换模式：边缘检测、颜色量化、剪影或海报化"
+      },
+      "precision": {
+        "name": "精度",
+        "tooltip": "SVG精度（越高越详细）"
+      },
+      "preset": {
+        "name": "预设模式",
+        "tooltip": "预设模式：简单、详细、艺术或自定义"
+      },
+      "edge_threshold1": {
+        "name": "边缘阈值1",
+        "tooltip": "边缘检测阈值1"
+      },
+      "edge_threshold2": {
+        "name": "边缘阈值2",
+        "tooltip": "边缘检测阈值2"
+      },
+      "color_levels": {
+        "name": "颜色级别",
+        "tooltip": "颜色量化级别"
+      },
+      "simplify_tolerance": {
+        "name": "简化容差",
+        "tooltip": "路径简化容差"
+      },
+      "min_area": {
+        "name": "最小区域",
+        "tooltip": "最小保留区域大小"
+      },
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "可选遮罩，用于限制转换区域"
+      },
+      "edge_auto_threshold": {
+        "name": "自动边缘阈值",
+        "tooltip": "自动计算Canny双阈值"
+      },
+      "preserve_aspect_ratio": {
+        "name": "保持宽高比",
+        "tooltip": "是否保持SVG的宽高比"
+      },
+      "background_color": {
+        "name": "背景色",
+        "tooltip": "SVG背景色十六进制，如#FFFFFF"
+      },
+      "stroke_color": {
+        "name": "描边颜色",
+        "tooltip": "描边颜色十六进制，如#000000"
+      },
+      "stroke_width": {
+        "name": "描边宽度",
+        "tooltip": "描边宽度"
+      },
+      "silhouette_auto_threshold": {
+        "name": "剪影自动阈值",
+        "tooltip": "剪影阈值自动(Otsu)"
+      },
+      "silhouette_threshold": {
+        "name": "剪影阈值",
+        "tooltip": "剪影手动阈值(当关闭自动时有效)"
+      },
+      "preview_max_size": {
+        "name": "预览最大尺寸",
+        "tooltip": "预览最长边像素"
+      },
+      "minify_svg": {
+        "name": "最小化SVG",
+        "tooltip": "最小化SVG以减小体积"
+      },
+      "decimal_precision": {
+        "name": "小数精度",
+        "tooltip": "坐标与数值小数位数"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "SVG内容",
+        "tooltip": "转换后的SVG内容"
+      },
+      "1": {
+        "name": "宽度",
+        "tooltip": "SVG宽度"
+      },
+      "2": {
+        "name": "高度",
+        "tooltip": "SVG高度"
+      },
+      "3": {
+        "name": "遮罩",
+        "tooltip": "转换过程中的遮罩"
+      },
+      "4": {
+        "name": "预览",
+        "tooltip": "SVG预览图像"
+      }
+    }
+  },
+  "ImageMaskConverter": {
+    "display_name": "图像遮罩转换",
+    "description": "独立的双向转换：图像提取通道到遮罩，遮罩转换为灰度图像",
+    "inputs": {
+      "channel": {
+        "name": "通道",
+        "tooltip": "图像转遮罩时使用的颜色通道（遮罩转图像时忽略）"
+      },
+      "image1": {
+        "name": "图像1",
+        "tooltip": "输入图像1 → 输出遮罩1"
+      },
+      "image2": {
+        "name": "图像2",
+        "tooltip": "输入图像2 → 输出遮罩2"
+      },
+      "mask1": {
+        "name": "遮罩1",
+        "tooltip": "输入遮罩1 → 输出图像1（灰度）"
+      },
+      "mask2": {
+        "name": "遮罩2",
+        "tooltip": "输入遮罩2 → 输出图像2（灰度）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "遮罩1",
+        "tooltip": "来自图像1的指定通道"
+      },
+      "1": {
+        "name": "遮罩2",
+        "tooltip": "来自图像2的指定通道"
+      },
+      "2": {
+        "name": "图像1",
+        "tooltip": "来自遮罩1的灰度图像"
+      },
+      "3": {
+        "name": "图像2",
+        "tooltip": "来自遮罩2的灰度图像"
+      }
+    }
+  }
+}
