@@ -14,6 +14,8 @@ from .nodes.Mask_expansion import MaskExpansion
 from .nodes.Image_mask_converter import ImageMaskConverter
 from .nodes.Mask_preview import ImageMaskPreview
 from .nodes.Image_cache import ImageCache
+from .nodes.Type_conversion import IntToString, StringToInt, StringToBool, BoolToInt, IntToBool, BoolInvert
+from .nodes.Image_flipping import ImageRotation, ImageFlipping
 
 
 # 按照官方文档加载翻译系统
@@ -43,6 +45,14 @@ NODE_CLASS_MAPPINGS = {
     "ImageMaskConverter": ImageMaskConverter,
     "ImageMaskPreview": ImageMaskPreview,
     "ImageCache": ImageCache,
+    "IntToString": IntToString,
+    "StringToInt": StringToInt,
+    "StringToBool": StringToBool,
+    "BoolToInt": BoolToInt,
+    "IntToBool": IntToBool,
+    "BoolInvert": BoolInvert,
+    "ImageRotation": ImageRotation,
+    "ImageFlipping": ImageFlipping,
 }
 
 # 默认显示名称（中文作为默认）
@@ -62,6 +72,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageMaskConverter": "图像遮罩转换",
     "ImageMaskPreview": "图像遮罩预览",
     "ImageCache": "图像缓存",
+    "IntToString": "整数到字符串",
+    "StringToInt": "字符串到整数",
+    "StringToBool": "字符串到布尔",
+    "BoolToInt": "布尔到整数",
+    "IntToBool": "整数到布尔",
+    "BoolInvert": "布尔反转",
+    "ImageRotation": "图像旋转",
+    "ImageFlipping": "图像翻转",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

@@ -651,7 +651,7 @@
   },
   "ImageMaskPreview": {
     "display_name": "图像遮罩预览",
-    "description": "高级图像和遮罩混合预览，支持实时效果和自定义颜色",
+    "description": "高级图像和遮罩混合预览，支持实时效果和9种自定义颜色(黑白赤橙黄绿青蓝紫)",
     "inputs": {
       "mask_alpha": {
         "name": "遮罩透明",
@@ -659,7 +659,7 @@
       },
       "mask_color": {
         "name": "遮罩颜色",
-        "tooltip": "遮罩显示颜色"
+        "tooltip": "遮罩显示颜色 (黑白赤橙黄绿青蓝紫)"
       },
       "image": {
         "name": "图像",
@@ -700,6 +700,162 @@
       "clear_cache": {
         "name": "清理缓存",
         "tooltip": "点击开启后将清空当前实例的所有缓存和预览图像"
+      }
+    }
+  },
+  "IntToString": {
+    "display_name": "整数到字符串",
+    "description": "将输入的整数转换为字符串格式",
+    "inputs": {
+      "integer": {
+        "name": "整数",
+        "tooltip": "要转换的整数值"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "字符串",
+        "tooltip": "转换后的字符串"
+      }
+    }
+  },
+  "StringToInt": {
+    "display_name": "字符串到整数",
+    "description": "将输入的字符串转换为整数，支持自动处理空格和标准数学四舍五入",
+    "inputs": {
+      "string": {
+        "name": "字符串",
+        "tooltip": "要转换的字符串（如：\"123\"、\"12.5\"）浮点数将使用标准四舍五入"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "整数",
+        "tooltip": "转换后的整数值"
+      }
+    }
+  },
+  "StringToBool": {
+    "display_name": "字符串到布尔",
+    "description": "将输入的字符串转换为布尔值，支持多种格式识别",
+    "inputs": {
+      "string": {
+        "name": "字符串",
+        "tooltip": "要转换的字符串（如：\"true\", \"1\", \"yes\", \"false\", \"0\", \"no\"）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "布尔",
+        "tooltip": "转换后的布尔值"
+      }
+    }
+  },
+  "BoolToInt": {
+    "display_name": "布尔到整数",
+    "description": "将输入的布尔值转换为整数（True->1, False->0）",
+    "inputs": {
+      "boolean": {
+        "name": "布尔",
+        "tooltip": "要转换的布尔值"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "整数",
+        "tooltip": "转换后的整数（1或0）"
+      }
+    }
+  },
+  "IntToBool": {
+    "display_name": "整数到布尔",
+    "description": "将输入的整数转换为布尔值（0->False, 非0->True）",
+    "inputs": {
+      "integer": {
+        "name": "整数",
+        "tooltip": "要转换的整数值"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "布尔",
+        "tooltip": "转换后的布尔值"
+      }
+    }
+  },
+  "BoolInvert": {
+    "display_name": "布尔反转",
+    "description": "将输入的布尔值进行反转（True->False, False->True）",
+    "inputs": {
+      "boolean": {
+        "name": "布尔",
+        "tooltip": "要反转的布尔值"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "布尔",
+        "tooltip": "反转后的布尔值"
+      }
+    }
+  },
+  "ImageRotation": {
+    "display_name": "图像旋转",
+    "description": "对输入图像进行旋转操作，支持正向/反向旋转、自定义角度、多种插值算法和填充选项",
+    "inputs": {
+      "image": {
+        "name": "图像",
+        "tooltip": "要旋转的输入图像"
+      },
+      "rotation_mode": {
+        "name": "旋转模式",
+        "tooltip": "正向旋转=顺时针旋转，反向旋转=逆时针旋转"
+      },
+      "rotation_angle": {
+        "name": "旋转角度",
+        "tooltip": "旋转角度，范围0-360度"
+      },
+      "interpolation": {
+        "name": "插值算法",
+        "tooltip": "图像旋转时使用的插值算法"
+      },
+      "enable_fill": {
+        "name": "是否填充",
+        "tooltip": "启用后使用指定颜色填充，否则使用透明填充"
+      },
+      "fill_color": {
+        "name": "填充颜色",
+        "tooltip": "旋转后空白区域的填充颜色"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "图像",
+        "tooltip": "旋转后的图像"
+      }
+    }
+  },
+  "ImageFlipping": {
+    "display_name": "图像翻转",
+    "description": "对输入图像进行翻转操作，支持水平翻转和垂直翻转，以及多种插值算法",
+    "inputs": {
+      "image": {
+        "name": "图像",
+        "tooltip": "要翻转的输入图像"
+      },
+      "flip_mode": {
+        "name": "翻转模式",
+        "tooltip": "选择水平翻转或垂直翻转"
+      },
+      "interpolation": {
+        "name": "插值算法",
+        "tooltip": "图像翻转时使用的插值算法"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "图像",
+        "tooltip": "翻转后的图像"
       }
     }
   }

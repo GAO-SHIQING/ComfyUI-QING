@@ -32,15 +32,16 @@
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **16个专业节点**，覆盖6大功能领域：
+ComfyUI-QING 提供 **24个专业节点**，覆盖7大功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
 | 🎨 **SVG处理** | 5个 | 加载、转换、保存、格式互转 |
 | 🎭 **遮罩工程** | 7个 | 拆分、缩放、混合、扩张、判断、转换、预览 |
 | 📝 **文本处理** | 1个 | 多组对比、条件分支 |
+| 🔄 **数据类型转换** | 6个 | 整数、字符串、布尔值互转、反转 |
+| 🔄 **图像变换** | 2个 | 旋转、翻转、多种插值算法 |
 | 🎬 **视频合成** | 1个 | 序列帧转视频、多格式支持 |
-| 🔄 **格式转换** | 1个 | 图像遮罩双向转换 |
 | 📦 **缓存管理** | 1个 | 智能图像缓存、预览、自动保存 |
 
 ---
@@ -68,7 +69,7 @@ ComfyUI-QING 提供 **16个专业节点**，覆盖6大功能领域：
 | **遮罩扩张** | 方向性遮罩区域扩展 | • 支持四方向独立控制<br>• 可配置扩张距离和羽化<br>• 保持边缘平滑过渡 |
 | **遮罩判断** | 遮罩有效性检测分析 | • 检测遮罩是否有效<br>• 输出比例和统计信息<br>• 提供布尔和数值结果 |
 | **图像遮罩转换** | 图像与遮罩的双向转换 | • 独立转换：image1→mask1, mask1→image1<br>• 图像提取指定通道到遮罩<br>• 遮罩转换为灰度图像 |
-| **图像遮罩预览** | 高级图像和遮罩混合预览 | • 实时预览混合效果<br>• 7种遮罩颜色选择(赤橙黄绿青蓝紫)<br>• 透明度调节(0-100)，支持单输入模式 |
+| **图像遮罩预览** | 高级图像和遮罩混合预览 | • 实时预览混合效果<br>• 9种遮罩颜色选择(黑白赤橙黄绿青蓝紫)<br>• 透明度调节(0-100)，支持单输入模式 |
 
 ### 3. 文本处理引擎 (1个节点)
 
@@ -76,13 +77,31 @@ ComfyUI-QING 提供 **16个专业节点**，覆盖6大功能领域：
 |---------|----------|----------|
 | **文本对比** | 多组文本比较和条件判断 | • 支持3组独立文本对比<br>• 可配置大小写敏感性<br>• 输出布尔结果用于条件分支 |
 
-### 4. 视频合成工具 (1个节点)
+### 4. 数据类型转换工具 (6个节点)
+
+| 节点名称 | 功能描述 | 主要特性 |
+|---------|----------|----------|
+| **整数到字符串** | 将整数转换为字符串格式 | • 支持全范围整数转换<br>• 异常处理机制<br>• 简单高效的类型转换 |
+| **字符串到整数** | 将字符串转换为整数 | • 自动处理空格和格式<br>• 支持标准数学四舍五入(0.5进位)<br>• 转换失败时返回默认值0 |
+| **字符串到布尔** | 将字符串转换为布尔值 | • 智能识别多种真假值格式<br>• 支持"true/false"、"1/0"、"yes/no"等<br>• 数字字符串按非零判断 |
+| **布尔到整数** | 将布尔值转换为整数 | • True转换为1，False转换为0<br>• 标准布尔逻辑转换<br>• 可用于条件计算 |
+| **整数到布尔** | 将整数转换为布尔值 | • 0转换为False，非0转换为True<br>• 标准C风格布尔转换<br>• 支持条件分支逻辑 |
+| **布尔反转** | 将布尔值进行逻辑反转 | • True反转为False，False反转为True<br>• 简单的逻辑非操作<br>• 用于条件逻辑反转 |
+
+### 5. 图像变换工具 (2个节点)
+
+| 节点名称 | 功能描述 | 主要特性 |
+|---------|----------|----------|
+| **图像旋转** | 对图像进行精确旋转操作 | • 支持正向/反向旋转模式<br>• 0-360度自由角度控制<br>• 6种插值算法(lanczos/bicubic/hamming等)<br>• 可选颜色填充或透明填充<br>• 9种填充颜色选择 |
+| **图像翻转** | 对图像进行翻转变换 | • 支持水平翻转和垂直翻转<br>• 6种高质量插值算法<br>• 保持图像质量的精确变换<br>• 批量处理支持 |
+
+### 6. 视频合成工具 (1个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
 | **合成视频** | 序列帧到视频的专业转换 | • 支持格式：mp4/webm/avi/mov/gif/mkv/flv<br>• 编码器：H.264/H.265/AV1/ProRes/VP9<br>• 自定义压缩率、帧率、质量参数 |
 
-### 5. 智能缓存管理系统 (1个节点)
+### 7. 智能缓存管理系统 (1个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
@@ -114,6 +133,22 @@ ComfyUI-QING 提供 **16个专业节点**，覆盖6大功能领域：
 1. 文本对比 → 检测关键词匹配
 2. 根据布尔结果 → 切换不同处理分支
 3. 实现智能内容筛选和模板选择
+```
+
+### 🔄 数据类型转换流水线
+```
+1. 字符串到整数 → 将用户输入转换为数值
+2. 整数到布尔 → 用于条件判断
+3. 布尔到整数 → 转换为数值用于计算
+4. 整数到字符串 → 格式化输出结果
+```
+
+### 🔄 图像变换处理流程
+```
+1. 加载图像 → 输入原始图像
+2. 图像旋转 → 设置角度和填充选项
+3. 图像翻转 → 水平或垂直翻转
+4. 输出处理后的图像
 ```
 
 ### 🎬 视频制作管道
@@ -237,15 +272,16 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 
 ## 📊 Node Overview  
-ComfyUI-QING provides **16 professional nodes** covering 6 major functional areas:
+ComfyUI-QING provides **24 professional nodes** covering 7 major functional areas:
 
 | Category | Node Count | Main Functions |
 |----------|------------|----------------|
 | 🎨 **SVG Processing** | 5 nodes | Load, convert, save, format interchange |
 | 🎭 **Mask Engineering** | 7 nodes | Split, scale, blend, expand, judge, convert, preview |
 | 📝 **Text Processing** | 1 node | Multi-group comparison, conditional branching |
+| 🔄 **Data Type Conversion** | 6 nodes | Integer, string, boolean interconversion, inversion |
+| 🔄 **Image Transformation** | 2 nodes | Rotation, flipping, multiple interpolation algorithms |
 | 🎬 **Video Synthesis** | 1 node | Frame sequence to video, multi-format support |
-| 🔄 **Format Conversion** | 1 node | Bidirectional image-mask conversion |
 | 📦 **Cache Management** | 1 node | Smart image caching, preview, auto-save |
 
 ---
@@ -279,11 +315,35 @@ ComfyUI-QING provides **16 professional nodes** covering 6 major functional area
 |-----------|---------------------|--------------|
 | **Text Compare** | Multi-group text comparison and conditional judgment | • Supports 3 independent text comparisons<br>• Configurable case sensitivity<br>• Outputs boolean results for conditional branching |
 
-### 4. Video Synthesis Tool (1 node)
+### 4. Data Type Conversion Tools (6 nodes)
+
+| Node Name | Function Description | Key Features |
+|-----------|---------------------|--------------|
+| **Integer to String** | Convert integer to string format | • Supports full range integer conversion<br>• Exception handling mechanism<br>• Simple and efficient type conversion |
+| **String to Integer** | Convert string to integer | • Auto-handles spaces and formatting<br>• Supports standard mathematical rounding (0.5 rounds up)<br>• Returns default value 0 on conversion failure |
+| **String to Boolean** | Convert string to boolean value | • Smart recognition of multiple true/false formats<br>• Supports "true/false", "1/0", "yes/no", etc.<br>• Numeric strings judged by non-zero |
+| **Boolean to Integer** | Convert boolean value to integer | • True converts to 1, False converts to 0<br>• Standard boolean logic conversion<br>• Useful for conditional calculations |
+| **Integer to Boolean** | Convert integer to boolean value | • 0 converts to False, non-zero converts to True<br>• Standard C-style boolean conversion<br>• Supports conditional branch logic |
+| **Boolean Invert** | Perform logical inversion of boolean values | • True inverts to False, False inverts to True<br>• Simple logical NOT operation<br>• Used for conditional logic inversion |
+
+### 5. Image Transformation Tools (2 nodes)
+
+| Node Name | Function Description | Key Features |
+|-----------|---------------------|--------------|
+| **Image Rotation** | Perform precise image rotation operations | • Supports forward/reverse rotation modes<br>• 0-360 degree free angle control<br>• 6 interpolation algorithms (lanczos/bicubic/hamming, etc.)<br>• Optional color fill or transparent fill<br>• 9 fill color options |
+| **Image Flipping** | Perform image flipping transformations | • Supports horizontal and vertical flipping<br>• 6 high-quality interpolation algorithms<br>• Precise transformations maintaining image quality<br>• Batch processing support |
+
+### 6. Video Synthesis Tool (1 node)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
 | **Synthetic Video** | Professional frame sequence to video conversion | • Supported formats: mp4/webm/avi/mov/gif/mkv/flv<br>• Encoders: H.264/H.265/AV1/ProRes/VP9<br>• Custom compression rate, frame rate, quality parameters |
+
+### 7. Smart Cache Management System (1 node)
+
+| Node Name | Function Description | Key Features |
+|-----------|---------------------|--------------|
+| **Image Cache** | Smart image caching and batch management | • Supports up to 99 image cache limit<br>• Real-time preview of all cached images<br>• Auto-save to dedicated directory when limit reached<br>• Manual cache clearing and preview support<br>• Complete isolation for multi-instance operation |
 
 ---
 
@@ -311,6 +371,22 @@ ComfyUI-QING provides **16 professional nodes** covering 6 major functional area
 1. Text Compare → Detect keyword matches
 2. Based on boolean results → Switch different processing branches
 3. Implement intelligent content filtering and template selection
+```
+
+### 🔄 Data Type Conversion Pipeline
+```
+1. String to Integer → Convert user input to numeric values
+2. Integer to Boolean → Use for conditional judgment
+3. Boolean to Integer → Convert to numeric for calculations
+4. Integer to String → Format output results
+```
+
+### 🔄 Image Transformation Processing Flow
+```
+1. Load Image → Input original image
+2. Image Rotation → Set angle and fill options
+3. Image Flipping → Horizontal or vertical flip
+4. Output processed image
 ```
 
 ### 🎬 Video Production Pipeline

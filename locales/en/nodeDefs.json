@@ -651,7 +651,7 @@
   },
   "ImageMaskPreview": {
     "display_name": "Image Mask Preview",
-    "description": "Advanced image and mask blending preview with real-time effects and customizable colors",
+    "description": "Advanced image and mask blending preview with real-time effects and 9 customizable colors (Black White Red Orange Yellow Green Cyan Blue Purple)",
     "inputs": {
       "mask_alpha": {
         "name": "Mask Transparency",
@@ -659,7 +659,7 @@
       },
       "mask_color": {
         "name": "Mask Color",
-        "tooltip": "Color for mask display"
+        "tooltip": "Color for mask display (Black White Red Orange Yellow Green Cyan Blue Purple)"
       },
       "image": {
         "name": "Image",
@@ -700,6 +700,162 @@
       "clear_cache": {
         "name": "Clear Cache",
         "tooltip": "Enable to clear all cached images and previews for current instance"
+      }
+    }
+  },
+  "IntToString": {
+    "display_name": "Integer to String",
+    "description": "Convert input integer to string format",
+    "inputs": {
+      "integer": {
+        "name": "Integer",
+        "tooltip": "Integer value to convert"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "String",
+        "tooltip": "Converted string"
+      }
+    }
+  },
+  "StringToInt": {
+    "display_name": "String to Integer",
+    "description": "Convert input string to integer, supports automatic handling of spaces and standard mathematical rounding",
+    "inputs": {
+      "string": {
+        "name": "String",
+        "tooltip": "String to convert (e.g. \"123\", \"12.5\") floats will use standard rounding (0.5 rounds up)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Integer",
+        "tooltip": "Converted integer value"
+      }
+    }
+  },
+  "StringToBool": {
+    "display_name": "String to Boolean",
+    "description": "Convert input string to boolean value, supports multiple format recognition",
+    "inputs": {
+      "string": {
+        "name": "String",
+        "tooltip": "String to convert (e.g. \"true\", \"1\", \"yes\", \"false\", \"0\", \"no\")"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Boolean",
+        "tooltip": "Converted boolean value"
+      }
+    }
+  },
+  "BoolToInt": {
+    "display_name": "Boolean to Integer",
+    "description": "Convert input boolean value to integer (True->1, False->0)",
+    "inputs": {
+      "boolean": {
+        "name": "Boolean",
+        "tooltip": "Boolean value to convert"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Integer",
+        "tooltip": "Converted integer (1 or 0)"
+      }
+    }
+  },
+  "IntToBool": {
+    "display_name": "Integer to Boolean",
+    "description": "Convert input integer to boolean value (0->False, non-zero->True)",
+    "inputs": {
+      "integer": {
+        "name": "Integer",
+        "tooltip": "Integer value to convert"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Boolean",
+        "tooltip": "Converted boolean value"
+      }
+    }
+  },
+  "BoolInvert": {
+    "display_name": "Boolean Invert",
+    "description": "Invert the input boolean value (True->False, False->True)",
+    "inputs": {
+      "boolean": {
+        "name": "Boolean",
+        "tooltip": "Boolean value to invert"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Boolean",
+        "tooltip": "Inverted boolean value"
+      }
+    }
+  },
+  "ImageRotation": {
+    "display_name": "Image Rotation",
+    "description": "Rotate input images with support for forward/reverse rotation, custom angles, multiple interpolation algorithms, and fill options",
+    "inputs": {
+      "image": {
+        "name": "Image",
+        "tooltip": "Input image to rotate"
+      },
+      "rotation_mode": {
+        "name": "Rotation Mode",
+        "tooltip": "Forward rotation=clockwise, reverse rotation=counterclockwise"
+      },
+      "rotation_angle": {
+        "name": "Rotation Angle",
+        "tooltip": "Rotation angle in degrees (0-360)"
+      },
+      "interpolation": {
+        "name": "Interpolation",
+        "tooltip": "Interpolation algorithm used for image rotation"
+      },
+      "enable_fill": {
+        "name": "Enable Fill",
+        "tooltip": "Use specified color fill when enabled, otherwise use transparent fill"
+      },
+      "fill_color": {
+        "name": "Fill Color",
+        "tooltip": "Fill color for empty areas after rotation"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Image",
+        "tooltip": "Rotated image"
+      }
+    }
+  },
+  "ImageFlipping": {
+    "display_name": "Image Flipping",
+    "description": "Flip input images with support for horizontal and vertical flipping, plus multiple interpolation algorithms",
+    "inputs": {
+      "image": {
+        "name": "Image",
+        "tooltip": "Input image to flip"
+      },
+      "flip_mode": {
+        "name": "Flip Mode",
+        "tooltip": "Choose horizontal or vertical flipping"
+      },
+      "interpolation": {
+        "name": "Interpolation",
+        "tooltip": "Interpolation algorithm used for image flipping"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Image",
+        "tooltip": "Flipped image"
       }
     }
   }
