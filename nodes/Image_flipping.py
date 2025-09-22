@@ -8,6 +8,7 @@ class ImageRotation:
     """
     图像旋转节点
     功能：对输入图像进行旋转操作，支持多种旋转模式、角度控制、插值算法和填充选项
+    透明度处理：当"是否填充"设置为透明时，输出带有透明通道的RGBA图像
     """
     
     def __init__(self):
@@ -168,22 +169,23 @@ class ImageRotation:
                         fillcolor=(0, 0, 0, 0)  # 透明填充
                     )
                 
-                # 确保输出为RGB格式（ComfyUI标准）
+                # 处理输出格式（保持透明度或转换为RGB）
                 if rotated_pil.mode == 'RGBA':
-                    # 如果不需要填充，将透明部分转换为黑色
                     if not enable_fill:
-                        # 创建白色背景
-                        background = Image.new('RGB', rotated_pil.size, (0, 0, 0))
-                        background.paste(rotated_pil, mask=rotated_pil.split()[-1])  # 使用alpha通道作为mask
-                        rotated_pil = background
+                        # 保持RGBA格式以保留透明度信息
+                        rotated_array = np.array(rotated_pil).astype(np.float32) / 255.0
+                        rotated_tensor = torch.from_numpy(rotated_array)
                     else:
+                        # 填充模式：转换为RGB
                         rotated_pil = rotated_pil.convert('RGB')
-                elif rotated_pil.mode != 'RGB':
-                    rotated_pil = rotated_pil.convert('RGB')
-                
-                # 转换回张量
-                rotated_array = np.array(rotated_pil).astype(np.float32) / 255.0
-                rotated_tensor = torch.from_numpy(rotated_array)
+                        rotated_array = np.array(rotated_pil).astype(np.float32) / 255.0
+                        rotated_tensor = torch.from_numpy(rotated_array)
+                else:
+                    # 确保为RGB格式
+                    if rotated_pil.mode != 'RGB':
+                        rotated_pil = rotated_pil.convert('RGB')
+                    rotated_array = np.array(rotated_pil).astype(np.float32) / 255.0
+                    rotated_tensor = torch.from_numpy(rotated_array)
                 
                 rotated_images.append(rotated_tensor)
             
@@ -202,6 +204,7 @@ class ImageFlipping:
     """
     图像翻转节点
     功能：对输入图像进行翻转操作，支持水平翻转和垂直翻转，以及多种插值算法
+    透明度处理：自动保持原始图像的透明度信息（如果存在）
     """
     
     def __init__(self):
@@ -286,15 +289,17 @@ class ImageFlipping:
                     # 默认水平翻转
                     flipped_pil = pil_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
                 
-                # 确保输出为RGB格式（ComfyUI标准）
+                # 处理输出格式（保持原始格式的透明度信息）
                 if flipped_pil.mode == 'RGBA':
-                    flipped_pil = flipped_pil.convert('RGB')
-                elif flipped_pil.mode != 'RGB':
-                    flipped_pil = flipped_pil.convert('RGB')
-                
-                # 转换回张量
-                flipped_array = np.array(flipped_pil).astype(np.float32) / 255.0
-                flipped_tensor = torch.from_numpy(flipped_array)
+                    # 保持RGBA格式以保留透明度信息
+                    flipped_array = np.array(flipped_pil).astype(np.float32) / 255.0
+                    flipped_tensor = torch.from_numpy(flipped_array)
+                else:
+                    # 确保为RGB格式
+                    if flipped_pil.mode != 'RGB':
+                        flipped_pil = flipped_pil.convert('RGB')
+                    flipped_array = np.array(flipped_pil).astype(np.float32) / 255.0
+                    flipped_tensor = torch.from_numpy(flipped_array)
                 
                 flipped_images.append(flipped_tensor)
             

@@ -801,7 +801,7 @@
   },
   "ImageRotation": {
     "display_name": "Image Rotation",
-    "description": "Rotate input images with support for forward/reverse rotation, custom angles, multiple interpolation algorithms, and fill options",
+    "description": "Rotate input images with support for forward/reverse rotation, custom angles, multiple interpolation algorithms, and fill options. When transparent fill is selected, outputs RGBA images with transparency",
     "inputs": {
       "image": {
         "name": "Image",
@@ -821,7 +821,7 @@
       },
       "enable_fill": {
         "name": "Enable Fill",
-        "tooltip": "Use specified color fill when enabled, otherwise use transparent fill"
+        "tooltip": "Use specified color fill when enabled (RGB output), otherwise use transparent fill (RGBA output)"
       },
       "fill_color": {
         "name": "Fill Color",
@@ -837,7 +837,7 @@
   },
   "ImageFlipping": {
     "display_name": "Image Flipping",
-    "description": "Flip input images with support for horizontal and vertical flipping, plus multiple interpolation algorithms",
+    "description": "Flip input images with support for horizontal and vertical flipping, plus multiple interpolation algorithms. Automatically preserves original image transparency",
     "inputs": {
       "image": {
         "name": "Image",
