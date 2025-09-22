@@ -648,5 +648,59 @@
         "tooltip": "来自遮罩2的灰度图像"
       }
     }
+  },
+  "ImageMaskPreview": {
+    "display_name": "图像遮罩预览",
+    "description": "高级图像和遮罩混合预览，支持实时效果和自定义颜色",
+    "inputs": {
+      "mask_alpha": {
+        "name": "遮罩透明",
+        "tooltip": "遮罩透明程度 (0=完全透明, 100=完全不透明)"
+      },
+      "mask_color": {
+        "name": "遮罩颜色",
+        "tooltip": "遮罩显示颜色"
+      },
+      "image": {
+        "name": "图像",
+        "tooltip": "输入图像 (可选)"
+      },
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "输入遮罩 (可选)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "预览",
+        "tooltip": "预览图像输出"
+      }
+    }
+  },
+  "ImageCache": {
+    "display_name": "图像缓存",
+    "description": "智能图像缓存管理系统，支持99张图像缓存、实时预览、自动保存和手动清理功能",
+    "inputs": {
+      "image": {
+        "name": "图像",
+        "tooltip": "需要缓存的输入图像"
+      },
+      "metadata": {
+        "name": "元数据",
+        "tooltip": "控制保存图像时是否包含生成元数据"
+      },
+      "filename_prefix": {
+        "name": "文件名前缀",
+        "tooltip": "保存图像的文件名前缀，默认为ComfyUI"
+      },
+      "custom_path": {
+        "name": "自定义路径",
+        "tooltip": "自定义保存路径，留空则使用ComfyUI默认output目录。注意：只有图像达到上限99张之后才会触发保存机制"
+      },
+      "clear_cache": {
+        "name": "清理缓存",
+        "tooltip": "点击开启后将清空当前实例的所有缓存和预览图像"
+      }
+    }
   }
 }

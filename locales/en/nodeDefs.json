@@ -648,5 +648,59 @@
         "tooltip": "Grayscale image from mask 2"
       }
     }
+  },
+  "ImageMaskPreview": {
+    "display_name": "Image Mask Preview",
+    "description": "Advanced image and mask blending preview with real-time effects and customizable colors",
+    "inputs": {
+      "mask_alpha": {
+        "name": "Mask Transparency",
+        "tooltip": "Mask transparency level (0=fully transparent, 100=fully opaque)"
+      },
+      "mask_color": {
+        "name": "Mask Color",
+        "tooltip": "Color for mask display"
+      },
+      "image": {
+        "name": "Image",
+        "tooltip": "Input image (optional)"
+      },
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Input mask (optional)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Preview",
+        "tooltip": "Preview image output"
+      }
+    }
+  },
+  "ImageCache": {
+    "display_name": "Image Cache",
+    "description": "Intelligent image cache management system with support for 99 image cache, real-time preview, auto-save and manual cleanup functions",
+    "inputs": {
+      "image": {
+        "name": "Image",
+        "tooltip": "Input image to be cached"
+      },
+      "metadata": {
+        "name": "Metadata",
+        "tooltip": "Control whether to include generation metadata when saving images"
+      },
+      "filename_prefix": {
+        "name": "Filename Prefix",
+        "tooltip": "Filename prefix for saved images, defaults to ComfyUI"
+      },
+      "custom_path": {
+        "name": "Custom Path",
+        "tooltip": "Custom save path, leave empty to use ComfyUI default output directory. Note: Save mechanism only triggers when image cache reaches the limit of 99 images"
+      },
+      "clear_cache": {
+        "name": "Clear Cache",
+        "tooltip": "Enable to clear all cached images and previews for current instance"
+      }
+    }
   }
 }

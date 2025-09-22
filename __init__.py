@@ -12,6 +12,8 @@ from .nodes.Mask_judgment import MaskJudgment
 from .nodes.Mask_blend import MaskBlend
 from .nodes.Mask_expansion import MaskExpansion
 from .nodes.Image_mask_converter import ImageMaskConverter
+from .nodes.Mask_preview import ImageMaskPreview
+from .nodes.Image_cache import ImageCache
 
 
 # 按照官方文档加载翻译系统
@@ -39,6 +41,8 @@ NODE_CLASS_MAPPINGS = {
     "MaskBlend": MaskBlend,
     "MaskExpansion": MaskExpansion,
     "ImageMaskConverter": ImageMaskConverter,
+    "ImageMaskPreview": ImageMaskPreview,
+    "ImageCache": ImageCache,
 }
 
 # 默认显示名称（中文作为默认）
@@ -56,6 +60,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskBlend": "遮罩混合",
     "MaskExpansion": "遮罩扩张",
     "ImageMaskConverter": "图像遮罩转换",
+    "ImageMaskPreview": "图像遮罩预览",
+    "ImageCache": "图像缓存",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
