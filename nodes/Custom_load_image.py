@@ -65,7 +65,7 @@ class CustomLoadImageWithFormat:
     RETURN_TYPES = ("IMAGE", "MASK", "STRING", "STRING")
     RETURN_NAMES = ("image", "mask", "svg_content", "format_info")
     FUNCTION = "load_image"
-    CATEGORY = "输入/图像"
+    CATEGORY = "QING/输入输出"
     OUTPUT_NODE = True
     
     

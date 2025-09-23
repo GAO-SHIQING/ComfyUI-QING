@@ -131,21 +131,81 @@
       }
     }
   },
+  "Imagesizescaling": {
+    "display_name": "图像缩放",
+    "description": "高级图像和遮罩缩放，支持多种缩放模式和插值方法，已优化倍数约束算法",
+    "inputs": {
+      "scale_mode": {
+        "name": "缩放模式",
+        "tooltip": "缩放模式：保持比例（维持宽高比）、拉伸（自由缩放）、裁剪（缩放并裁剪）、填充（缩放并填充）"
+      },
+      "interpolation": {
+        "name": "插值方法",
+        "tooltip": "插值方法：lanczos、最近邻、双线性、双三次、区域、精确最近邻"
+      },
+      "scale_definition": {
+        "name": "缩放定义",
+        "tooltip": "缩放定义：无、最长边、最短边、宽度、高度、百分比、总像素"
+      },
+      "definition_value": {
+        "name": "定义数值",
+        "tooltip": "缩放定义的目标数值（支持无上限大数值，适用于高分辨率和总像素模式）"
+      },
+      "multiple_of": {
+        "name": "倍数约束",
+        "tooltip": "将尺寸约束为该数值的倍数（使用就近舍入，减少黑边产生）"
+      },
+      "image": {
+        "name": "图像",
+        "tooltip": "输入图像（可选）"
+      },
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "输入遮罩（可选）"
+      },
+      "width": {
+        "name": "宽度",
+        "tooltip": "目标宽度（优先于缩放定义，0为使用缩放定义）"
+      },
+      "height": {
+        "name": "高度",
+        "tooltip": "目标高度（优先于缩放定义，0为使用缩放定义）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "图像",
+        "tooltip": "缩放后的图像"
+      },
+      "1": {
+        "name": "遮罩",
+        "tooltip": "缩放后的遮罩"
+      },
+      "2": {
+        "name": "宽度",
+        "tooltip": "最终宽度"
+      },
+      "3": {
+        "name": "高度",
+        "tooltip": "最终高度"
+      }
+    }
+  },
   "MaskScale": {
     "display_name": "遮罩缩放",
-    "description": "缩放遮罩尺寸，支持多种缩放方式",
+    "description": "缩放遮罩尺寸，支持多种缩放方式，参数名称已与图像缩放节点对齐",
     "inputs": {
       "mask": {
         "name": "遮罩",
         "tooltip": "输入遮罩"
       },
-      "scale_by": {
-        "name": "缩放依据",
-        "tooltip": "缩放依据：宽度、高度、最长边、最短边或总像素"
+      "scale_definition": {
+        "name": "缩放定义",
+        "tooltip": "缩放定义：宽度、高度、最长边、最短边或总像素"
       },
-      "target_value": {
-        "name": "目标数值",
-        "tooltip": "目标数值（与缩放依据对应）"
+      "definition_value": {
+        "name": "定义数值",
+        "tooltip": "定义数值（与缩放定义对应，支持无上限大数值）"
       },
       "interpolation": {
         "name": "插值方式",
@@ -155,13 +215,13 @@
         "name": "保持比例",
         "tooltip": "是否保持纵横比"
       },
-      "target_width": {
-        "name": "目标宽度",
-        "tooltip": "指定目标宽度（优先于缩放依据）"
+      "width": {
+        "name": "宽度",
+        "tooltip": "指定目标宽度（优先于缩放定义）"
       },
-      "target_height": {
-        "name": "目标高度",
-        "tooltip": "指定目标高度（优先于缩放依据）"
+      "height": {
+        "name": "高度",
+        "tooltip": "指定目标高度（优先于缩放定义）"
       }
     },
     "outputs": {

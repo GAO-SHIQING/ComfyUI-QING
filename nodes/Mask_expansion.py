@@ -56,7 +56,7 @@ class MaskExpansion:
             }
         }
 
-    CATEGORY = "自定义/遮罩"
+    CATEGORY = "QING/遮罩处理"
     RETURN_TYPES = ("MASK",)
     RETURN_NAMES = ("mask",)
     FUNCTION = "expand_mask"

@@ -22,7 +22,7 @@ class MaskJudgment:
     RETURN_TYPES = ("BOOLEAN", "INT", "FLOAT", "STRING")
     RETURN_NAMES = ("has_mask", "mask_flag", "mask_ratio", "mask_info")
     FUNCTION = "judge_mask"
-    CATEGORY = "自定义/遮罩"
+    CATEGORY = "QING/遮罩处理"
 
     def judge_mask(self, mask, threshold=0.01):
         """

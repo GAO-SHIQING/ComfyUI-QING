@@ -131,21 +131,81 @@
       }
     }
   },
+  "Imagesizescaling": {
+    "display_name": "Image Scale",
+    "description": "Advanced image and mask scaling with multiple modes and interpolation methods, optimized multiple constraint algorithm",
+    "inputs": {
+      "scale_mode": {
+        "name": "Scale Mode",
+        "tooltip": "Scaling mode: keep_ratio (maintain aspect ratio), stretch (free scaling), crop (scale and crop), pad (scale and pad)"
+      },
+      "interpolation": {
+        "name": "Interpolation",
+        "tooltip": "Interpolation method: lanczos, nearest, bilinear, bicubic, area, nearest-exact"
+      },
+      "scale_definition": {
+        "name": "Scale Definition",
+        "tooltip": "Scale definition: none, longest_side, shortest_side, width, height, percentage, total_pixels"
+      },
+      "definition_value": {
+        "name": "Definition Value",
+        "tooltip": "Target value for scale definition (supports unlimited large values for high resolution and total pixels mode)"
+      },
+      "multiple_of": {
+        "name": "Multiple Of",
+        "tooltip": "Constrain dimensions to multiples of this value (uses nearest rounding to reduce black borders)"
+      },
+      "image": {
+        "name": "Image",
+        "tooltip": "Input image (optional)"
+      },
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Input mask (optional)"
+      },
+      "width": {
+        "name": "Width",
+        "tooltip": "Target width (overrides scale definition, 0 to use scale definition)"
+      },
+      "height": {
+        "name": "Height",
+        "tooltip": "Target height (overrides scale definition, 0 to use scale definition)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Image",
+        "tooltip": "Scaled image"
+      },
+      "1": {
+        "name": "Mask",
+        "tooltip": "Scaled mask"
+      },
+      "2": {
+        "name": "Width",
+        "tooltip": "Final width"
+      },
+      "3": {
+        "name": "Height",
+        "tooltip": "Final height"
+      }
+    }
+  },
   "MaskScale": {
     "display_name": "Mask Scale",
-    "description": "Scale mask dimensions with multiple scaling methods",
+    "description": "Scale mask dimensions with multiple scaling methods, parameter names aligned with Image Scale node",
     "inputs": {
       "mask": {
         "name": "Mask",
         "tooltip": "Input mask"
       },
-      "scale_by": {
-        "name": "Scale By",
-        "tooltip": "Scale basis: width, height, longest side, shortest side, or total pixels"
+      "scale_definition": {
+        "name": "Scale Definition",
+        "tooltip": "Scale definition: width, height, longest side, shortest side, or total pixels"
       },
-      "target_value": {
-        "name": "Target Value",
-        "tooltip": "Target value (corresponding to scale basis)"
+      "definition_value": {
+        "name": "Definition Value",
+        "tooltip": "Definition value (corresponding to scale definition, supports unlimited large values)"
       },
       "interpolation": {
         "name": "Interpolation",
@@ -155,13 +215,13 @@
         "name": "Keep Proportions",
         "tooltip": "Whether to maintain aspect ratio"
       },
-      "target_width": {
-        "name": "Target Width",
-        "tooltip": "Specified target width (overrides scale basis)"
+      "width": {
+        "name": "Width",
+        "tooltip": "Specified target width (overrides scale definition)"
       },
-      "target_height": {
-        "name": "Target Height",
-        "tooltip": "Specified target height (overrides scale basis)"
+      "height": {
+        "name": "Height",
+        "tooltip": "Specified target height (overrides scale definition)"
       }
     },
     "outputs": {

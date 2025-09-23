@@ -69,7 +69,7 @@ class ImageRotation:
     RETURN_TYPES = ("IMAGE", "MASK")
     RETURN_NAMES = ("image", "mask")
     FUNCTION = "rotate_image"
-    CATEGORY = "图像/变换"
+    CATEGORY = "QING/图像处理"
 
     def rotate_image(self, image, rotation_mode, rotation_angle, interpolation, enable_fill, fill_color):
         """
@@ -267,7 +267,7 @@ class ImageFlipping:
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)
     FUNCTION = "flip_image"
-    CATEGORY = "图像/变换"
+    CATEGORY = "QING/图像处理"
 
     def flip_image(self, image, flip_mode, interpolation):
         """

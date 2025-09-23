@@ -3,7 +3,7 @@ from .nodes.Load_svg import LoadSVG
 from .nodes.Mask_Splitter import MaskSplitter
 from .nodes.Svg_to_image import SVGToImage
 from .nodes.Custom_load_image import CustomLoadImageWithFormat
-from .nodes.Mask_scale import MaskScale
+from .nodes.Size_scaling import Imagesizescaling, MaskScale
 from .nodes.Text_compare import TextCompare
 from .nodes.Video_combine import SyntheticVideo
 from .nodes.Svg_saver import SVGSaver
@@ -36,6 +36,7 @@ NODE_CLASS_MAPPINGS = {
     "SVGToImage": SVGToImage,
     "CustomLoadImageWithFormat": CustomLoadImageWithFormat,
     "MaskScale": MaskScale,
+    "Imagesizescaling": Imagesizescaling,
     "TextCompare": TextCompare,
     "SyntheticVideo": SyntheticVideo,
     "SVGSaver": SVGSaver,
@@ -65,6 +66,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SVGToImage": "SVG转图像",
     "CustomLoadImageWithFormat": "加载图像(支持SVG)",
     "MaskScale": "遮罩缩放",
+    "Imagesizescaling": "图像缩放",
     "TextCompare": "文本对比",
     "SyntheticVideo": "合成视频",
     "SVGSaver": "保存SVG",

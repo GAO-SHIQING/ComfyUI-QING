@@ -189,7 +189,7 @@ class SVGSaver:
     RETURN_TYPES = ()
     RETURN_NAMES = ()
     FUNCTION = "save_svg"
-    CATEGORY = "自定义/SVG"
+    CATEGORY = "QING/输入输出"
     OUTPUT_NODE = True
     
     def save_svg(self, svg_content, filename_prefix, save_dir="", overwrite="enable", preview_max_size=512):

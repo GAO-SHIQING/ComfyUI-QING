@@ -81,7 +81,7 @@ class MaskSplitter:
     RETURN_NAMES = ("mask_list",)
     FUNCTION = "split"
     OUTPUT_IS_LIST = (True,)
-    CATEGORY = "图像/mask"
+    CATEGORY = "QING/遮罩处理"
 
     def split(self, mask, min_component_size=100, small_region_handling="merge", 
               merge_distance_ratio=2.0, text_preservation="auto", 

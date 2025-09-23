@@ -25,7 +25,7 @@ class ImageMaskConverter:
             }
         }
 
-    CATEGORY = "自定义/图像"
+    CATEGORY = "QING/图像处理"
     RETURN_TYPES = ("MASK", "MASK", "IMAGE", "IMAGE")
     RETURN_NAMES = ("mask1", "mask2", "image1", "image2")
     FUNCTION = "convert"

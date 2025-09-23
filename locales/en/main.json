@@ -1,14 +1,10 @@
 {
   "nodeCategories": {
-    "输入/文件": "Input/File",
-    "图像/遮罩": "Image/Mask", 
-    "图像/转换": "Image/Convert",
-    "文本/处理": "Text/Processing",
-    "视频/合成": "Video/Synthesis",
-    "输入/图像": "Input/Image",
-    "自定义/遮罩": "Custom/Mask",
-    "自定义/图像": "Custom/Image",
-    "自定义/SVG": "Custom/SVG",
-    "数据分析": "Data Analysis"
+    "QING/图像处理": "QING/Image Processing",
+    "QING/遮罩处理": "QING/Mask Processing", 
+    "QING/SVG处理": "QING/SVG Processing",
+    "QING/数据类型": "QING/Data Types",
+    "QING/视频处理": "QING/Video Processing",
+    "QING/输入输出": "QING/Input/Output"
   }
 }

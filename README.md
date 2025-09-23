@@ -32,7 +32,7 @@
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **26个专业节点**，覆盖8大功能领域：
+ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
@@ -40,7 +40,7 @@ ComfyUI-QING 提供 **26个专业节点**，覆盖8大功能领域：
 | 🎭 **遮罩工程** | 7个 | 拆分、缩放、混合、扩张、判断、转换、预览 |
 | 📝 **文本处理** | 1个 | 多组对比、条件分支 |
 | 🔄 **数据类型转换** | 6个 | 整数、字符串、布尔值互转、反转 |
-| 🔄 **图像变换** | 2个 | 旋转、翻转、多种插值算法 |
+| 🔄 **图像变换** | 3个 | 旋转、翻转、缩放、多种插值算法 |
 | 🎬 **视频合成** | 1个 | 序列帧转视频、多格式支持 |
 | 📦 **缓存管理** | 1个 | 智能图像缓存、预览、自动保存 |
 | 📊 **数据分析** | 2个 | 图像数据分析、遮罩数据分析 |
@@ -89,10 +89,11 @@ ComfyUI-QING 提供 **26个专业节点**，覆盖8大功能领域：
 | **整数到布尔** | 将整数转换为布尔值 | • 0转换为False，非0转换为True<br>• 标准C风格布尔转换<br>• 支持条件分支逻辑 |
 | **布尔反转** | 将布尔值进行逻辑反转 | • True反转为False，False反转为True<br>• 简单的逻辑非操作<br>• 用于条件逻辑反转 |
 
-### 5. 图像变换工具 (2个节点)
+### 5. 图像变换工具 (3个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
+| **图像缩放** | 高级图像和遮罩缩放处理 | • 4种缩放模式(保持比例/拉伸/裁剪/填充)<br>• 6种插值算法(lanczos/bicubic/bilinear等)<br>• 7种缩放定义(最长边/最短边/宽度/高度/百分比/总像素)<br>• 智能倍数约束(就近舍入减少黑边)<br>• 无上限数值支持(适用高分辨率)<br>• **同时输出缩放后的图像和遮罩** |
 | **图像旋转** | 对图像进行精确旋转操作 | • 支持正向/反向旋转模式<br>• 0-360度自由角度控制<br>• 6种插值算法(lanczos/bicubic/hamming等)<br>• 可选颜色填充或透明填充<br>• 9种填充颜色选择<br>• **输出填充区域遮罩** |
 | **图像翻转** | 对图像进行翻转变换 | • 支持水平翻转和垂直翻转<br>• 6种高质量插值算法<br>• 保持图像质量的精确变换<br>• 批量处理支持 |
 
@@ -147,9 +148,10 @@ ComfyUI-QING 提供 **26个专业节点**，覆盖8大功能领域：
 ### 🔄 图像变换处理流程
 ```
 1. 加载图像 → 输入原始图像
-2. 图像旋转 → 设置角度和填充选项，同时输出填充区域遮罩
-3. 图像翻转 → 水平或垂直翻转
-4. 输出处理后的图像和遮罩信息
+2. 图像缩放 → 选择缩放模式和目标尺寸，同时输出缩放后的图像和遮罩
+3. 图像旋转 → 设置角度和填充选项，同时输出填充区域遮罩
+4. 图像翻转 → 水平或垂直翻转
+5. 输出处理后的图像和遮罩信息
 ```
 
 ### 🎬 视频制作管道
@@ -289,7 +291,7 @@ ComfyUI-QING provides **24 professional nodes** covering 7 major functional area
 | 🎭 **Mask Engineering** | 7 nodes | Split, scale, blend, expand, judge, convert, preview |
 | 📝 **Text Processing** | 1 node | Multi-group comparison, conditional branching |
 | 🔄 **Data Type Conversion** | 6 nodes | Integer, string, boolean interconversion, inversion |
-| 🔄 **Image Transformation** | 2 nodes | Rotation, flipping, multiple interpolation algorithms |
+| 🔄 **Image Transformation** | 3 nodes | Scaling, rotation, flipping, multiple interpolation algorithms |
 | 🎬 **Video Synthesis** | 1 node | Frame sequence to video, multi-format support |
 | 📦 **Cache Management** | 1 node | Smart image caching, preview, auto-save |
 
@@ -335,10 +337,11 @@ ComfyUI-QING provides **24 professional nodes** covering 7 major functional area
 | **Integer to Boolean** | Convert integer to boolean value | • 0 converts to False, non-zero converts to True<br>• Standard C-style boolean conversion<br>• Supports conditional branch logic |
 | **Boolean Invert** | Perform logical inversion of boolean values | • True inverts to False, False inverts to True<br>• Simple logical NOT operation<br>• Used for conditional logic inversion |
 
-### 5. Image Transformation Tools (2 nodes)
+### 5. Image Transformation Tools (3 nodes)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
+| **Image Scale** | Advanced image and mask scaling processing | • 4 scaling modes (keep ratio/stretch/crop/pad)<br>• 6 interpolation algorithms (lanczos/bicubic/bilinear etc.)<br>• 7 scale definitions (longest/shortest side/width/height/percentage/total pixels)<br>• Smart multiple constraints (nearest rounding reduces black borders)<br>• Unlimited value support (for high resolution)<br>• **Outputs both scaled image and mask** |
 | **Image Rotation** | Perform precise image rotation operations | • Supports forward/reverse rotation modes<br>• 0-360 degree free angle control<br>• 6 interpolation algorithms (lanczos/bicubic/hamming, etc.)<br>• Optional color fill or transparent fill<br>• 9 fill color options |
 | **Image Flipping** | Perform image flipping transformations | • Supports horizontal and vertical flipping<br>• 6 high-quality interpolation algorithms<br>• Precise transformations maintaining image quality<br>• Batch processing support |
 
@@ -393,9 +396,10 @@ ComfyUI-QING provides **24 professional nodes** covering 7 major functional area
 ### 🔄 Image Transformation Processing Flow
 ```
 1. Load Image → Input original image
-2. Image Rotation → Set angle and fill options
-3. Image Flipping → Horizontal or vertical flip
-4. Output processed image
+2. Image Scale → Choose scaling mode and target dimensions, outputs both scaled image and mask
+3. Image Rotation → Set angle and fill options
+4. Image Flipping → Horizontal or vertical flip
+5. Output processed image and mask information
 ```
 
 ### 🎬 Video Production Pipeline

@@ -75,7 +75,7 @@ class ImageMaskPreview:
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("preview",)
     FUNCTION = "preview_mask"
-    CATEGORY = "自定义/遮罩"
+    CATEGORY = "QING/遮罩处理"
     OUTPUT_NODE = True  # 输出节点，具备预览功能
     
     def preview_mask(self, mask_alpha, mask_color, image=None, mask=None):

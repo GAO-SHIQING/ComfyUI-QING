@@ -23,7 +23,7 @@ class ImageDataAnalyzer:
     RETURN_TYPES = ("INT", "INT", "INT", "INT", "STRING")
     RETURN_NAMES = ("批次", "宽度", "高度", "通道", "更多")
     FUNCTION = "analyze_image_data"
-    CATEGORY = "数据分析"
+    CATEGORY = "QING/数据类型"
     OUTPUT_NODE = False
 
     def analyze_image_data(self, image=None):
@@ -180,7 +180,7 @@ class MaskDataAnalyzer:
     RETURN_TYPES = ("INT", "INT", "INT", "FLOAT", "STRING")
     RETURN_NAMES = ("批次", "宽度", "高度", "比例", "更多")
     FUNCTION = "analyze_mask_data"
-    CATEGORY = "数据分析"
+    CATEGORY = "QING/数据类型"
     OUTPUT_NODE = False
 
     def analyze_mask_data(self, mask=None):
