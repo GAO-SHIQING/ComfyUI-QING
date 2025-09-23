@@ -89,4 +89,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "MaskDataAnalyzer": "遮罩数据",
 }
 
-__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
+# JavaScript扩展目录
+WEB_DIRECTORY = "./js"
+
+__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
