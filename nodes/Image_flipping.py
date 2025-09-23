@@ -66,8 +66,8 @@ class ImageRotation:
             },
         }
 
-    RETURN_TYPES = ("IMAGE",)
-    RETURN_NAMES = ("image",)
+    RETURN_TYPES = ("IMAGE", "MASK")
+    RETURN_NAMES = ("image", "mask")
     FUNCTION = "rotate_image"
     CATEGORY = "图像/变换"
 
@@ -84,16 +84,20 @@ class ImageRotation:
             fill_color: 填充颜色
             
         返回:
-            tuple: (旋转后的图像张量,)
+            tuple: (旋转后的图像张量, 填充区域遮罩张量)
         """
         try:
-            # 如果角度为0或360，直接返回原图像以提高效率
+            # 如果角度为0或360，直接返回原图像和全零遮罩
             if rotation_angle % 360 == 0:
-                return (image,)
+                # 创建全零遮罩（无填充区域）
+                batch_size, height, width = image.shape[:3]
+                zero_mask = torch.zeros((batch_size, height, width), dtype=torch.float32, device=image.device)
+                return (image, zero_mask)
             
             # 转换输入张量为PIL图像列表
             batch_size = image.shape[0]
             rotated_images = []
+            rotation_masks = []
             
             # 确定实际旋转角度
             # PIL的rotate()默认是逆时针旋转，为了让"正向旋转"表现为顺时针，需要取负值
@@ -141,6 +145,17 @@ class ImageRotation:
                     img_array = np.repeat(img_array, 3, axis=2)
                     pil_img = Image.fromarray(img_array, 'RGB')
                 
+                # 生成遮罩：首先创建原图对应的全白遮罩
+                original_mask = Image.new('L', pil_img.size, 255)  # 全白遮罩表示原图区域
+                
+                # 旋转原图遮罩以获得填充区域
+                rotated_mask = original_mask.rotate(
+                    actual_angle,
+                    resample=resample_method,
+                    expand=True,
+                    fillcolor=0  # 填充区域用黑色(0)表示
+                )
+                
                 # 执行旋转
                 if enable_fill:
                     # 使用指定颜色填充
@@ -187,17 +202,32 @@ class ImageRotation:
                     rotated_array = np.array(rotated_pil).astype(np.float32) / 255.0
                     rotated_tensor = torch.from_numpy(rotated_array)
                 
+                # 处理遮罩：将遮罩转换为张量
+                # 注意：我们需要反转遮罩，使填充区域为白色(1.0)，原图区域为黑色(0.0)
+                mask_array = np.array(rotated_mask).astype(np.float32) / 255.0
+                # 反转遮罩：原图区域(白色255->1.0)变为0.0，填充区域(黑色0->0.0)变为1.0
+                mask_array = 1.0 - mask_array
+                mask_tensor = torch.from_numpy(mask_array)
+                
+                # 确保遮罩与图像在同一设备上
+                mask_tensor = mask_tensor.to(device=image.device)
+                
+                
                 rotated_images.append(rotated_tensor)
+                rotation_masks.append(mask_tensor)
             
             # 合并批次
             result_tensor = torch.stack(rotated_images, dim=0)
+            mask_tensor = torch.stack(rotation_masks, dim=0)
             
-            return (result_tensor,)
+            return (result_tensor, mask_tensor)
             
         except Exception as e:
             print(f"图像旋转错误: {e}")
-            # 返回原图像作为fallback
-            return (image,)
+            # 返回原图像和全零遮罩作为fallback
+            batch_size, height, width = image.shape[:3]
+            fallback_mask = torch.zeros((batch_size, height, width), dtype=torch.float32, device=image.device)
+            return (image, fallback_mask)
 
 
 class ImageFlipping:

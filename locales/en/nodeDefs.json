@@ -832,6 +832,10 @@
       "0": {
         "name": "Image",
         "tooltip": "Rotated image"
+      },
+      "1": {
+        "name": "Mask",
+        "tooltip": "Mask of filled areas during rotation (white=filled areas, black=original image areas)"
       }
     }
   },
@@ -856,6 +860,70 @@
       "0": {
         "name": "Image",
         "tooltip": "Flipped image"
+      }
+    }
+  },
+  "ImageDataAnalyzer": {
+    "display_name": "Image Data",
+    "description": "Analyze input image information parameters, output batch size, width, height, channels and other basic information",
+    "inputs": {
+      "image": {
+        "name": "Image",
+        "tooltip": "Image to analyze"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Batch",
+        "tooltip": "Image batch size"
+      },
+      "1": {
+        "name": "Width",
+        "tooltip": "Image width (pixels)"
+      },
+      "2": {
+        "name": "Height",
+        "tooltip": "Image height (pixels)"
+      },
+      "3": {
+        "name": "Channels",
+        "tooltip": "Image channel count"
+      },
+      "4": {
+        "name": "More",
+        "tooltip": "Detailed image information string"
+      }
+    }
+  },
+  "MaskDataAnalyzer": {
+    "display_name": "Mask Data",
+    "description": "Analyze input mask information parameters, output batch size, width, height, coverage ratio and other information",
+    "inputs": {
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Mask to analyze"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Batch",
+        "tooltip": "Mask batch size"
+      },
+      "1": {
+        "name": "Width",
+        "tooltip": "Mask width (pixels)"
+      },
+      "2": {
+        "name": "Height",
+        "tooltip": "Mask height (pixels)"
+      },
+      "3": {
+        "name": "Ratio",
+        "tooltip": "Mask coverage ratio (0.0-1.0)"
+      },
+      "4": {
+        "name": "More",
+        "tooltip": "Detailed mask information string"
       }
     }
   }

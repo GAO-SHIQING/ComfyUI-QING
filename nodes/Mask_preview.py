@@ -91,6 +91,11 @@ class ImageMaskPreview:
         返回:
             dict: 包含输出图像和UI预览信息
         """
+        # 调试信息：记录输入状态（可以注释掉）
+        # print(f"遮罩预览节点输入状态: image={'有' if image is not None else '无'}, mask={'有' if mask is not None else '无'}")
+        # if mask is not None:
+        #     print(f"接收到的遮罩信息: 类型={type(mask)}, 形状={mask.shape if hasattr(mask, 'shape') else '未知'}")
+        
         # 验证输入
         if image is None and mask is None:
             # 创建一个带提示的占位符图像
@@ -173,14 +178,60 @@ class ImageMaskPreview:
                         align_corners=False
                     ).permute(0, 2, 3, 1)  # (B, H, W, 1)
                 
-                # 创建彩色遮罩
+                # 创建彩色遮罩，匹配图像的通道数
                 color_tensor = torch.tensor(color_rgb, device=device, dtype=torch.float32)
-                colored_mask = mask * color_tensor  # (B, H, W, 3)
                 
-                # 混合图像和遮罩
-                blended = image * (1 - mask * alpha) + colored_mask * (mask * alpha)
-                
-                # 混合完成
+                if channels == 4:  # RGBA图像
+                    # 分离RGB和Alpha通道
+                    image_rgb = image[:, :, :, :3]  # RGB部分
+                    image_alpha = image[:, :, :, 3:4]  # Alpha部分
+                    
+                    # 创建RGB彩色遮罩
+                    colored_mask_rgb = mask * color_tensor  # (B, H, W, 3)
+                    
+                    # 混合RGB部分
+                    blended_rgb = image_rgb * (1 - mask * alpha) + colored_mask_rgb * (mask * alpha)
+                    
+                    # 保持原始alpha通道（遮罩区域可能需要调整透明度）
+                    # 选项1：保持原始alpha
+                    blended_alpha = image_alpha
+                    
+                    # 选项2：在遮罩区域增加不透明度（取消注释使用）
+                    # mask_alpha_effect = mask * (1.0 - alpha) + alpha  # 遮罩区域变更不透明
+                    # blended_alpha = image_alpha * mask_alpha_effect
+                    
+                    # 合并RGB和Alpha
+                    blended = torch.cat([blended_rgb, blended_alpha], dim=3)
+                    
+                    # ComfyUI可能需要RGB输出，因此提供选项转换
+                    # 如果预览异常，可以尝试转换为RGB
+                    use_rgb_output = True  # 设为True强制输出RGB，False保持RGBA
+                    
+                    if use_rgb_output:
+                        # 使用alpha混合将RGBA转换为RGB
+                        alpha_channel = blended[:, :, :, 3:4]
+                        rgb_part = blended[:, :, :, :3]
+                        
+                        # 选择转换方案
+                        use_alpha_enhancement = False  # 设为True使用alpha增强，False直接使用RGB
+                        
+                        if use_alpha_enhancement:
+                            # 方案1：强制遮罩区域为不透明，避免被白色背景稀释
+                            enhanced_alpha = torch.where(mask > 0.1, torch.ones_like(alpha_channel), alpha_channel)
+                            # Alpha混合公式：result = foreground * alpha + background * (1 - alpha)
+                            blended = rgb_part * enhanced_alpha + torch.ones_like(rgb_part) * (1 - enhanced_alpha)
+                        else:
+                            # 方案2：直接跳过alpha混合，保持RGB结果（推荐）
+                            blended = rgb_part
+                    
+                elif channels == 3:  # RGB图像
+                    # 为RGB图像创建3通道彩色遮罩
+                    colored_mask = mask * color_tensor  # (B, H, W, 3)
+                    
+                    # 混合图像和遮罩
+                    blended = image * (1 - mask * alpha) + colored_mask * (mask * alpha)
+                else:
+                    return self._create_placeholder_image("不支持的图像通道数")
                 
                 # 确保输出在 [0, 1] 范围内
                 blended = torch.clamp(blended, 0.0, 1.0)
@@ -201,6 +252,20 @@ class ImageMaskPreview:
                     image = image / 255.0
                 image = torch.clamp(image, 0.0, 1.0)
                 
+                # 检查是否为RGBA图像，如果是则转换为RGB以便显示
+                batch_size, height, width, channels = image.shape
+                
+                if channels == 4:  # RGBA图像
+                    # 使用alpha混合将RGBA转换为RGB（白色背景）
+                    alpha_channel = image[:, :, :, 3:4]
+                    rgb_part = image[:, :, :, :3]
+                    # Alpha混合公式：result = foreground * alpha + background * (1 - alpha)
+                    image = rgb_part * alpha_channel + torch.ones_like(rgb_part) * (1 - alpha_channel)
+                elif channels == 3:  # RGB图像
+                    pass  # 直接返回
+                else:
+                    return self._create_placeholder_image("不支持的图像通道数")
+                
                 return image
             else:
                 return self._create_placeholder_image("图像维度错误")
@@ -220,6 +285,18 @@ class ImageMaskPreview:
             if mask.max() > 1.0:
                 mask = mask / 255.0
             
+            # 检测是否为全零遮罩或极小值遮罩
+            mask_max = torch.max(mask).item()
+            mask_sum = torch.sum(mask).item()
+            mask_mean = torch.mean(mask).item()
+            
+            # 更严格的全零检测
+            is_effectively_zero = (mask_max < 1e-6 and mask_sum < 1e-6 and mask_mean < 1e-6)
+            
+            if is_effectively_zero:
+                # 全零遮罩：创建一个带说明的可视化图像
+                return self._create_empty_mask_visualization(mask.shape, device, mask_color)
+            
             # 获取遮罩尺寸并转换为 (B, H, W, C) 格式
             if mask.dim() == 2:  # (H, W)
                 height, width = mask.shape
@@ -231,6 +308,8 @@ class ImageMaskPreview:
                 else:
                     height, width = mask.shape[0], mask.shape[1]
                     mask = mask.unsqueeze(0).unsqueeze(-1)  # (1, H, W, 1)
+            else:
+                pass  # 处理不常见的遮罩维度
             
             # 创建彩色遮罩
             color_tensor = torch.tensor(color_rgb, device=device, dtype=torch.float32)
@@ -238,6 +317,11 @@ class ImageMaskPreview:
             
             # 确保输出在 [0, 1] 范围内
             colored_mask = torch.clamp(colored_mask, 0.0, 1.0)
+            
+            # 如果着色后仍然是全零，使用备用可视化
+            if torch.max(colored_mask).item() < 1e-6:
+                return self._create_empty_mask_visualization(mask.shape, device, mask_color)
+            
             return colored_mask
             
         except Exception as e:
@@ -300,6 +384,57 @@ class ImageMaskPreview:
         except Exception as e:
             # 最后的备用方案
             return torch.zeros((1, 64, 64, 3), dtype=torch.float32)
+    
+    def _create_empty_mask_visualization(self, mask_shape, device, mask_color):
+        """为全零遮罩创建可视化图像"""
+        try:
+            # 获取遮罩的实际尺寸
+            if len(mask_shape) == 2:  # (H, W)
+                height, width = mask_shape
+            elif len(mask_shape) == 3:  # (B, H, W) 或 (H, W, 1)
+                if mask_shape[0] == 1:
+                    height, width = mask_shape[1], mask_shape[2]
+                else:
+                    height, width = mask_shape[0], mask_shape[1]
+            else:
+                # 使用默认尺寸
+                height, width = 256, 256
+            
+            # 创建一个棋盘格模式来表示"空遮罩"
+            # 使用低对比度的棋盘格，便于区分和占位符图像
+            checkboard_size = max(8, min(height, width) // 16)  # 动态调整棋盘格大小
+            
+            # 创建棋盘格模式
+            y_indices = torch.arange(height, device=device).float()
+            x_indices = torch.arange(width, device=device).float()
+            
+            y_grid = (y_indices // checkboard_size) % 2
+            x_grid = (x_indices // checkboard_size) % 2
+            
+            # 创建棋盘格：XOR操作产生交替模式
+            checkboard = (y_grid.unsqueeze(1) + x_grid.unsqueeze(0)) % 2
+            
+            # 创建低对比度的灰色棋盘格 (0.3 和 0.4 之间)
+            checkboard_intensity = 0.3 + checkboard * 0.1
+            
+            # 转换为 (1, H, W, 3) 格式
+            visualization = checkboard_intensity.unsqueeze(0).unsqueeze(-1).repeat(1, 1, 1, 3)
+            
+            # 添加边框指示这是空遮罩
+            border_width = max(1, min(height, width) // 64)
+            if border_width > 0:
+                # 上下边框
+                visualization[0, :border_width, :, :] = 0.6
+                visualization[0, -border_width:, :, :] = 0.6
+                # 左右边框
+                visualization[0, :, :border_width, :] = 0.6
+                visualization[0, :, -border_width:, :] = 0.6
+            
+            return visualization.to(device)
+            
+        except Exception as e:
+            # 如果出错，返回简单的灰色图像
+            return torch.full((1, 128, 128, 3), 0.4, dtype=torch.float32, device=device)
     
     def _save_temp_preview(self, pil_image):
         """保存临时预览图像（仅用于UI显示）"""

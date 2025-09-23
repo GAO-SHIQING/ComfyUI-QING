@@ -8,6 +8,7 @@
     "输入/图像": "Input/Image",
     "自定义/遮罩": "Custom/Mask",
     "自定义/图像": "Custom/Image",
-    "自定义/SVG": "Custom/SVG"
+    "自定义/SVG": "Custom/SVG",
+    "数据分析": "Data Analysis"
   }
 }

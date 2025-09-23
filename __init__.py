@@ -16,6 +16,7 @@ from .nodes.Mask_preview import ImageMaskPreview
 from .nodes.Image_cache import ImageCache
 from .nodes.Type_conversion import IntToString, StringToInt, StringToBool, BoolToInt, IntToBool, BoolInvert
 from .nodes.Image_flipping import ImageRotation, ImageFlipping
+from .nodes.Data_preview import ImageDataAnalyzer, MaskDataAnalyzer
 
 
 # 按照官方文档加载翻译系统
@@ -53,6 +54,8 @@ NODE_CLASS_MAPPINGS = {
     "BoolInvert": BoolInvert,
     "ImageRotation": ImageRotation,
     "ImageFlipping": ImageFlipping,
+    "ImageDataAnalyzer": ImageDataAnalyzer,
+    "MaskDataAnalyzer": MaskDataAnalyzer,
 }
 
 # 默认显示名称（中文作为默认）
@@ -80,6 +83,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BoolInvert": "布尔反转",
     "ImageRotation": "图像旋转",
     "ImageFlipping": "图像翻转",
+    "ImageDataAnalyzer": "图像数据",
+    "MaskDataAnalyzer": "遮罩数据",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
