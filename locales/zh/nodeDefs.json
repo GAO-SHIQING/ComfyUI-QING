@@ -986,5 +986,37 @@
         "tooltip": "详细的遮罩信息字符串"
       }
     }
-  }
+  },
+    "LetMeSee": {
+      "display_name": "我想看看",
+      "description": "通用调试工具，显示任何类型数据的详细分析，包含数据类型、运行时长、系统资源使用等信息",
+      "inputs": {
+        "source": {
+          "name": "源",
+          "tooltip": "任意类型的数据输入，支持连接任何ComfyUI数据类型"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "源",
+          "tooltip": "透传输入的原始数据，不做任何修改"
+        }
+      }
+    },
+    "ShowMePure": {
+      "display_name": "让我看看",
+      "description": "极简内容显示工具，直接输出原始数据内容，无任何格式化或额外信息",
+      "inputs": {
+        "source": {
+          "name": "源",
+          "tooltip": "任意类型的数据输入，支持连接任何ComfyUI数据类型"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "源",
+          "tooltip": "透传输入的原始数据，不做任何修改"
+        }
+      }
+    }
 }

@@ -47,27 +47,16 @@ def _discover_and_register_nodes():
                         display_names[name] = module_display_names.get(name, name)
                         module_node_count += 1
             
-            # 调试信息：显示每个模块加载的节点数
-            if module_node_count > 0:
-                display_info = f"✅ 从 {py_file.name} 加载了 {module_node_count} 个节点"
-                if module_display_names:
-                    display_info += f"（含 {len(module_display_names)} 个显示名称）"
-                print(display_info)
+            # 静默加载节点，不显示详细信息
                         
         except ImportError as e:
             error_msg = f"模块导入失败 {py_file.name}: {e}"
             failed_imports.append(error_msg)
-            print(f"⚠️  {error_msg}")
         except Exception as e:
             error_msg = f"处理模块时出错 {py_file.name}: {e}"
             failed_imports.append(error_msg)
-            print(f"❌ {error_msg}")
     
-    # 如果有失败的导入，在调试模式下显示详细信息
-    if failed_imports and os.environ.get('COMFYUI_QING_DEBUG', '').lower() in ('true', '1', 'yes'):
-        print(f"\n⚠️  共有 {len(failed_imports)} 个模块导入失败:")
-        for error in failed_imports:
-            print(f"   {error}")
+    # 静默处理失败的导入
     
     return node_classes, display_names
 
@@ -87,15 +76,6 @@ def get_registered_nodes():
 # 使用动态发现机制注册所有节点
 _NODE_CLASSES, _DISPLAY_NAMES = _discover_and_register_nodes()
 
-# 调试信息：打印已注册的节点数量
-print(f"🎨QING节点包：成功注册了 {len(_NODE_CLASSES)} 个节点")
-
-# 可选：打印详细的节点信息（仅在调试模式下）
-DEBUG_MODE = os.environ.get('COMFYUI_QING_DEBUG', '').lower() in ('true', '1', 'yes')
-if DEBUG_MODE:
-    print("已注册的节点列表:")
-    for node_name in sorted(_NODE_CLASSES.keys()):
-        print(f"  - {node_name} ({_DISPLAY_NAMES.get(node_name, node_name)})")
 
 
 # 按照官方文档加载翻译系统

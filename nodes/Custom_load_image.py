@@ -127,86 +127,82 @@ class CustomLoadImageWithFormat:
             return self._create_error_result(error_msg, "UNKNOWN")
     
     def _get_format_info(self, file_extension, image_path):
-        """获取格式信息"""
-        # 从预定义的格式映射中获取格式信息
-        if file_extension in SUPPORTED_FORMATS:
-            return SUPPORTED_FORMATS[file_extension]
+        """获取文件格式信息"""
+        format_info = SUPPORTED_FORMATS.get(file_extension, f"UNKNOWN({file_extension})")
         
-        # 如果不在预定义列表中，尝试使用PIL检测格式
-        try:
-            img = Image.open(image_path)
-            return img.format or file_extension[1:].upper() if file_extension else "UNKNOWN"
-        except:
-            return file_extension[1:].upper() if file_extension else "UNKNOWN"
+        # 尝试从文件内容获取更准确的格式信息
+        if file_extension in ['.jpg', '.jpeg']:
+            # 对于JPEG，可能需要额外检查
+            try:
+                with open(image_path, 'rb') as f:
+                    header = f.read(10)
+                    if header.startswith(b'\xff\xd8\xff'):
+                        format_info = "JPEG"
+                    else:
+                        format_info = f"JPEG(?)"
+            except:
+                pass
+        
+        return format_info
     
     def _is_valid_svg(self, svg_content):
         """验证SVG内容是否有效"""
         if not svg_content or not isinstance(svg_content, str):
             return False
         
-        # 简单的SVG验证：检查是否包含SVG标签
-        svg_content_lower = svg_content.lower().strip()
-        return svg_content_lower.startswith('<?xml') or '<svg' in svg_content_lower
-    
-    def _create_error_result(self, error_msg, format_info="ERROR"):
-        """创建错误结果"""
-        # Error occurred
-        return (NO_OUTPUT, NO_OUTPUT, NO_OUTPUT, format_info)
+        # 基本检查：包含SVG标签
+        svg_content_lower = svg_content.lower()
+        return '<svg' in svg_content_lower and '</svg>' in svg_content_lower
     
     def _load_other_formats(self, img):
-        """
-        处理其他图像格式（PNG, JPG, GIF等）
-        """
-        try:
-            output_images = []
-            output_masks = []
-            
-            for frame in ImageSequence.Iterator(img):
-                frame = ImageOps.exif_transpose(frame)
-                
-                # 处理不同图像模式
-                if frame.mode == 'I':
-                    frame = frame.point(lambda i: i * (1 / 255))
-                elif frame.mode == '1':
-                    frame = frame.convert('L')
-                
-                image_rgb = frame.convert("RGB")
-                image_np = np.array(image_rgb).astype(np.float32) / 255.0
-                
-                # 确保数组形状正确
-                if len(image_np.shape) == 2:
-                    # 灰度图，添加通道维度
-                    image_np = np.expand_dims(image_np, axis=2)
-                    image_np = np.repeat(image_np, 3, axis=2)
-                
-                image_tensor = torch.from_numpy(image_np)[None,]
-                
-                if hasattr(frame, 'getbands') and 'A' in frame.getbands():
-                    mask = np.array(frame.getchannel('A')).astype(np.float32) / 255.0
-                    mask = 1. - torch.from_numpy(mask)
-                else:
-                    # 创建与图像尺寸匹配的空白掩码
-                    height, width = image_np.shape[:2]
-                    mask = torch.zeros((height, width), dtype=torch.float32, device="cpu")
-                
-                output_images.append(image_tensor)
-                output_masks.append(mask.unsqueeze(0))
-            
-            if len(output_images) > 1:
-                output_image = torch.cat(output_images, dim=0)
-                output_mask = torch.cat(output_masks, dim=0)
-            else:
-                output_image = output_images[0] if output_images else torch.zeros((1, 64, 64, 3), dtype=torch.float32)
-                output_mask = output_masks[0] if output_masks else torch.zeros((1, 64, 64), dtype=torch.float32)
-            
-            return (output_image, output_mask)
+        """处理非SVG格式的图像"""
+        output_images = []
+        output_masks = []
         
-        except Exception as e:
-            # Error in _load_other_formats
-            traceback.print_exc()
-            # 返回默认的空张量
-            return (torch.zeros((1, 64, 64, 3), dtype=torch.float32), 
-                    torch.zeros((1, 64, 64), dtype=torch.float32))
+        # 处理动画图像的所有帧
+        for i in ImageSequence.Iterator(img):
+            i = ImageOps.exif_transpose(i)
+            
+            # 处理特殊格式
+            if i.mode == 'I':
+                i = i.point(lambda p: p * 0.0039215686)  # 将16位转换为8位
+            
+            image = i.convert("RGB")
+            image = np.array(image).astype(np.float32) / 255.0
+            image = torch.from_numpy(image)[None,]
+            
+            # 处理透明度/遮罩
+            if 'transparency' in i.info:
+                mask = np.array(i.convert('RGBA'))[:,:,3].astype(np.float32) / 255.0
+                mask = 1. - torch.from_numpy(mask)
+            elif i.mode == 'RGBA':
+                mask = np.array(i)[:,:,3].astype(np.float32) / 255.0
+                mask = torch.from_numpy(mask)
+            elif i.mode == 'LA':
+                mask = np.array(i.convert('RGBA'))[:,:,3].astype(np.float32) / 255.0
+                mask = torch.from_numpy(mask)
+            else:
+                mask = torch.zeros((image.shape[1], image.shape[2]), dtype=torch.float32)
+            
+            output_images.append(image)
+            output_masks.append(mask.unsqueeze(0))
+        
+        if len(output_images) > 1:
+            output_image = torch.cat(output_images, dim=0)
+            output_mask = torch.cat(output_masks, dim=0)
+        else:
+            output_image = output_images[0]
+            output_mask = output_masks[0]
+        
+        return (output_image, output_mask)
+    
+    def _create_error_result(self, error_msg, format_info="UNKNOWN"):
+        """创建错误返回结果"""
+        print(f"加载错误: {error_msg}")
+        # 创建空的图像和遮罩张量
+        empty_image = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
+        empty_mask = torch.zeros((1, 64, 64), dtype=torch.float32)
+        return (empty_image, empty_mask, NO_OUTPUT, f"ERROR: {error_msg} (Format: {format_info})")
     
     @classmethod
     def IS_CHANGED(s, image):
@@ -222,7 +218,7 @@ class CustomLoadImageWithFormat:
     @classmethod
     def VALIDATE_INPUTS(s, image):
         if not folder_paths.exists_annotated_filepath(image):
-            return "Invalid image file: {}".format(image)
+            return "Invalid image: {}".format(image)
         return True
 
 # 节点注册
@@ -231,5 +227,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "CustomLoadImageWithFormat": "Load Image (SVG Supported)"
+    "CustomLoadImageWithFormat": "加载图像(支持SVG)"
 }

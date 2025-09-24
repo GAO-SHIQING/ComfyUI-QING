@@ -1,0 +1,84 @@
+{
+  "id": "06b0731d-acbc-401d-89f2-9f236d0d3898",
+  "revision": 0,
+  "last_node_id": 166,
+  "last_link_id": 150,
+  "nodes": [
+    {
+      "id": 166,
+      "type": "SyntheticVideo",
+      "pos": [
+        -236.20233154296875,
+        -443.7431945800781
+      ],
+      "size": [
+        400,
+        492
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "file_path",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SyntheticVideo"
+      },
+      "widgets_values": [
+        16,
+        0,
+        0,
+        "QING",
+        "video/mp4",
+        false,
+        true,
+        true,
+        "h264",
+        "vp9",
+        "mpeg4",
+        "prores",
+        "gif",
+        "h264",
+        "flv",
+        "",
+        ""
+      ],
+      "color": "#1A442E"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9229599817706675,
+      "offset": [
+        1056.7736283559943,
+        640.8978644324858
+      ]
+    },
+    "frontendVersion": "1.26.13",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

@@ -3,7 +3,7 @@
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
-一款为ComfyUI量身打造的「全能媒体处理扩展」，集成14个专业节点，让图像、SVG、文本、视频的复杂工作流变得简单高效。无论是创意设计、动画制作还是批量处理，都能提供精准工具链支持，释放你的创作潜能。  
+一款为ComfyUI量身打造的「全能媒体处理扩展」，集成28个专业节点，让图像、SVG、文本、视频的复杂工作流变得简单高效。无论是创意设计、动画制作还是批量处理，都能提供精准工具链支持，释放你的创作潜能。  
 
 
 ## ✨ 核心亮点  
@@ -32,7 +32,7 @@
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
+ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
@@ -44,6 +44,7 @@ ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
 | 🎬 **视频合成** | 1个 | 序列帧转视频、多格式支持 |
 | 📦 **缓存管理** | 1个 | 智能图像缓存、预览、自动保存 |
 | 📊 **数据分析** | 2个 | 图像数据分析、遮罩数据分析 |
+| 🔧 **调试工具** | 2个 | 数据查看器、系统监控、纯净内容显示 |
 
 ---
 
@@ -108,6 +109,13 @@ ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
 | **图像缓存** | 智能图像缓存和批量管理 | • 支持99张图像缓存上限<br>• 实时预览显示所有缓存图像<br>• 达到上限自动保存到独立目录<br>• 支持手动清理缓存和预览<br>• 多实例完全隔离运行 |
+
+### 8. 调试工具 (2个节点)
+
+| 节点名称 | 功能描述 | 主要特性 |
+|---------|----------|----------|
+| **我想看看** | 通用数据查看器和系统监控 | • 支持任意数据类型显示<br>• 实时显示数据类型、尺寸、运行时长<br>• 内存和GPU使用监控<br>• 透传输出不修改原数据<br>• 零CSS纯净架构，基于HTML标准属性 |
+| **让我看看** | 极简纯净内容显示工具 | • 直接输出原始数据内容，无任何格式化<br>• 无额外分析信息，专注内容本身<br>• 支持任意数据类型，自动适配显示<br>• 透传输出不修改原数据<br>• 零CSS纯净架构，轻量化设计 |
 
 ---
 
@@ -178,6 +186,23 @@ ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
 4. 详细信息输出 → 内存占用、数值范围、质量评估
 ```
 
+### 🔧 调试工具工作流程
+```
+【我想看看节点】
+1. 我想看看 → 连接任意数据输出端口
+2. 实时分析 → 显示数据类型、尺寸、运行时长
+3. 系统监控 → 内存使用、GPU占用、时间戳
+4. 透传输出 → 原始数据不变，可继续连接其他节点
+5. 详细查看 → 完整显示数据内容和分析信息
+
+【让我看看节点】
+1. 让我看看 → 连接任意数据输出端口
+2. 纯净显示 → 直接输出原始数据内容
+3. 无格式化 → 不添加任何分析或装饰信息
+4. 透传输出 → 原始数据不变，可继续连接其他节点
+5. 极简查看 → 专注数据内容本身，最小化干扰
+```
+
 ---
 
 ## 🚀 快速开始  
@@ -203,7 +228,7 @@ ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
    pip install -r requirements.txt  
    ```  
 
-3. 重启ComfyUI，节点将自动加载，可在「自定义节点」「image」等分类中找到。  
+3. 重启ComfyUI，节点将自动加载，可在「自定义节点」「image」等分类中找到。
 
 ### ⚠️ 重要提示
 - **视频合成功能**需要系统安装FFmpeg
@@ -253,7 +278,7 @@ ComfyUI-QING 提供 **27个专业节点**，覆盖8大功能领域：
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
-A powerful all-in-one media processing extension tailored for ComfyUI, featuring **14 professional nodes** that simplify complex workflows involving images, SVG, text, and video. Whether for creative design, animation production, or batch processing, it provides precise toolchain support to unleash your creative potential.  
+A powerful all-in-one media processing extension tailored for ComfyUI, featuring **28 professional nodes** that simplify complex workflows involving images, SVG, text, and video. Whether for creative design, animation production, or batch processing, it provides precise toolchain support to unleash your creative potential.  
 
 
 ## ✨ Core Highlights  
@@ -283,7 +308,7 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 
 ## 📊 Node Overview  
-ComfyUI-QING provides **24 professional nodes** covering 7 major functional areas:
+ComfyUI-QING provides **28 professional nodes** covering 9 major functional areas:
 
 | Category | Node Count | Main Functions |
 |----------|------------|----------------|
@@ -294,6 +319,8 @@ ComfyUI-QING provides **24 professional nodes** covering 7 major functional area
 | 🔄 **Image Transformation** | 3 nodes | Scaling, rotation, flipping, multiple interpolation algorithms |
 | 🎬 **Video Synthesis** | 1 node | Frame sequence to video, multi-format support |
 | 📦 **Cache Management** | 1 node | Smart image caching, preview, auto-save |
+| 📊 **Data Analysis** | 2 nodes | Image data analysis, mask data analysis |
+| 🔧 **Debug Tools** | 2 nodes | Data viewer, system monitor, pure content display |
 
 ---
 
@@ -356,6 +383,13 @@ ComfyUI-QING provides **24 professional nodes** covering 7 major functional area
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
 | **Image Cache** | Smart image caching and batch management | • Supports up to 99 image cache limit<br>• Real-time preview of all cached images<br>• Auto-save to dedicated directory when limit reached<br>• Manual cache clearing and preview support<br>• Complete isolation for multi-instance operation |
+
+### 8. Debug Tools (2 nodes)
+
+| Node Name | Function Description | Key Features |
+|-----------|---------------------|--------------|
+| **Let Me See** | Universal data viewer and system monitor | • Supports any data type display<br>• Real-time data type, size, runtime display<br>• Memory and GPU usage monitoring<br>• Pass-through output without modifying original data<br>• Zero-CSS pure architecture based on HTML standards |
+| **Show Me Pure** | Minimal pure content display tool | • Direct output of raw data content without formatting<br>• No additional analysis info, focus on content itself<br>• Supports any data type with auto-adaptive display<br>• Pass-through output without modifying original data<br>• Zero-CSS pure architecture with lightweight design |
 
 ---
 
@@ -433,7 +467,7 @@ ComfyUI-QING provides **24 professional nodes** covering 7 major functional area
    pip install -r requirements.txt  
    ```  
 
-3. Restart ComfyUI. Nodes will load automatically, found under "Custom Nodes" or "Image" categories.  
+3. Restart ComfyUI. Nodes will load automatically, found under "Custom Nodes" or "Image" categories.
 
 ### ⚠️ Important Notes
 - **Video synthesis** requires system-level FFmpeg installation

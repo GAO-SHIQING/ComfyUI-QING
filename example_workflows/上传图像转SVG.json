@@ -1,0 +1,345 @@
+{
+  "id": "06b0731d-acbc-401d-89f2-9f236d0d3898",
+  "revision": 0,
+  "last_node_id": 154,
+  "last_link_id": 145,
+  "nodes": [
+    {
+      "id": 148,
+      "type": "CustomLoadImageWithFormat",
+      "pos": [
+        -1033.292236328125,
+        -654.54541015625
+      ],
+      "size": [
+        270,
+        354
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            133
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "svg_content",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "format_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CustomLoadImageWithFormat"
+      },
+      "widgets_values": [
+        "01.png",
+        "image"
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 149,
+      "type": "SVGSaver",
+      "pos": [
+        275.3417663574219,
+        -654.54541015625
+      ],
+      "size": [
+        270,
+        342
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "svg_content",
+          "type": "STRING",
+          "link": 141
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SVGSaver"
+      },
+      "widgets_values": [
+        "comfy_svg",
+        "",
+        "disable",
+        512
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 150,
+      "type": "LetMeSee",
+      "pos": [
+        -221.4833984375,
+        -654.54541015625
+      ],
+      "size": [
+        435.4919738769531,
+        240.4335479736328
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "shape": 7,
+          "type": "*",
+          "link": 142
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "links": [
+            141
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LetMeSee"
+      },
+      "widgets_values": [
+        "📊 数据分析\n🕒 2025-09-24 18:19:06 | ⚡ 0.007s\n\n类型: int | 大小: 0.0KB\n\n💻 内存: 21785MB (33%)\n🖥️ GPU: 0MB | NVIDIA GeForce RTX 3060\n\n📄 内容:\n1584"
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 147,
+      "type": "ImageToSVG",
+      "pos": [
+        -560.8228759765625,
+        -654.54541015625
+      ],
+      "size": [
+        270,
+        522
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 133
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "svg_content",
+          "type": "STRING",
+          "links": [
+            142
+          ]
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            143
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            145
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": []
+        },
+        {
+          "name": "preview",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageToSVG"
+      },
+      "widgets_values": [
+        "edge_detection",
+        100,
+        "simple",
+        50,
+        150,
+        1,
+        10,
+        true,
+        true,
+        "#FFFFFF",
+        "#000000",
+        1,
+        true,
+        127,
+        512,
+        true,
+        2
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 152,
+      "type": "ShowMePure",
+      "pos": [
+        -221.4833984375,
+        -299.5229797363281
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "shape": 7,
+          "type": "*",
+          "link": 143
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowMePure"
+      },
+      "widgets_values": [
+        "1056"
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 154,
+      "type": "ShowMePure",
+      "pos": [
+        4.008575439453125,
+        -299.5229797363281
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "shape": 7,
+          "type": "*",
+          "link": 145
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShowMePure"
+      },
+      "widgets_values": [
+        "1056"
+      ],
+      "color": "#1A442E"
+    }
+  ],
+  "links": [
+    [
+      133,
+      148,
+      0,
+      147,
+      0,
+      "IMAGE"
+    ],
+    [
+      141,
+      150,
+      0,
+      149,
+      0,
+      "STRING"
+    ],
+    [
+      142,
+      147,
+      0,
+      150,
+      0,
+      "*"
+    ],
+    [
+      143,
+      147,
+      1,
+      152,
+      0,
+      "*"
+    ],
+    [
+      145,
+      147,
+      2,
+      154,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8390545288824249,
+      "offset": [
+        1265.0962119973751,
+        862.6537388463615
+      ]
+    },
+    "frontendVersion": "1.26.13",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

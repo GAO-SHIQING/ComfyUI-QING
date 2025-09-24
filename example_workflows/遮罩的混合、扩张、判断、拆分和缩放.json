@@ -1,0 +1,298 @@
+{
+  "id": "06b0731d-acbc-401d-89f2-9f236d0d3898",
+  "revision": 0,
+  "last_node_id": 165,
+  "last_link_id": 150,
+  "nodes": [
+    {
+      "id": 162,
+      "type": "MaskExpansion",
+      "pos": [
+        -181.90740966796875,
+        -554.7081298828125
+      ],
+      "size": [
+        270,
+        202
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskExpansion"
+      },
+      "widgets_values": [
+        15,
+        8,
+        false,
+        true,
+        true,
+        true,
+        true
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 163,
+      "type": "MaskJudgment",
+      "pos": [
+        -181.90740966796875,
+        -287.8697204589844
+      ],
+      "size": [
+        270,
+        118
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "has_mask",
+          "type": "BOOLEAN",
+          "links": null
+        },
+        {
+          "name": "mask_flag",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "mask_ratio",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "mask_info",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskJudgment"
+      },
+      "widgets_values": [
+        0.01
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 164,
+      "type": "MaskSplitter",
+      "pos": [
+        144.92457580566406,
+        -508.1453857421875
+      ],
+      "size": [
+        270,
+        222
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "reference_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask_list",
+          "shape": 6,
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskSplitter"
+      },
+      "widgets_values": [
+        100,
+        "merge",
+        2,
+        "chinese_optimized",
+        "auto",
+        true,
+        true
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 165,
+      "type": "MaskScale",
+      "pos": [
+        147.61085510253906,
+        -207.28131103515625
+      ],
+      "size": [
+        270,
+        218
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskScale"
+      },
+      "widgets_values": [
+        "longest_side",
+        512,
+        "lanczos",
+        true,
+        0,
+        0
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 161,
+      "type": "MaskBlend",
+      "pos": [
+        -514.7052001953125,
+        -588.754150390625
+      ],
+      "size": [
+        270,
+        354
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask1",
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "mask2",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "mask3",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "mask4",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "mask5",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "raw_mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MaskBlend"
+      },
+      "widgets_values": [
+        "add",
+        0,
+        "false",
+        50,
+        "false",
+        0,
+        "center",
+        "none",
+        "horizontal",
+        1
+      ],
+      "color": "#1A442E"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0152559799477343,
+      "offset": [
+        1013.5382267755377,
+        727.7620659164708
+      ]
+    },
+    "frontendVersion": "1.26.13",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

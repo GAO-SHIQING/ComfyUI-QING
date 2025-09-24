@@ -986,5 +986,37 @@
         "tooltip": "Detailed mask information string"
       }
     }
-  }
+  },
+    "LetMeSee": {
+      "display_name": "Let Me See",
+      "description": "Universal debug tool, displays detailed analysis of any data type, including data type, runtime, system resource usage and more",
+      "inputs": {
+        "source": {
+          "name": "Source",
+          "tooltip": "Any type of data input, supports connecting any ComfyUI data type"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "Source",
+          "tooltip": "Pass-through the original input data without any modification"
+        }
+      }
+    },
+    "ShowMePure": {
+      "display_name": "Show Me Pure",
+      "description": "Minimal content display tool, directly outputs raw data content without any formatting or additional information",
+      "inputs": {
+        "source": {
+          "name": "Source",
+          "tooltip": "Any type of data input, supports connecting any ComfyUI data type"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "Source",
+          "tooltip": "Pass-through the original input data without any modification"
+        }
+      }
+    }
 }
