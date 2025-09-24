@@ -616,7 +616,7 @@ class SyntheticVideo:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("file_path",)
     OUTPUT_NODE = True
-    CATEGORY = "QING/视频处理"
+    CATEGORY = "🎨QING/视频处理"
     FUNCTION = "combine_video"
 
     def combine_video(

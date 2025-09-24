@@ -19,7 +19,7 @@ class LoadSVG:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("svg_content",)
     FUNCTION = "load_svg"
-    CATEGORY = "QING/输入输出"
+    CATEGORY = "🎨QING/输入输出"
     
 
     def clean_path(self, path):

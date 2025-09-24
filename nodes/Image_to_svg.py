@@ -170,7 +170,7 @@ class ImageToSVG:
     RETURN_TYPES = ("STRING", "INT", "INT", "MASK", "IMAGE")
     RETURN_NAMES = ("svg_content", "width", "height", "mask", "preview")
     FUNCTION = "convert_image"
-    CATEGORY = "QING/SVG处理"
+    CATEGORY = "🎨QING/SVG处理"
     
     def apply_preset(self, preset, **kwargs):
         """应用预设配置，用户自定义参数会覆盖预设"""

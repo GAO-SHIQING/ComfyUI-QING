@@ -67,7 +67,7 @@ class Imagesizescaling:
     RETURN_TYPES = ("IMAGE", "MASK", "INT", "INT")
     RETURN_NAMES = ("image", "mask", "width", "height")
     FUNCTION = "scale_image"
-    CATEGORY = "QING/图像处理"
+    CATEGORY = "🎨QING/图像处理"
     
     def scale_image(self, scale_mode, interpolation, scale_definition, definition_value, multiple_of,
                    width=0, height=0, image=None, mask=None):
@@ -564,7 +564,7 @@ class MaskScale:
     RETURN_TYPES = ("MASK", "INT", "INT")
     RETURN_NAMES = ("mask", "width", "height")
     FUNCTION = "scale_mask"
-    CATEGORY = "QING/遮罩处理"
+    CATEGORY = "🎨QING/遮罩处理"
     
     def scale_mask(self, mask, scale_definition, definition_value, interpolation, keep_proportions, width=0, height=0):
         """

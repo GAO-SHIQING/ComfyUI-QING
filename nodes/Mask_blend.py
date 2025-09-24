@@ -231,7 +231,7 @@ class MaskBlend:
     RETURN_TYPES = ("MASK", "IMAGE", "MASK")  # 返回遮罩、图像和原始混合结果
     RETURN_NAMES = ("mask", "image", "raw_mask")
     FUNCTION = "blend_masks"
-    CATEGORY = "QING/遮罩处理"
+    CATEGORY = "🎨QING/遮罩处理"
 
     def blend_masks(self, mask1, blend_mode, feather_radius, invert_mask, threshold, 
                    mask2=None, mask3=None, mask4=None, mask5=None, gradient_type=GradientType.NONE.value, 

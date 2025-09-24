@@ -1,10 +1,10 @@
 {
   "nodeCategories": {
-    "QING/图像处理": "QING/Image Processing",
-    "QING/遮罩处理": "QING/Mask Processing", 
-    "QING/SVG处理": "QING/SVG Processing",
-    "QING/数据类型": "QING/Data Types",
-    "QING/视频处理": "QING/Video Processing",
-    "QING/输入输出": "QING/Input/Output"
+    "🎨QING/图像处理": "🎨QING/Image Processing",
+    "🎨QING/遮罩处理": "🎨QING/Mask Processing", 
+    "🎨QING/SVG处理": "🎨QING/SVG Processing",
+    "🎨QING/数据类型": "🎨QING/Data Types",
+    "🎨QING/视频处理": "🎨QING/Video Processing",
+    "🎨QING/输入输出": "🎨QING/Input/Output"
   }
 }

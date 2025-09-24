@@ -44,7 +44,7 @@ class TextCompare:
     # 输出名称去掉下划线，使用更简洁的中文
     RETURN_NAMES = tuple([f"result_{i+1}" for i in range(MODULE_COUNT)])
     FUNCTION = "compare_texts"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
     OUTPUT_NODE = True
     
     def compare_texts(self, case_sensitive=False, **kwargs):

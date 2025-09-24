@@ -70,7 +70,7 @@ class ImageCache:
     RETURN_TYPES = ()
     RETURN_NAMES = ()
     FUNCTION = "cache_image"
-    CATEGORY = "QING/图像处理"
+    CATEGORY = "🎨QING/图像处理"
     OUTPUT_NODE = True
     
     def cache_image(self, image, metadata=False, filename_prefix="ComfyUI", custom_path="", clear_cache=False):

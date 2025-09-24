@@ -22,7 +22,7 @@ class IntToString:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("string",)
     FUNCTION = "convert_int_to_string"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
 
     def convert_int_to_string(self, integer):
         """
@@ -62,7 +62,7 @@ class StringToInt:
     RETURN_TYPES = ("INT",)
     RETURN_NAMES = ("integer",)
     FUNCTION = "convert_string_to_int"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
 
     def convert_string_to_int(self, string):
         """
@@ -131,7 +131,7 @@ class StringToBool:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("boolean",)
     FUNCTION = "convert_string_to_bool"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
 
     def convert_string_to_bool(self, string):
         """
@@ -200,7 +200,7 @@ class BoolToInt:
     RETURN_TYPES = ("INT",)
     RETURN_NAMES = ("integer",)
     FUNCTION = "convert_bool_to_int"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
 
     def convert_bool_to_int(self, boolean):
         """
@@ -246,7 +246,7 @@ class IntToBool:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("boolean",)
     FUNCTION = "convert_int_to_bool"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
 
     def convert_int_to_bool(self, integer):
         """
@@ -291,7 +291,7 @@ class BoolInvert:
     RETURN_TYPES = ("BOOLEAN",)
     RETURN_NAMES = ("boolean",)
     FUNCTION = "invert_bool"
-    CATEGORY = "QING/数据类型"
+    CATEGORY = "🎨QING/数据类型"
 
     def invert_bool(self, boolean):
         """

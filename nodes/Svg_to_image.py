@@ -83,7 +83,7 @@ class SVGToImage:
     RETURN_TYPES = ("IMAGE", "MASK", "INT", "INT")
     RETURN_NAMES = ("image", "mask", "width", "height")
     FUNCTION = "convert_svg"
-    CATEGORY = "QING/SVG处理"
+    CATEGORY = "🎨QING/SVG处理"
     
 
     def parse_size_string(self, size_str):
