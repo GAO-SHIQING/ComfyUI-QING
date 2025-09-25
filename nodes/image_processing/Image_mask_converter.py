@@ -92,7 +92,7 @@ class ImageMaskConverter:
         # 验证值范围（ComfyUI图像通常在0-1范围内）
         if torch.any(image < 0) or torch.any(image > 1):
             # 警告但不抛出异常，因为有些图像可能超出0-1范围
-            print(f"警告：图像值超出标准范围 [0,1]，实际范围 [{image.min():.3f}, {image.max():.3f}]")
+            pass
         
         # 保存原始设备信息
         original_device = image.device
@@ -150,7 +150,8 @@ class ImageMaskConverter:
         
         # 验证值范围（遮罩应该在0-1范围内）
         if torch.any(mask < 0) or torch.any(mask > 1):
-            print(f"警告：遮罩值超出标准范围 [0,1]，实际范围 [{mask.min():.3f}, {mask.max():.3f}]")
+            # 警告但不抛出异常，因为有些遮罩可能超出0-1范围
+            pass
         
         # 保存原始设备信息
         original_device = mask.device
@@ -209,7 +210,8 @@ class ImageMaskConverter:
         
         # 验证值范围（遮罩应该在0-1范围内）
         if torch.any(mask < 0) or torch.any(mask > 1):
-            print(f"警告：遮罩值超出标准范围 [0,1]，实际范围 [{mask.min():.3f}, {mask.max():.3f}]")
+            # 警告但不抛出异常，因为有些遮罩可能超出0-1范围
+            pass
         
         # 保存原始设备信息
         original_device = mask.device

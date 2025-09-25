@@ -6,5 +6,9 @@
     "🎨QING/数据类型": "🎨QING/Data Types",
     "🎨QING/视频处理": "🎨QING/Video Processing",
     "🎨QING/输入输出": "🎨QING/Input/Output"
+  },
+  "settingsCategories": {
+    "🎨QING": "🎨QING",
+    "API配置": "API Configuration"
   }
 }

@@ -20,3 +20,6 @@ cairosvg>=2.5.0
 # Windows: 从 https://ffmpeg.org/download.html 下载
 # Linux: sudo apt-get install ffmpeg
 # macOS: brew install ffmpeg
+
+# AI模型API依赖
+zai-sdk>=0.0.3.3

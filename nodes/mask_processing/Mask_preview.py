@@ -91,10 +91,6 @@ class ImageMaskPreview:
         返回:
             dict: 包含输出图像和UI预览信息
         """
-        # 调试信息：记录输入状态（可以注释掉）
-        # print(f"遮罩预览节点输入状态: image={'有' if image is not None else '无'}, mask={'有' if mask is not None else '无'}")
-        # if mask is not None:
-        #     print(f"接收到的遮罩信息: 类型={type(mask)}, 形状={mask.shape if hasattr(mask, 'shape') else '未知'}")
         
         # 验证输入
         if image is None and mask is None:

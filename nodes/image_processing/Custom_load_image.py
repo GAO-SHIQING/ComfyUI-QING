@@ -198,7 +198,7 @@ class CustomLoadImageWithFormat:
     
     def _create_error_result(self, error_msg, format_info="UNKNOWN"):
         """创建错误返回结果"""
-        print(f"加载错误: {error_msg}")
+        pass
         # 创建空的图像和遮罩张量
         empty_image = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
         empty_mask = torch.zeros((1, 64, 64), dtype=torch.float32)

@@ -107,7 +107,7 @@ class ImageCache:
             return preview_result
             
         except Exception as e:
-            print(f"图像缓存节点错误: {e}")
+            pass
             return {"ui": {"text": [f"错误: {str(e)}"]}}
     
     def _handle_clear_cache(self):
@@ -125,7 +125,7 @@ class ImageCache:
             # 清理整个实例目录（如果存在的话）
             self._cleanup_instance_directory()
             
-            print(f"实例 {self.instance_id} 的缓存和预览已全部清理")
+            pass
             
             return {
                 "ui": {
@@ -134,7 +134,7 @@ class ImageCache:
             }
             
         except Exception as e:
-            print(f"清理缓存失败: {e}")
+            pass
             return {"ui": {"text": [f"清理失败: {str(e)}"]}}
     
     def _cleanup_instance_directory(self):
@@ -150,13 +150,13 @@ class ImageCache:
             if os.path.exists(preview_dir):
                 import shutil
                 shutil.rmtree(preview_dir)
-                print(f"已删除预览目录: {preview_dir}")
+                pass
             
             # 如果实例目录为空，也可以删除（但保留以备将来使用）
             # 这里我们选择保留目录结构，只清理内容
             
         except Exception as e:
-            print(f"清理实例目录失败: {e}")
+            pass
     
     def _save_cached_images(self):
         """
@@ -208,13 +208,13 @@ class ImageCache:
                     saved_count += 1
                     
                 except Exception as e:
-                    print(f"保存第{i+1}张图像失败: {e}")
+                    pass
                     continue
             
-            print(f"成功保存 {saved_count} 张缓存图像到: {save_dir}")
+            pass
             
         except Exception as e:
-            print(f"保存缓存图像失败: {e}")
+            pass
     
     def _generate_preview(self):
         """
@@ -260,7 +260,7 @@ class ImageCache:
             return {"ui": ui_result}
             
         except Exception as e:
-            print(f"生成预览失败: {e}")
+            pass
             return {"ui": {"text": [f"预览生成失败: {str(e)}"]}}
     
     def _tensor_to_pil(self, tensor):

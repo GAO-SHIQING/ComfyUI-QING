@@ -49,7 +49,6 @@ app.registerExtension({
                 
                 // 处理从Python返回的ui.text数据
                 if (message.text) {
-                    console.log("[JS] 收到UI数据:", message.text);
                     populate.call(this, message.text);
                 }
             };
@@ -59,7 +58,6 @@ app.registerExtension({
             nodeType.prototype.onConfigure = function () {
                 onConfigure?.apply(this, arguments);
                 if (this.widgets_values?.length) {
-                    console.log("[JS] 恢复配置:", this.widgets_values);
                     populate.call(this, this.widgets_values);
                 }
             };

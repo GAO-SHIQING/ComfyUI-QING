@@ -1,12 +1,45 @@
 # 🎨 ComfyUI-QING：解锁ComfyUI媒体处理全场景能力  
-[English](#english-intro) | [节点文档](#nodes-documentation)  
+[English](#english-intro) | [节点文档](#nodes-documentation) | [最新更新](#latest-updates)
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
-一款为ComfyUI量身打造的「全能媒体处理扩展」，集成28个专业节点，让图像、SVG、文本、视频的复杂工作流变得简单高效。无论是创意设计、动画制作还是批量处理，都能提供精准工具链支持，释放你的创作潜能。  
+一款为ComfyUI量身打造的「全能媒体处理扩展」，集成30个专业节点，让图像、SVG、文本、视频、AI对话、视觉理解的复杂工作流变得简单高效。无论是创意设计、动画制作、AI内容生成、图像分析还是批量处理，都能提供精准工具链支持，释放你的创作潜能。
+
+## 🆕 最新更新 <a id="latest-updates"></a>
+
+### 🔧 项目架构优化 (2025年9月)
+- **节点目录重构**: 将`nodes`目录下的节点文件按功能分类到子目录中，结构更加清晰直观
+  - 📁 `api/` - API相关节点和服务
+  - 📁 `image_processing/` - 图像处理节点
+  - 📁 `mask_processing/` - 遮罩处理节点
+  - 📁 `svg_processing/` - SVG处理节点
+  - 📁 `data_types/` - 数据类型转换节点
+  - 📁 `video_processing/` - 视频处理节点
+  - 📁 `io_nodes/` - 输入输出节点
+
+### ⚙️ API密钥管理系统升级
+- **实时双向同步**: 实现ComfyUI设置界面与本地配置文件的实时同步
+- **多层级优先级**: ComfyUI设置 → 环境变量 → 本地文件存储
+- **自动配置管理**: 新增`config.json`文件自动管理API密钥和同步设置
+- **防冲突机制**: 时间戳检查和同步锁，避免配置冲突
+- **本地化存储**: API密钥本地存储，支持离线使用和备份
+
+### 🌐 国际化支持
+- **多语言设置**: 支持中文和英文的设置界面
+- **节点分类翻译**: 所有节点分类支持多语言显示
+- **设置项翻译**: API密钥设置支持多语言提示和说明
+
+### 🧹 代码质量提升
+- **代码精简**: 移除所有冗余的`console.log`和`print`语句
+- **依赖清理**: 清除未使用的导入和死代码
+- **错误修复**: 修复节点导入失败和语法错误
+- **性能优化**: 简化日志输出，提升运行效率  
 
 
 ## ✨ 核心亮点  
+- **🎨QING智能设置系统**  
+  全新的实时双向同步设置管理，API密钥在ComfyUI设置界面与本地配置文件之间自动同步，支持多语言界面，一键配置所有GLM模型节点。
+
 - **SVG全链路解决方案**  
   从本地文件加载到高质量格式转换，一站式搞定SVG素材的全流程管理，完美适配图像生成工作流。  
 
@@ -20,7 +53,13 @@
   多组文本对比与条件判断，让工作流根据内容智能分支，轻松实现模板切换、内容审核等场景。  
 
 - **专业级视频合成**  
-  覆盖mp4/webm/avi/gif/mkv/flv等格式，内置H.264/H.265/AV1/ProRes等编码器，自定义压缩率与质量参数。  
+  覆盖mp4/webm/avi/gif/mkv/flv等格式，内置H.264/H.265/AV1/ProRes等编码器，自定义压缩率与质量参数。
+
+- **智能AI对话引擎**  
+  支持16个GLM语言模型，包括最新GLM-4.5系列，提供多轮对话记忆、参数精细控制和完整错误处理机制。
+
+- **强大视觉理解能力**  
+  集成GLM-4V视觉模型，支持图像分析、描述生成、视觉问答，实现图像+文本多模态智能交互。  
 
 
 ## 🎯 适用场景  
@@ -28,17 +67,20 @@
 - **精细遮罩处理**：拆分、混合、扩张含文字的复杂遮罩，用于图像编辑、区域替换等场景。  
 - **图像通道操作**：提取特定颜色通道制作遮罩，或将遮罩转换为可视化图像。  
 - **智能文本分支**：基于文本匹配结果自动切换工作流（如审核合规内容、选择对应模板）。  
-- **视频创作 pipeline**：序列帧合成动画、多格式导出、编码器优化，满足从草稿到发布的全需求。  
+- **视频创作 pipeline**：序列帧合成动画、多格式导出、编码器优化，满足从草稿到发布的全需求。
+- **AI内容生成工作流**：智谱GLM模型驱动的文本生成，支持多轮对话、长文档分析和创意写作。
+- **智能图像理解分析**：GLM-4V视觉模型驱动的图像分析，支持图像描述、视觉问答和内容识别。  
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
+ComfyUI-QING 提供 **30个专业节点**，覆盖11大功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
 | 🎨 **SVG处理** | 5个 | 加载、转换、保存、格式互转 |
 | 🎭 **遮罩工程** | 7个 | 拆分、缩放、混合、扩张、判断、转换、预览 |
 | 📝 **文本处理** | 1个 | 多组对比、条件分支 |
+| 🤖 **AI对话** | 2个 | GLM语言模型、GLM视觉模型、多轮对话、智能生成 |
 | 🔄 **数据类型转换** | 6个 | 整数、字符串、布尔值互转、反转 |
 | 🔄 **图像变换** | 3个 | 旋转、翻转、缩放、多种插值算法 |
 | 🎬 **视频合成** | 1个 | 序列帧转视频、多格式支持 |
@@ -79,7 +121,14 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 |---------|----------|----------|
 | **文本对比** | 多组文本比较和条件判断 | • 支持3组独立文本对比<br>• 可配置大小写敏感性<br>• 输出布尔结果用于条件分支 |
 
-### 4. 数据类型转换工具 (6个节点)
+### 4. AI对话引擎 (2个节点)
+
+| 节点名称 | 功能描述 | 主要特性 |
+|---------|----------|----------|
+| **GLM_语言丨API** | 智谱GLM语言模型API调用和文本生成 | • 支持16个GLM语言模型（GLM-4.5/4/3系列）<br>• 智能多轮对话记忆（最多18轮）<br>• 精细参数控制（温度、top_p、max_tokens）<br>• 完整错误处理和智能分类<br>• 实时token统计和对话信息<br>• 基于官方zai-sdk，完全兼容 |
+| **GLM_视觉丨API** | 智谱GLM视觉模型API调用和图像理解 | • 支持5个GLM视觉模型（GLM-4.5V/4.1V/4V系列）<br>• 智能参数适配，自动解决1210兼容性问题<br>• 图像+文本多模态输入<br>• 智能图像分析和描述生成<br>• 三种图像质量模式（auto/low/high）<br>• 多轮视觉对话记忆<br>• 多层参数尝试机制，确保所有模型可用 |
+
+### 5. 数据类型转换工具 (6个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
@@ -90,7 +139,7 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 | **整数到布尔** | 将整数转换为布尔值 | • 0转换为False，非0转换为True<br>• 标准C风格布尔转换<br>• 支持条件分支逻辑 |
 | **布尔反转** | 将布尔值进行逻辑反转 | • True反转为False，False反转为True<br>• 简单的逻辑非操作<br>• 用于条件逻辑反转 |
 
-### 5. 图像变换工具 (3个节点)
+### 6. 图像变换工具 (3个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
@@ -98,19 +147,19 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 | **图像旋转** | 对图像进行精确旋转操作 | • 支持正向/反向旋转模式<br>• 0-360度自由角度控制<br>• 6种插值算法(lanczos/bicubic/hamming等)<br>• 可选颜色填充或透明填充<br>• 9种填充颜色选择<br>• **输出填充区域遮罩** |
 | **图像翻转** | 对图像进行翻转变换 | • 支持水平翻转和垂直翻转<br>• 6种高质量插值算法<br>• 保持图像质量的精确变换<br>• 批量处理支持 |
 
-### 6. 视频合成工具 (1个节点)
+### 7. 视频合成工具 (1个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
 | **合成视频** | 序列帧到视频的专业转换 | • 支持格式：mp4/webm/avi/mov/gif/mkv/flv<br>• 编码器：H.264/H.265/AV1/ProRes/VP9<br>• 自定义压缩率、帧率、质量参数 |
 
-### 7. 智能缓存管理系统 (1个节点)
+### 8. 智能缓存管理系统 (1个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
 | **图像缓存** | 智能图像缓存和批量管理 | • 支持99张图像缓存上限<br>• 实时预览显示所有缓存图像<br>• 达到上限自动保存到独立目录<br>• 支持手动清理缓存和预览<br>• 多实例完全隔离运行 |
 
-### 8. 调试工具 (2个节点)
+### 9. 调试工具 (2个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
@@ -143,6 +192,25 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 1. 文本对比 → 检测关键词匹配
 2. 根据布尔结果 → 切换不同处理分支
 3. 实现智能内容筛选和模板选择
+```
+
+### 🤖 AI对话工作流
+```
+1. GLM_语言丨API → 连接智谱GLM语言模型
+2. 选择模型 → GLM-4.5-flash（快速）或GLM-4-long（长文档）
+3. 输入提示词 → 创意写作、文档分析、代码生成
+4. 多轮对话 → 保持上下文，实现连续对话
+5. 获取结果 → 生成文本 + token统计 + 对话信息
+```
+
+### 👁️ AI视觉理解工作流
+```
+1. GLM_视觉丨API → 连接智谱GLM视觉模型
+2. 输入图像 → 上传要分析的图片
+3. 选择模型 → GLM-4.5V（推荐）/4.1V-thinking/4V系列
+4. 输入问题 → "描述图片内容"、"图中有什么文字？"
+5. 设置质量 → auto自动/low快速/high精细
+6. 获取结果 → 图像分析文本 + 对话信息 + token统计
 ```
 
 ### 🔄 数据类型转换流水线
@@ -206,6 +274,30 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 ---
 
 ## 🚀 快速开始  
+
+### ⚙️ 🎨QING智能设置配置
+
+全新的智能设置系统，支持实时双向同步和多语言界面：
+
+1. **打开设置界面**
+   - 通过ComfyUI菜单 → 设置 → 🎨QING
+   - 支持中文/英文界面自动切换
+
+2. **配置API密钥**
+   - **智谱GLM API密钥**: 统一配置，支持所有GLM语言和视觉模型
+   - **实时同步**: 设置界面修改后自动同步到本地配置文件
+   - **双向更新**: 手动修改配置文件也会实时反映到设置界面
+
+3. **获取API密钥**
+   - 访问 [智谱AI开放平台](https://open.bigmodel.cn/)
+   - 注册并创建API密钥
+
+4. **配置文件位置**
+   - 本地配置文件：`nodes/api/config/config.json`
+   - 支持手动编辑和自动备份
+
+配置完成后，所有GLM节点将自动使用设置中的API密钥，支持多层级优先级和离线使用！
+
 ### 安装步骤  
 
 1. 克隆仓库到ComfyUI的`custom_nodes`目录：  
@@ -228,11 +320,12 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
    pip install -r requirements.txt  
    ```  
 
-3. 重启ComfyUI，节点将自动加载，可在「自定义节点」「image」等分类中找到。
+3. 重启ComfyUI，节点将自动加载，可在「🎨QING」分类下找到所有节点，支持多语言显示。
 
 ### ⚠️ 重要提示
 - **视频合成功能**需要系统安装FFmpeg
 - **SVG处理**推荐安装cairosvg以获得最佳效果
+- **API功能**需要配置智谱AI API密钥，支持实时同步管理
 - 如遇到安装问题，请使用自动化安装脚本进行诊断
 
 
@@ -246,6 +339,7 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 | **scipy** | ≥1.7.0 | 科学计算 | 遮罩拆分、遮罩扩张 |
 | **scikit-image** | ≥0.18.0 | 图像分析 | 遮罩拆分 |
 | **cairosvg** | ≥2.5.0 | SVG转换 | SVG转图像、保存SVG预览 |
+| **zai-sdk** | ≥0.0.3.3 | 智谱AI API | GLM_语言丨API、GLM_视觉丨API节点 |
 
 ### ComfyUI内置依赖 (无需安装)
 - **torch**: 张量计算核心
@@ -278,10 +372,43 @@ ComfyUI-QING 提供 **28个专业节点**，覆盖9大功能领域：
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
-A powerful all-in-one media processing extension tailored for ComfyUI, featuring **28 professional nodes** that simplify complex workflows involving images, SVG, text, and video. Whether for creative design, animation production, or batch processing, it provides precise toolchain support to unleash your creative potential.  
+A powerful all-in-one media processing extension tailored for ComfyUI, featuring **30 professional nodes** that simplify complex workflows involving images, SVG, text, video, AI conversation, and visual understanding. Whether for creative design, animation production, AI content generation, or batch processing, it provides precise toolchain support to unleash your creative potential.
+
+## 🆕 Latest Updates
+
+### 🔧 Project Architecture Optimization (September 2025)
+- **Node Directory Restructuring**: Reorganized node files in the `nodes` directory into functional subdirectories for cleaner and more intuitive structure
+  - 📁 `api/` - API-related nodes and services
+  - 📁 `image_processing/` - Image processing nodes
+  - 📁 `mask_processing/` - Mask processing nodes
+  - 📁 `svg_processing/` - SVG processing nodes
+  - 📁 `data_types/` - Data type conversion nodes
+  - 📁 `video_processing/` - Video processing nodes
+  - 📁 `io_nodes/` - Input/output nodes
+
+### ⚙️ API Key Management System Upgrade
+- **Real-time Bidirectional Sync**: Implemented real-time synchronization between ComfyUI settings UI and local configuration files
+- **Multi-tier Priority**: ComfyUI settings → Environment variables → Local file storage
+- **Automatic Configuration Management**: Added `config.json` file for automatic API key and sync settings management
+- **Conflict Prevention**: Timestamp checking and sync locks to avoid configuration conflicts
+- **Local Storage**: API key local storage with offline usage and backup support
+
+### 🌐 Internationalization Support
+- **Multi-language Settings**: Support for Chinese and English settings interface
+- **Node Category Translation**: All node categories support multi-language display
+- **Settings Translation**: API key settings support multi-language tooltips and descriptions
+
+### 🧹 Code Quality Enhancement
+- **Code Simplification**: Removed all redundant `console.log` and `print` statements
+- **Dependency Cleanup**: Cleared unused imports and dead code
+- **Bug Fixes**: Fixed node import failures and syntax errors
+- **Performance Optimization**: Simplified logging output for improved runtime efficiency  
 
 
 ## ✨ Core Highlights  
+- **🎨QING Smart Settings System**  
+  Brand new real-time bidirectional sync settings management, API keys automatically sync between ComfyUI settings interface and local configuration files, supporting multi-language interface, one-click configuration for all GLM model nodes.
+
 - **Full SVG Workflow Solution**  
   Seamless management of SVG materials from local file loading to high-quality format conversion, perfectly integrating with image generation workflows.  
 
@@ -308,13 +435,14 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 
 ## 📊 Node Overview  
-ComfyUI-QING provides **28 professional nodes** covering 9 major functional areas:
+ComfyUI-QING provides **30 professional nodes** covering 11 major functional areas:
 
 | Category | Node Count | Main Functions |
 |----------|------------|----------------|
 | 🎨 **SVG Processing** | 5 nodes | Load, convert, save, format interchange |
 | 🎭 **Mask Engineering** | 7 nodes | Split, scale, blend, expand, judge, convert, preview |
 | 📝 **Text Processing** | 1 node | Multi-group comparison, conditional branching |
+| 🤖 **AI Conversation** | 2 nodes | GLM language models, GLM vision models, multi-turn dialogue, intelligent generation |
 | 🔄 **Data Type Conversion** | 6 nodes | Integer, string, boolean interconversion, inversion |
 | 🔄 **Image Transformation** | 3 nodes | Scaling, rotation, flipping, multiple interpolation algorithms |
 | 🎬 **Video Synthesis** | 1 node | Frame sequence to video, multi-format support |
@@ -353,7 +481,14 @@ ComfyUI-QING provides **28 professional nodes** covering 9 major functional area
 |-----------|---------------------|--------------|
 | **Text Compare** | Multi-group text comparison and conditional judgment | • Supports 3 independent text comparisons<br>• Configurable case sensitivity<br>• Outputs boolean results for conditional branching |
 
-### 4. Data Type Conversion Tools (6 nodes)
+### 4. AI Conversation Engine (2 nodes)
+
+| Node Name | Function Description | Key Features |
+|-----------|---------------------|--------------|
+| **GLM_Language丨API** | Zhipu GLM language model API calls and text generation | • Supports 16 GLM language models (GLM-4.5/4/3 series)<br>• Smart multi-turn conversation memory (up to 18 rounds)<br>• Fine-grained parameter control (temperature, top_p, max_tokens)<br>• Complete error handling and intelligent classification<br>• Real-time token statistics and conversation info<br>• Based on official zai-sdk, fully compatible |
+| **GLM_Vision丨API** | Zhipu GLM vision model API calls and image understanding | • Supports 5 GLM vision models (GLM-4.5V/4.1V/4V series)<br>• Smart parameter adaptation, auto-solves 1210 compatibility issues<br>• Image + text multi-modal input<br>• Smart image analysis and description generation<br>• Three image quality modes (auto/low/high)<br>• Multi-turn visual conversation memory<br>• Multi-layer parameter retry mechanism, ensures all models work |
+
+### 5. Data Type Conversion Tools (6 nodes)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
@@ -364,7 +499,7 @@ ComfyUI-QING provides **28 professional nodes** covering 9 major functional area
 | **Integer to Boolean** | Convert integer to boolean value | • 0 converts to False, non-zero converts to True<br>• Standard C-style boolean conversion<br>• Supports conditional branch logic |
 | **Boolean Invert** | Perform logical inversion of boolean values | • True inverts to False, False inverts to True<br>• Simple logical NOT operation<br>• Used for conditional logic inversion |
 
-### 5. Image Transformation Tools (3 nodes)
+### 6. Image Transformation Tools (3 nodes)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
@@ -372,19 +507,19 @@ ComfyUI-QING provides **28 professional nodes** covering 9 major functional area
 | **Image Rotation** | Perform precise image rotation operations | • Supports forward/reverse rotation modes<br>• 0-360 degree free angle control<br>• 6 interpolation algorithms (lanczos/bicubic/hamming, etc.)<br>• Optional color fill or transparent fill<br>• 9 fill color options |
 | **Image Flipping** | Perform image flipping transformations | • Supports horizontal and vertical flipping<br>• 6 high-quality interpolation algorithms<br>• Precise transformations maintaining image quality<br>• Batch processing support |
 
-### 6. Video Synthesis Tool (1 node)
+### 7. Video Synthesis Tool (1 node)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
 | **Synthetic Video** | Professional frame sequence to video conversion | • Supported formats: mp4/webm/avi/mov/gif/mkv/flv<br>• Encoders: H.264/H.265/AV1/ProRes/VP9<br>• Custom compression rate, frame rate, quality parameters |
 
-### 7. Smart Cache Management System (1 node)
+### 8. Smart Cache Management System (1 node)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
 | **Image Cache** | Smart image caching and batch management | • Supports up to 99 image cache limit<br>• Real-time preview of all cached images<br>• Auto-save to dedicated directory when limit reached<br>• Manual cache clearing and preview support<br>• Complete isolation for multi-instance operation |
 
-### 8. Debug Tools (2 nodes)
+### 9. Debug Tools (2 nodes)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
@@ -419,6 +554,25 @@ ComfyUI-QING provides **28 professional nodes** covering 9 major functional area
 3. Implement intelligent content filtering and template selection
 ```
 
+### 🤖 AI Conversation Workflow
+```
+1. GLM_Language丨API → Connect to Zhipu GLM language models
+2. Select model → GLM-4.5-flash (fast) or GLM-4-long (long documents)
+3. Input prompts → Creative writing, document analysis, code generation
+4. Multi-turn dialogue → Maintain context for continuous conversation
+5. Get results → Generated text + token statistics + conversation info
+```
+
+### 👁️ AI Visual Understanding Workflow
+```
+1. GLM_Vision丨API → Connect to Zhipu GLM vision models
+2. Input image → Upload image to analyze
+3. Select model → GLM-4.5V (recommended)/4.1V-thinking/4V series
+4. Input question → "Describe image content", "What text is in the image?"
+5. Set quality → auto/low/high
+6. Get results → Image analysis text + conversation info + token statistics
+```
+
 ### 🔄 Data Type Conversion Pipeline
 ```
 1. String to Integer → Convert user input to numeric values
@@ -446,6 +600,30 @@ ComfyUI-QING provides **28 professional nodes** covering 9 major functional area
 ---
 
 ## 🚀 Quick Start  
+
+### ⚙️ 🎨QING Smart Settings Configuration
+
+Brand new intelligent settings system with real-time bidirectional sync and multi-language interface:
+
+1. **Open Settings Interface**
+   - Navigate to ComfyUI Menu → Settings → 🎨QING
+   - Supports automatic Chinese/English interface switching
+
+2. **Configure API Key**
+   - **Zhipu GLM API Key**: Unified configuration for all GLM language and vision models
+   - **Real-time Sync**: Settings interface changes automatically sync to local configuration file
+   - **Bidirectional Update**: Manual configuration file changes also reflect in settings interface in real-time
+
+3. **Get API Key**
+   - Visit [Zhipu AI Open Platform](https://open.bigmodel.cn/)
+   - Register and create API key
+
+4. **Configuration File Location**
+   - Local configuration file: `nodes/api/config/config.json`
+   - Supports manual editing and automatic backup
+
+After configuration, all GLM nodes will automatically use the API key from settings, supporting multi-tier priority and offline usage!
+
 ### Installation Steps  
 1. Clone the repository to ComfyUI's `custom_nodes` directory:  
    ```bash  
@@ -467,11 +645,12 @@ ComfyUI-QING provides **28 professional nodes** covering 9 major functional area
    pip install -r requirements.txt  
    ```  
 
-3. Restart ComfyUI. Nodes will load automatically, found under "Custom Nodes" or "Image" categories.
+3. Restart ComfyUI. Nodes will load automatically, found under "🎨QING" categories with multi-language support.
 
 ### ⚠️ Important Notes
 - **Video synthesis** requires system-level FFmpeg installation
 - **SVG processing** recommends cairosvg for best results
+- **API functionality** requires Zhipu AI API key configuration with real-time sync management
 - If installation issues occur, use the automated installation script for diagnosis
 
 
