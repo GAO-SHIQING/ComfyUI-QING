@@ -10,5 +10,23 @@
   "settingsCategories": {
     "🎨QING": "🎨QING",
     "API配置": "API配置"
+  },
+  "settings": {
+    "🎨QING.API配置.GLM_API_Key": {
+      "name": "智谱GLM API Key",
+      "tooltip": "智谱AI的API密钥，用于GLM语言和视觉模型调用。修改后会实时同步到本地配置文件。"
+    },
+    "🎨QING.API配置.Volcengine_API_Key": {
+      "name": "火山引擎 API Key",
+      "tooltip": "火山引擎平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。"
+    },
+    "🎨QING.API配置.Dashscope_API_Key": {
+      "name": "阿里云百炼 API Key",
+      "tooltip": "阿里云百炼平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。"
+    },
+    "🎨QING.API配置.Siliconflow_API_Key": {
+      "name": "硅基流动 API Key",
+      "tooltip": "硅基流动平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。"
+    }
   }
 }

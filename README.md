@@ -19,10 +19,12 @@
 
 ### ⚙️ API密钥管理系统升级
 - **实时双向同步**: 实现ComfyUI设置界面与本地配置文件的实时同步
+- **多平台API支持**: 支持智谱GLM、火山引擎、阿里云百炼、硅基流动四大平台
 - **多层级优先级**: ComfyUI设置 → 环境变量 → 本地文件存储
 - **自动配置管理**: 新增`config.json`文件自动管理API密钥和同步设置
 - **防冲突机制**: 时间戳检查和同步锁，避免配置冲突
 - **本地化存储**: API密钥本地存储，支持离线使用和备份
+- **智能同步频率**: 自适应检查间隔，平衡响应性和性能
 
 ### 🌐 国际化支持
 - **多语言设置**: 支持中文和英文的设置界面
@@ -38,7 +40,7 @@
 
 ## ✨ 核心亮点  
 - **🎨QING智能设置系统**  
-  全新的实时双向同步设置管理，API密钥在ComfyUI设置界面与本地配置文件之间自动同步，支持多语言界面，一键配置所有GLM模型节点。
+  全新的实时双向同步设置管理，支持智谱GLM、火山引擎、阿里云百炼、硅基流动四大平台API密钥配置，在ComfyUI设置界面与本地配置文件之间自动同步，支持多语言界面，智能频率调节，一键配置所有AI模型节点。
 
 - **SVG全链路解决方案**  
   从本地文件加载到高质量格式转换，一站式搞定SVG素材的全流程管理，完美适配图像生成工作流。  
@@ -280,23 +282,29 @@ ComfyUI-QING 提供 **30个专业节点**，覆盖11大功能领域：
 全新的智能设置系统，支持实时双向同步和多语言界面：
 
 1. **打开设置界面**
-   - 通过ComfyUI菜单 → 设置 → 🎨QING
+   - 通过ComfyUI菜单 → 设置 → 🎨QING → API配置
    - 支持中文/英文界面自动切换
 
-2. **配置API密钥**
-   - **智谱GLM API密钥**: 统一配置，支持所有GLM语言和视觉模型
+2. **配置API密钥**（支持四大AI平台）
+   - **智谱GLM API Key**: 支持所有GLM语言和视觉模型
+   - **火山引擎 API Key**: 火山引擎平台模型调用
+   - **阿里云百炼 API Key**: 阿里云百炼平台模型调用  
+   - **硅基流动 API Key**: 硅基流动平台模型调用
    - **实时同步**: 设置界面修改后自动同步到本地配置文件
    - **双向更新**: 手动修改配置文件也会实时反映到设置界面
+   - **智能频率**: 自适应检查间隔，平衡响应性和性能
 
 3. **获取API密钥**
-   - 访问 [智谱AI开放平台](https://open.bigmodel.cn/)
-   - 注册并创建API密钥
+   - 智谱GLM: [智谱AI开放平台](https://open.bigmodel.cn/)
+   - 火山引擎: [火山引擎开放平台](https://www.volcengine.com/)
+   - 阿里云百炼: [阿里云百炼平台](https://dashscope.aliyun.com/)
+   - 硅基流动: [硅基流动平台](https://siliconflow.cn/)
 
 4. **配置文件位置**
    - 本地配置文件：`nodes/api/config/config.json`
    - 支持手动编辑和自动备份
 
-配置完成后，所有GLM节点将自动使用设置中的API密钥，支持多层级优先级和离线使用！
+配置完成后，所有AI节点将自动使用设置中的API密钥，支持多层级优先级和离线使用！
 
 ### 安装步骤  
 
@@ -325,7 +333,7 @@ ComfyUI-QING 提供 **30个专业节点**，覆盖11大功能领域：
 ### ⚠️ 重要提示
 - **视频合成功能**需要系统安装FFmpeg
 - **SVG处理**推荐安装cairosvg以获得最佳效果
-- **API功能**需要配置智谱AI API密钥，支持实时同步管理
+- **API功能**需要配置相应平台API密钥（智谱GLM、火山引擎、阿里云百炼、硅基流动），支持实时同步管理
 - 如遇到安装问题，请使用自动化安装脚本进行诊断
 
 
@@ -388,10 +396,12 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 ### ⚙️ API Key Management System Upgrade
 - **Real-time Bidirectional Sync**: Implemented real-time synchronization between ComfyUI settings UI and local configuration files
+- **Multi-platform API Support**: Supports four major platforms: Zhipu GLM, Volcengine, Alibaba Dashscope, and Siliconflow
 - **Multi-tier Priority**: ComfyUI settings → Environment variables → Local file storage
 - **Automatic Configuration Management**: Added `config.json` file for automatic API key and sync settings management
 - **Conflict Prevention**: Timestamp checking and sync locks to avoid configuration conflicts
 - **Local Storage**: API key local storage with offline usage and backup support
+- **Smart Sync Frequency**: Adaptive check intervals balancing responsiveness and performance
 
 ### 🌐 Internationalization Support
 - **Multi-language Settings**: Support for Chinese and English settings interface
@@ -407,7 +417,7 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 ## ✨ Core Highlights  
 - **🎨QING Smart Settings System**  
-  Brand new real-time bidirectional sync settings management, API keys automatically sync between ComfyUI settings interface and local configuration files, supporting multi-language interface, one-click configuration for all GLM model nodes.
+  Brand new real-time bidirectional sync settings management, supporting API keys for four major platforms (Zhipu GLM, Volcengine, Alibaba Dashscope, Siliconflow), automatically sync between ComfyUI settings interface and local configuration files, supporting multi-language interface with smart frequency adjustment, one-click configuration for all AI model nodes.
 
 - **Full SVG Workflow Solution**  
   Seamless management of SVG materials from local file loading to high-quality format conversion, perfectly integrating with image generation workflows.  
@@ -606,23 +616,29 @@ ComfyUI-QING provides **30 professional nodes** covering 11 major functional are
 Brand new intelligent settings system with real-time bidirectional sync and multi-language interface:
 
 1. **Open Settings Interface**
-   - Navigate to ComfyUI Menu → Settings → 🎨QING
+   - Navigate to ComfyUI Menu → Settings → 🎨QING → API Configuration
    - Supports automatic Chinese/English interface switching
 
-2. **Configure API Key**
-   - **Zhipu GLM API Key**: Unified configuration for all GLM language and vision models
+2. **Configure API Keys** (Four Major AI Platforms Supported)
+   - **Zhipu GLM API Key**: For all GLM language and vision models
+   - **Volcengine API Key**: For Volcengine platform model calls
+   - **Alibaba Dashscope API Key**: For Alibaba Cloud Dashscope platform model calls
+   - **Siliconflow API Key**: For Siliconflow platform model calls
    - **Real-time Sync**: Settings interface changes automatically sync to local configuration file
    - **Bidirectional Update**: Manual configuration file changes also reflect in settings interface in real-time
+   - **Smart Frequency**: Adaptive check intervals balancing responsiveness and performance
 
-3. **Get API Key**
-   - Visit [Zhipu AI Open Platform](https://open.bigmodel.cn/)
-   - Register and create API key
+3. **Get API Keys**
+   - Zhipu GLM: [Zhipu AI Open Platform](https://open.bigmodel.cn/)
+   - Volcengine: [Volcengine Open Platform](https://www.volcengine.com/)
+   - Alibaba Dashscope: [Alibaba Cloud Dashscope](https://dashscope.aliyun.com/)
+   - Siliconflow: [Siliconflow Platform](https://siliconflow.cn/)
 
 4. **Configuration File Location**
    - Local configuration file: `nodes/api/config/config.json`
    - Supports manual editing and automatic backup
 
-After configuration, all GLM nodes will automatically use the API key from settings, supporting multi-tier priority and offline usage!
+After configuration, all AI nodes will automatically use the API keys from settings, supporting multi-tier priority and offline usage!
 
 ### Installation Steps  
 1. Clone the repository to ComfyUI's `custom_nodes` directory:  
@@ -650,7 +666,7 @@ After configuration, all GLM nodes will automatically use the API key from setti
 ### ⚠️ Important Notes
 - **Video synthesis** requires system-level FFmpeg installation
 - **SVG processing** recommends cairosvg for best results
-- **API functionality** requires Zhipu AI API key configuration with real-time sync management
+- **API functionality** requires corresponding platform API keys (Zhipu GLM, Volcengine, Alibaba Dashscope, Siliconflow) with real-time sync management
 - If installation issues occur, use the automated installation script for diagnosis
 
 

@@ -23,3 +23,4 @@ cairosvg>=2.5.0
 
 # AI模型API依赖
 zai-sdk>=0.0.3.3
+openai>=1.0.0

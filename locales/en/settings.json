@@ -1,9 +1,0 @@
-{
-  "🎨QING_GLM_API_Key": {
-    "name": "Zhipu GLM API Key",
-    "tooltip": "API key for Zhipu AI, used for GLM language and vision model calls. Changes will be synchronized to local configuration file in real-time.",
-    "attrs": {
-      "placeholder": "Please enter Zhipu AI API key"
-    }
-  }
-}

@@ -109,7 +109,7 @@ class GLMVisionAPI:
     RETURN_TYPES = ("STRING", "STRING", "INT")
     RETURN_NAMES = ("generated_text", "conversation_info", "token_count")
     FUNCTION = "analyze_image"
-    CATEGORY = "🎨QING/AI对话"
+    CATEGORY = "🎨QING/API调用"
     OUTPUT_NODE = False
     
     def analyze_image(self, image: torch.Tensor, text_input: str, model: str, max_tokens: int, 

@@ -1,9 +1,0 @@
-{
-  "🎨QING_GLM_API_Key": {
-    "name": "智谱GLM_API_Key",
-    "tooltip": "智谱AI的API密钥，用于GLM语言和视觉模型调用。修改后会实时同步到本地配置文件。",
-    "attrs": {
-      "placeholder": "请输入智谱AI API密钥"
-    }
-  }
-}

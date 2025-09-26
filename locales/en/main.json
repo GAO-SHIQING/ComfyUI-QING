@@ -10,5 +10,23 @@
   "settingsCategories": {
     "🎨QING": "🎨QING",
     "API配置": "API Configuration"
+  },
+  "settings": {
+    "🎨QING.API配置.GLM_API_Key": {
+      "name": "Zhipu GLM API Key",
+      "tooltip": "API key for Zhipu AI GLM language and vision models. Changes will be synced to local configuration file in real-time."
+    },
+    "🎨QING.API配置.Volcengine_API_Key": {
+      "name": "Volcengine API Key",
+      "tooltip": "API key for Volcengine platform models. Changes will be synced to local configuration file in real-time."
+    },
+    "🎨QING.API配置.Dashscope_API_Key": {
+      "name": "Alibaba Dashscope API Key",
+      "tooltip": "API key for Alibaba Cloud Dashscope platform models. Changes will be synced to local configuration file in real-time."
+    },
+    "🎨QING.API配置.Siliconflow_API_Key": {
+      "name": "Siliconflow API Key",
+      "tooltip": "API key for Siliconflow platform models. Changes will be synced to local configuration file in real-time."
+    }
   }
 }

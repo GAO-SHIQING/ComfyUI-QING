@@ -20,6 +20,12 @@ REQUIRED_PACKAGES = {
     'cairosvg': '>=2.5.0',
 }
 
+# AI API依赖
+AI_API_PACKAGES = {
+    'zai-sdk': '>=0.0.3.3',
+    'openai': '>=1.0.0',
+}
+
 OPTIONAL_PACKAGES = {
     'svglib': '>=1.4.0',
     'reportlab': '>=3.6.0',
@@ -30,7 +36,16 @@ BUILTIN_PACKAGES = ['torch', 'numpy']  # ComfyUI内置，无需安装
 def check_package_installed(package_name):
     """检查包是否已安装"""
     try:
-        importlib.import_module(package_name.replace('-', '_'))
+        # 特殊包名映射
+        import_name_map = {
+            'opencv-python': 'cv2',
+            'scikit-image': 'skimage',
+            'zai-sdk': 'zai_sdk',
+            'Pillow': 'PIL',
+        }
+        
+        import_name = import_name_map.get(package_name, package_name.replace('-', '_'))
+        importlib.import_module(import_name)
         return True
     except ImportError:
         return False
@@ -77,8 +92,17 @@ def main():
     failed_packages = []
     
     for package, version in REQUIRED_PACKAGES.items():
-        package_import_name = package.replace('-', '_')
-        if check_package_installed(package_import_name):
+        if check_package_installed(package):
+            print(f"✓ {package} - 已安装")
+        else:
+            print(f"⚠ {package} - 未安装，开始安装...")
+            if not install_package(package, version):
+                failed_packages.append(package)
+    
+    # 安装AI API依赖
+    print("\n🤖 检查并安装AI API依赖...")
+    for package, version in AI_API_PACKAGES.items():
+        if check_package_installed(package):
             print(f"✓ {package} - 已安装")
         else:
             print(f"⚠ {package} - 未安装，开始安装...")
@@ -88,13 +112,13 @@ def main():
     # 询问是否安装可选依赖
     print("\n🎯 可选依赖 (增强SVG处理功能):")
     for package, version in OPTIONAL_PACKAGES.items():
-        package_import_name = package.replace('-', '_')
-        if check_package_installed(package_import_name):
+        if check_package_installed(package):
             print(f"✓ {package} - 已安装")
         else:
             response = input(f"是否安装 {package}? (y/n): ").lower().strip()
             if response in ['y', 'yes', '是']:
-                install_package(package, version)
+                if not install_package(package, version):
+                    failed_packages.append(package)
     
     # 检查FFmpeg
     print("\n🎬 检查系统级依赖...")
@@ -113,10 +137,29 @@ def main():
     if failed_packages:
         print(f"⚠ 安装完成，但以下包安装失败: {', '.join(failed_packages)}")
         print("请手动安装或检查网络连接")
+        print("\n手动安装命令:")
+        for package in failed_packages:
+            if package in REQUIRED_PACKAGES:
+                version = REQUIRED_PACKAGES[package]
+            elif package in AI_API_PACKAGES:
+                version = AI_API_PACKAGES[package]
+            else:
+                version = OPTIONAL_PACKAGES.get(package, '')
+            print(f"  pip install {package}{version}")
         return 1
     else:
         print("✅ 所有依赖安装完成！")
-        print("重启ComfyUI后即可使用ComfyUI-QING的所有功能")
+        print("\n🎉 ComfyUI-QING 功能模块状态:")
+        print("  ✓ 图像处理 - 完全可用")
+        print("  ✓ SVG处理 - 完全可用") 
+        print("  ✓ 遮罩工程 - 完全可用")
+        print("  ✓ AI对话引擎 - 完全可用 (需配置API密钥)")
+        if check_ffmpeg():
+            print("  ✓ 视频合成 - 完全可用")
+        else:
+            print("  ⚠ 视频合成 - 需要安装FFmpeg")
+        print("\n重启ComfyUI后即可使用ComfyUI-QING的所有功能")
+        print("API密钥配置: ComfyUI设置 → 🎨QING → API配置")
         return 0
 
 if __name__ == "__main__":

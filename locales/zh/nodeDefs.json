@@ -1122,5 +1122,65 @@
           "tooltip": "本次API调用使用的总token数量"
         }
       }
+    },
+    "DeepSeekLanguageAPI": {
+      "display_name": "DeepSeek_语言丨API",
+      "description": "DeepSeek模型API调用和文本生成，支持多平台(火山引擎、阿里云百炼、硅基流动)，DeepSeek-V3.1/R1/V3模型，多轮对话记忆",
+      "inputs": {
+        "text_input": {
+          "name": "文本框",
+          "tooltip": "输入要发送给DeepSeek模型的文本内容"
+        },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "选择DeepSeek模型的服务平台：火山引擎、阿里云百炼或硅基流动"
+        },
+        "model": {
+          "name": "模型",
+          "tooltip": "选择要使用的DeepSeek模型（DeepSeek-V3.1/R1/V3）"
+        },
+        "max_tokens": {
+          "name": "最大令牌",
+          "tooltip": "生成文本的最大令牌数量，控制回复长度"
+        },
+        "history": {
+          "name": "历史轮数",
+          "tooltip": "保持的对话历史轮数，控制模型能记住多少轮之前的对话"
+        },
+        "temperature": {
+          "name": "温度",
+          "tooltip": "控制生成文本的随机性，数值越高越随机"
+        },
+        "top_p": {
+          "name": "核采样",
+          "tooltip": "控制生成文本的多样性，通过核心采样控制词汇选择范围"
+        },
+        "system_prompt": {
+          "name": "系统提示",
+          "tooltip": "为AI设定角色和行为规范的系统提示词"
+        },
+        "seed": {
+          "name": "种子",
+          "tooltip": "随机种子，用于控制生成结果的一致性"
+        },
+        "clear_history": {
+          "name": "清空历史",
+          "tooltip": "是否清空对话历史记录"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "生成文本",
+          "tooltip": "DeepSeek模型生成的文本内容"
+        },
+        "1": {
+          "name": "对话信息",
+          "tooltip": "包含对话历史和统计信息的详细数据"
+        },
+        "2": {
+          "name": "令牌数量",
+          "tooltip": "本次API调用使用的总token数量"
+        }
+      }
     }
 }

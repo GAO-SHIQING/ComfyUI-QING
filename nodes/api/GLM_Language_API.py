@@ -108,7 +108,7 @@ class GLMLanguageAPI:
     RETURN_TYPES = ("STRING", "STRING", "INT")
     RETURN_NAMES = ("generated_text", "conversation_info", "token_count")
     FUNCTION = "generate_text"
-    CATEGORY = "🎨QING/AI对话"
+    CATEGORY = "🎨QING/API调用"
     OUTPUT_NODE = False
     
     def generate_text(self, text_input: str, model: str, max_tokens: int, history: int,

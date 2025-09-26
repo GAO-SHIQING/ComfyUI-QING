@@ -83,7 +83,10 @@ def get_registered_nodes():
 
 
 # 使用动态发现机制注册所有节点（包括子目录中的节点）
-_NODE_CLASSES, _DISPLAY_NAMES = _discover_and_register_nodes()
+try:
+    _NODE_CLASSES, _DISPLAY_NAMES = _discover_and_register_nodes()
+except Exception:
+    _NODE_CLASSES, _DISPLAY_NAMES = {}, {}
 
 # 按照官方文档加载翻译系统
 # 参考：https://docs.comfy.org/zh-CN/custom-nodes/i18n
