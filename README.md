@@ -75,14 +75,14 @@
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **30个专业节点**，覆盖11大功能领域：
+ComfyUI-QING 提供 **31个专业节点**，覆盖11大功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
 | 🎨 **SVG处理** | 5个 | 加载、转换、保存、格式互转 |
 | 🎭 **遮罩工程** | 7个 | 拆分、缩放、混合、扩张、判断、转换、预览 |
 | 📝 **文本处理** | 1个 | 多组对比、条件分支 |
-| 🤖 **AI对话** | 2个 | GLM语言模型、GLM视觉模型、多轮对话、智能生成 |
+| 🤖 **API调用** | 3个 | GLM语言/视觉模型、DeepSeek语言模型、多轮对话、智能生成 |
 | 🔄 **数据类型转换** | 6个 | 整数、字符串、布尔值互转、反转 |
 | 🔄 **图像变换** | 3个 | 旋转、翻转、缩放、多种插值算法 |
 | 🎬 **视频合成** | 1个 | 序列帧转视频、多格式支持 |
@@ -123,12 +123,13 @@ ComfyUI-QING 提供 **30个专业节点**，覆盖11大功能领域：
 |---------|----------|----------|
 | **文本对比** | 多组文本比较和条件判断 | • 支持3组独立文本对比<br>• 可配置大小写敏感性<br>• 输出布尔结果用于条件分支 |
 
-### 4. AI对话引擎 (2个节点)
+### 4. API调用 (3个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
 | **GLM_语言丨API** | 智谱GLM语言模型API调用和文本生成 | • 支持16个GLM语言模型（GLM-4.5/4/3系列）<br>• 智能多轮对话记忆（最多18轮）<br>• 精细参数控制（温度、top_p、max_tokens）<br>• 完整错误处理和智能分类<br>• 实时token统计和对话信息<br>• 基于官方zai-sdk，完全兼容 |
 | **GLM_视觉丨API** | 智谱GLM视觉模型API调用和图像理解 | • 支持5个GLM视觉模型（GLM-4.5V/4.1V/4V系列）<br>• 智能参数适配，自动解决1210兼容性问题<br>• 图像+文本多模态输入<br>• 智能图像分析和描述生成<br>• 三种图像质量模式（auto/low/high）<br>• 多轮视觉对话记忆<br>• 多层参数尝试机制，确保所有模型可用 |
+| **DeepSeek_语言丨API** | DeepSeek语言模型API调用和推理生成 | • 支持3个DeepSeek模型（V3.1/R1/V3系列）<br>• 多平台支持（火山引擎/阿里云百炼/硅基流动）<br>• 智能多轮对话记忆（最多20轮）<br>• 精细参数控制（温度、top_p、max_tokens、frequency_penalty）<br>• 完整错误处理和重试机制<br>• 实时token统计和成本计算<br>• 基于OpenAI兼容API，稳定可靠 |
 
 ### 5. 数据类型转换工具 (6个节点)
 
@@ -213,6 +214,17 @@ ComfyUI-QING 提供 **30个专业节点**，覆盖11大功能领域：
 4. 输入问题 → "描述图片内容"、"图中有什么文字？"
 5. 设置质量 → auto自动/low快速/high精细
 6. 获取结果 → 图像分析文本 + 对话信息 + token统计
+```
+
+### 🚀 DeepSeek推理工作流
+```
+1. DeepSeek_语言丨API → 连接DeepSeek语言模型
+2. 选择平台 → 火山引擎/阿里云百炼/硅基流动
+3. 选择模型 → DeepSeek-V3.1（最新）/R1（推理）/V3（稳定）
+4. 输入提示词 → 复杂推理、数学计算、代码分析
+5. 调节参数 → 温度、top_p、频率惩罚、最大token
+6. 多轮对话 → 支持最多20轮连续推理对话
+7. 获取结果 → 推理文本 + token统计 + 成本信息
 ```
 
 ### 🔄 数据类型转换流水线
@@ -445,14 +457,14 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 
 ## 📊 Node Overview  
-ComfyUI-QING provides **30 professional nodes** covering 11 major functional areas:
+ComfyUI-QING provides **31 professional nodes** covering 11 major functional areas:
 
 | Category | Node Count | Main Functions |
 |----------|------------|----------------|
 | 🎨 **SVG Processing** | 5 nodes | Load, convert, save, format interchange |
 | 🎭 **Mask Engineering** | 7 nodes | Split, scale, blend, expand, judge, convert, preview |
 | 📝 **Text Processing** | 1 node | Multi-group comparison, conditional branching |
-| 🤖 **AI Conversation** | 2 nodes | GLM language models, GLM vision models, multi-turn dialogue, intelligent generation |
+| 🤖 **API Calls** | 3 nodes | GLM language/vision models, DeepSeek language models, multi-turn dialogue, intelligent generation |
 | 🔄 **Data Type Conversion** | 6 nodes | Integer, string, boolean interconversion, inversion |
 | 🔄 **Image Transformation** | 3 nodes | Scaling, rotation, flipping, multiple interpolation algorithms |
 | 🎬 **Video Synthesis** | 1 node | Frame sequence to video, multi-format support |
@@ -491,12 +503,13 @@ ComfyUI-QING provides **30 professional nodes** covering 11 major functional are
 |-----------|---------------------|--------------|
 | **Text Compare** | Multi-group text comparison and conditional judgment | • Supports 3 independent text comparisons<br>• Configurable case sensitivity<br>• Outputs boolean results for conditional branching |
 
-### 4. AI Conversation Engine (2 nodes)
+### 4. API Calls (3 nodes)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
 | **GLM_Language丨API** | Zhipu GLM language model API calls and text generation | • Supports 16 GLM language models (GLM-4.5/4/3 series)<br>• Smart multi-turn conversation memory (up to 18 rounds)<br>• Fine-grained parameter control (temperature, top_p, max_tokens)<br>• Complete error handling and intelligent classification<br>• Real-time token statistics and conversation info<br>• Based on official zai-sdk, fully compatible |
 | **GLM_Vision丨API** | Zhipu GLM vision model API calls and image understanding | • Supports 5 GLM vision models (GLM-4.5V/4.1V/4V series)<br>• Smart parameter adaptation, auto-solves 1210 compatibility issues<br>• Image + text multi-modal input<br>• Smart image analysis and description generation<br>• Three image quality modes (auto/low/high)<br>• Multi-turn visual conversation memory<br>• Multi-layer parameter retry mechanism, ensures all models work |
+| **DeepSeek_Language丨API** | DeepSeek language model API calls and reasoning generation | • Supports 3 DeepSeek models (V3.1/R1/V3 series)<br>• Multi-platform support (Volcengine/Alibaba Dashscope/Siliconflow)<br>• Smart multi-turn conversation memory (up to 20 rounds)<br>• Fine-grained parameter control (temperature, top_p, max_tokens, frequency_penalty)<br>• Complete error handling and retry mechanism<br>• Real-time token statistics and cost calculation<br>• Based on OpenAI-compatible API, stable and reliable |
 
 ### 5. Data Type Conversion Tools (6 nodes)
 
@@ -581,6 +594,17 @@ ComfyUI-QING provides **30 professional nodes** covering 11 major functional are
 4. Input question → "Describe image content", "What text is in the image?"
 5. Set quality → auto/low/high
 6. Get results → Image analysis text + conversation info + token statistics
+```
+
+### 🚀 DeepSeek Reasoning Workflow
+```
+1. DeepSeek_Language丨API → Connect to DeepSeek language models
+2. Select platform → Volcengine/Alibaba Dashscope/Siliconflow
+3. Select model → DeepSeek-V3.1 (latest)/R1 (reasoning)/V3 (stable)
+4. Input prompts → Complex reasoning, mathematical calculations, code analysis
+5. Adjust parameters → temperature, top_p, frequency penalty, max tokens
+6. Multi-turn dialogue → Support up to 20 rounds of continuous reasoning conversation
+7. Get results → Reasoning text + token statistics + cost information
 ```
 
 ### 🔄 Data Type Conversion Pipeline
