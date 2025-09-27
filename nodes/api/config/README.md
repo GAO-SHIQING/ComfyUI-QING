@@ -49,6 +49,14 @@
     "siliconflow_api_key": {
       "// ": "💎 硅基流动 (获取: https://cloud.siliconflow.cn/account/ak)",
       "value": "在此填写硅基流动密钥 (格式: sk-xxxxxx)"
+    },
+    "tencent_lkeap_api_key": {
+      "// ": "☁️ 腾讯云 (获取: https://console.cloud.tencent.com/cam/capi)",
+      "value": "在此填写腾讯云知识引擎密钥"
+    },
+    "moonshot_api_key": {
+      "// ": "🌙 月之暗面 (获取: https://platform.moonshot.cn/console/api-keys)",
+      "value": "在此填写月之暗面API密钥"
     }
   }
 }
@@ -70,6 +78,8 @@
 | 🌋 火山引擎 | https://console.volcengine.com/ark | `ak-xxxxxx...` |
 | ☁️ 阿里云百炼 | https://bailian.console.aliyun.com | `sk-xxxxxx...` |
 | 💎 硅基流动 | https://cloud.siliconflow.cn/account/ak | `sk-xxxxxx...` |
+| ☁️ 腾讯云 | https://console.cloud.tencent.com/cam/capi | 腾讯云API密钥 |
+| 🌙 月之暗面 | https://platform.moonshot.cn/console/api-keys | `sk-xxxxxx...` |
 
 ## 🔄 同步机制
 
@@ -87,10 +97,11 @@
 ## ✨ 功能特性
 
 - 🔄 **实时双向同步**：配置文件与ComfyUI设置完全同步
-- 📋 **多平台支持**：支持智谱AI、火山引擎、阿里云百炼、硅基流动
+- 📋 **多平台支持**：支持智谱AI、火山引擎、阿里云百炼、硅基流动、腾讯云
 - 🛡️ **向后兼容**：自动兼容旧版配置格式
 - 📖 **清晰易懂**：配置文件包含详细说明和获取地址
 - 🎯 **精准定位**：明确指示API密钥填写位置
+- 🔧 **智能键名管理**：自动使用英文平台标识符避免编码问题
 
 ## 🔧 故障排除
 

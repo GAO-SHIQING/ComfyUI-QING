@@ -73,6 +73,24 @@ class QingConfigManager:
                     "value": ""
                 },
                 
+                "tencent_lkeap_api_key": {
+                    "// ": "☁️ 腾讯云知识引擎平台",
+                    "描述": "腾讯云知识引擎平台的API密钥，用于DeepSeek模型调用",
+                    "格式示例": "您在腾讯云控制台创建的API密钥",
+                    "获取地址": "https://console.cloud.tencent.com/cam/capi",
+                    "🔑 请在此填写": "👇👇👇 在下方value字段填写您的腾讯云API密钥 👇👇👇",
+                    "value": ""
+                },
+                
+                "moonshot_api_key": {
+                    "// ": "🌙 月之暗面平台",
+                    "描述": "月之暗面平台的API密钥，用于Kimi模型调用",
+                    "格式示例": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                    "获取地址": "https://platform.moonshot.cn/console/api-keys",
+                    "🔑 请在此填写": "👇👇👇 在下方value字段填写您的月之暗面API密钥 👇👇👇",
+                    "value": ""
+                },
+                
                 "//      ": "═══════════════════════════════════════════════════════════════════════════════",
                 "__system_info": {
                     "// ": "⚠️ 系统信息 - 请勿手动修改",

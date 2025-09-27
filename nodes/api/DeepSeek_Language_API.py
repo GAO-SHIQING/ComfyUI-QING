@@ -2,7 +2,7 @@
 """
 DeepSeek Language API节点
 调用DeepSeek语言模型API进行文本推理
-支持多平台：火山引擎、阿里云百炼、硅基流动
+支持多平台：火山引擎、阿里云百炼、硅基流动、腾讯云
 """
 
 import os
@@ -15,6 +15,12 @@ SERVICE_PLATFORMS = {
         "base_url": "https://ark.cn-beijing.volces.com/api/v3",
         "api_key_env": "VOLCENGINE_API_KEY",
         "config_key": "volcengine_api_key",
+        "platform_key": "volcengine",
+        "models": [
+            "DeepSeek-V3.1",
+            "DeepSeek-R1",
+            "DeepSeek-V3"
+        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-v3-1-250821",
             "DeepSeek-R1": "deepseek-r1-250528",
@@ -25,6 +31,12 @@ SERVICE_PLATFORMS = {
         "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
         "api_key_env": "DASHSCOPE_API_KEY", 
         "config_key": "dashscope_api_key",
+        "platform_key": "dashscope",
+        "models": [
+            "DeepSeek-V3.1",
+            "DeepSeek-R1",
+            "DeepSeek-V3"
+        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-v3.1",        
             "DeepSeek-R1": "deepseek-r1-0528",       
@@ -35,10 +47,32 @@ SERVICE_PLATFORMS = {
         "base_url": "https://api.siliconflow.cn/v1",
         "api_key_env": "SILICONFLOW_API_KEY",
         "config_key": "siliconflow_api_key",
+        "platform_key": "siliconflow",
+        "models": [
+            "DeepSeek-V3.1",
+            "DeepSeek-R1",
+            "DeepSeek-V3"
+        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-ai/DeepSeek-V3.1",
             "DeepSeek-R1": "deepseek-ai/DeepSeek-R1",
             "DeepSeek-V3": "deepseek-ai/DeepSeek-V3"
+        }
+    },
+    "腾讯云": {
+        "base_url": "https://api.lkeap.cloud.tencent.com/v1",
+        "api_key_env": "TENCENT_LKEAP_API_KEY",
+        "config_key": "tencent_lkeap_api_key",
+        "platform_key": "tencent",
+        "models": [
+            "DeepSeek-V3.1",
+            "DeepSeek-R1",
+            "DeepSeek-V3"
+        ],
+        "model_mapping": {
+            "DeepSeek-V3.1": "deepseek-v3.1",
+            "DeepSeek-R1": "deepseek-r1-0528",
+            "DeepSeek-V3": "deepseek-v3-0324"
         }
     }
 }
@@ -70,9 +104,9 @@ class DeepSeekLanguageAPI:
         return {
             "required": {
                 "text_input": ("STRING", {
-                    "default": "你好，请介绍一下你自己。",
+                    "default": "请进行深度推理分析，提供详细的思考过程和结论。",
                     "multiline": True,
-                    "tooltip": "输入要发送给DeepSeek模型的文本内容"
+                    "tooltip": "输入要发送给DeepSeek模型的文本内容，DeepSeek擅长复杂推理和深度分析"
                 }),
                 "platform": (list(cls.SERVICE_PLATFORMS.keys()), {
                     "default": "硅基流动",
@@ -80,37 +114,37 @@ class DeepSeekLanguageAPI:
                 }),
                 "model": (cls.DEEPSEEK_MODELS, {
                     "default": "DeepSeek-V3.1",
-                    "tooltip": "选择要使用的DeepSeek模型"
+                    "tooltip": "选择要使用的DeepSeek模型\n📋 模型特点：\n🔸 DeepSeek-V3.1：最新版本，推理能力最强，适合复杂分析\n🔸 DeepSeek-R1：推理专用模型，逻辑思维强，适合数学和编程\n🔸 DeepSeek-V3：稳定版本，平衡性能，适合通用任务\n💡 推荐使用V3.1或R1获得最佳推理效果"
                 }),
-                       "max_tokens": ("INT", {
-                           "default": 3072,
-                           "min": 1,
-                           "max": 32768,
-                           "step": 1,
-                           "tooltip": "模型生成文本时最多能使用的token数量"
-                       }),
-                "history": ("INT", {
-                    "default": 6,
+                "max_tokens": ("INT", {
+                    "default": 6144,
                     "min": 1,
-                    "max": 18,
+                    "max": 32768,
                     "step": 1,
-                    "tooltip": "保持的历史对话轮数"
+                    "tooltip": "模型生成文本时最多能使用的token数量，DeepSeek推理模型建议较高值"
+                }),
+                "history": ("INT", {
+                    "default": 10,
+                    "min": 1,
+                    "max": 25,
+                    "step": 1,
+                    "tooltip": "保持的历史对话轮数，DeepSeek模型支持超长上下文，适合复杂推理链"
                 }),
             },
             "optional": {
                 "temperature": ("FLOAT", {
-                    "default": 0.7,
+                    "default": 0.6,
                     "min": 0.0,
                     "max": 2.0,
                     "step": 0.1,
-                    "tooltip": "控制生成文本的随机性，越高越随机"
+                    "tooltip": "控制生成文本的随机性，DeepSeek推理模型建议0.4-0.8以保证逻辑严谨性"
                 }),
                 "top_p": ("FLOAT", {
-                    "default": 0.9,
+                    "default": 0.92,
                     "min": 0.0,
                     "max": 1.0,
                     "step": 0.1,
-                    "tooltip": "控制生成文本的多样性"
+                    "tooltip": "控制生成文本的多样性，DeepSeek模型建议高值以支持创造性推理"
                 }),
                 "clear_history": ("BOOLEAN", {
                     "default": False,
@@ -120,7 +154,7 @@ class DeepSeekLanguageAPI:
         }
     
     RETURN_TYPES = ("STRING", "STRING", "INT")
-    RETURN_NAMES = ("generated_text", "conversation_info", "token_count")
+    RETURN_NAMES = ("generated_text", "conversation_info", "total_tokens")
     FUNCTION = "generate_text"
     CATEGORY = "🎨QING/API调用"
     OUTPUT_NODE = False
@@ -222,8 +256,9 @@ class DeepSeekLanguageAPI:
                 api_key=api_key
             )
             
-            # 获取对话历史
-            conversation_key = f"{platform}_{model}"
+            # 获取对话历史 - 使用英文平台键避免编码问题
+            platform_key = platform_config.get("platform_key", platform)
+            conversation_key = f"{platform_key}_{model}"
             if conversation_key not in self.conversation_history:
                 self.conversation_history[conversation_key] = []
             
@@ -257,12 +292,18 @@ class DeepSeekLanguageAPI:
             current_history.append({"role": "assistant", "content": reply})
             
             # 计算token使用情况
-            token_count = response.usage.total_tokens if hasattr(response, 'usage') and response.usage else 0
+            if hasattr(response, 'usage') and response.usage:
+                total_tokens = response.usage.total_tokens
+                prompt_tokens = getattr(response.usage, 'prompt_tokens', 0)
+                completion_tokens = getattr(response.usage, 'completion_tokens', 0)
+                token_count = total_tokens
+            else:
+                total_tokens = completion_tokens = prompt_tokens = token_count = 0
             
             # 生成对话信息
-            conversation_info = f"平台: {platform} | 模型: {model} | 历史轮数: {len(current_history)//2} | Tokens: {token_count}"
+            conversation_info = f"平台: {platform} | 模型: {model} | 历史轮数: {len(current_history)//2} | 总Tokens: {total_tokens} (输入: {prompt_tokens}, 输出: {completion_tokens}, 限制: {max_tokens})"
             
-            return (reply, conversation_info, token_count)
+            return (reply, conversation_info, total_tokens)
             
         except Exception as e:
             error_message = f"DeepSeek API调用失败 ({platform}): {str(e)}"

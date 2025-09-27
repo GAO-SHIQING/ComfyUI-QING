@@ -57,43 +57,43 @@ class GLMVisionAPI:
                     "tooltip": "输入要分析的图像"
                 }),
                 "text_input": ("STRING", {
-                    "default": "请描述这张图片的内容。",
+                    "default": "请详细分析这张图片，包括主要内容、细节特征和整体构图。",
                     "multiline": True,
-                    "tooltip": "输入关于图像的问题或指令"
+                    "tooltip": "输入关于图像的问题或指令，GLM视觉模型擅长详细的图像分析"
                 }),
                  "model": (cls.GLM_VISION_MODELS, {
                      "default": "glm-4.5v",
-                     "tooltip": "选择要使用的GLM视觉模型"
+                     "tooltip": "选择要使用的GLM视觉模型\n📋 模型特点：\n🔸 glm-4.5v：最新版本，视觉理解能力最强\n🔸 glm-4.1v：高性能版本，平衡速度与效果\n🔸 glm-4v：稳定版本，可靠的视觉分析\n💡 建议使用 glm-4.5v 获得最佳视觉分析效果"
                  }),
                 "max_tokens": ("INT", {
-                    "default": 3072,
+                    "default": 4096,
                     "min": 1,
                     "max": 32768,
                     "step": 1,
-                    "tooltip": "模型生成文本时最多能使用的token数量"
+                    "tooltip": "模型生成文本时最多能使用的token数量，GLM视觉模型建议较高值以获得详细分析"
                 }),
                 "history": ("INT", {
-                    "default": 6,
+                    "default": 4,
                     "min": 1,
-                    "max": 18,
+                    "max": 12,
                     "step": 1,
-                    "tooltip": "保持的历史对话轮数"
+                    "tooltip": "保持的历史对话轮数，视觉分析通常需要较少的历史上下文"
                 }),
             },
             "optional": {
                 "temperature": ("FLOAT", {
-                    "default": 0.7,
+                    "default": 0.3,
                     "min": 0.0,
                     "max": 2.0,
                     "step": 0.1,
-                    "tooltip": "控制生成文本的随机性，越高越随机"
+                    "tooltip": "控制生成文本的随机性，GLM视觉分析建议使用较低值以获得准确描述"
                 }),
                 "top_p": ("FLOAT", {
-                    "default": 0.9,
+                    "default": 0.8,
                     "min": 0.0,
                     "max": 1.0,
                     "step": 0.1,
-                    "tooltip": "控制生成文本的多样性"
+                    "tooltip": "控制生成文本的多样性，视觉分析建议适中值保证描述准确性"
                 }),
                 "clear_history": ("BOOLEAN", {
                     "default": False,
@@ -107,7 +107,7 @@ class GLMVisionAPI:
         }
     
     RETURN_TYPES = ("STRING", "STRING", "INT")
-    RETURN_NAMES = ("generated_text", "conversation_info", "token_count")
+    RETURN_NAMES = ("analysis_result", "conversation_info", "total_tokens")
     FUNCTION = "analyze_image"
     CATEGORY = "🎨QING/API调用"
     OUTPUT_NODE = False
@@ -219,10 +219,16 @@ class GLMVisionAPI:
                 self._update_conversation_history(text_input, image_base64, generated_text, history)
                 
                 # 获取token使用信息
-                token_count = getattr(response.usage, 'total_tokens', 0) if hasattr(response, 'usage') else 0
+                if hasattr(response, 'usage') and response.usage:
+                    total_tokens = response.usage.total_tokens
+                    prompt_tokens = getattr(response.usage, 'prompt_tokens', 0)
+                    completion_tokens = getattr(response.usage, 'completion_tokens', 0)
+                    token_count = total_tokens
+                else:
+                    total_tokens = completion_tokens = prompt_tokens = token_count = 0
                 
                 # 生成对话信息
-                conversation_info = self._generate_conversation_info(model, len(messages), token_count)
+                conversation_info = self._generate_conversation_info(model, len(messages), total_tokens, prompt_tokens, completion_tokens, max_tokens)
                 
                 return (generated_text, conversation_info, token_count)
             else:
@@ -372,14 +378,14 @@ class GLMVisionAPI:
         if len(self.conversation_history) > max_messages:
             self.conversation_history = self.conversation_history[-max_messages:]
     
-    def _generate_conversation_info(self, model: str, message_count: int, token_count: int) -> str:
-        """生成对话信息"""
+    def _generate_conversation_info(self, model: str, message_count: int, total_tokens: int, prompt_tokens: int = 0, completion_tokens: int = 0, max_tokens: int = 0) -> str:
+        """生成对话信息（优化版本 - 详细Token显示）"""
         history_rounds = len(self.conversation_history) // 2
         info_lines = [
             f"模型: {model}",
             f"本次消息数: {message_count}",
             f"历史轮数: {history_rounds}",
-            f"Token使用: {token_count}",
+            f"总Tokens: {total_tokens} (输入: {prompt_tokens}, 输出: {completion_tokens}, 限制: {max_tokens})",
             f"模式: 视觉+文本",
             f"对话状态: 正常"
         ]

@@ -6,41 +6,6 @@
 
 import { app } from "../../scripts/app.js";
 
-// 本地化辅助函数
-function getLocalizedText(key, fallback) {
-    // 检测当前语言环境
-    const isChineseUI = document.documentElement.lang === 'zh-CN' || 
-                       navigator.language.startsWith('zh') ||
-                       localStorage.getItem('Comfy.Settings.Comfy.Locale') === 'zh';
-    
-    const locales = {
-        zh: {
-            "glm_api_key_name": "智谱GLM API密钥",
-            "glm_api_key_tooltip": "智谱AI的API密钥，用于GLM语言和视觉模型调用。修改后会实时同步到本地配置文件。",
-            "volcengine_api_key_name": "火山引擎 API密钥",
-            "volcengine_api_key_tooltip": "火山引擎平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。",
-            "dashscope_api_key_name": "阿里云百炼 API密钥",
-            "dashscope_api_key_tooltip": "阿里云百炼平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。",
-            "siliconflow_api_key_name": "硅基流动 API密钥",
-            "siliconflow_api_key_tooltip": "硅基流动平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。",
-            "placeholder": "请输入API Key..."
-        },
-        en: {
-            "glm_api_key_name": "Zhipu GLM API Key",
-            "glm_api_key_tooltip": "API key for Zhipu AI GLM language and vision models. Changes will be synced to local configuration file in real-time.",
-            "volcengine_api_key_name": "Volcengine API Key",
-            "volcengine_api_key_tooltip": "API key for Volcengine platform models. Changes will be synced to local configuration file in real-time.",
-            "dashscope_api_key_name": "Alibaba Dashscope API Key",
-            "dashscope_api_key_tooltip": "API key for Alibaba Cloud Dashscope platform models. Changes will be synced to local configuration file in real-time.",
-            "siliconflow_api_key_name": "Siliconflow API Key",
-            "siliconflow_api_key_tooltip": "API key for Siliconflow platform models. Changes will be synced to local configuration file in real-time.",
-            "placeholder": "Enter API Key..."
-        }
-    };
-    
-    const currentLocale = isChineseUI ? 'zh' : 'en';
-    return locales[currentLocale][key] || fallback || key;
-}
 
 class QingSettingsSync {
     constructor() {
@@ -128,7 +93,9 @@ class QingSettingsSync {
             { settingId: "🎨QING.API配置.GLM_API_Key", configKey: "glm_api_key" },
             { settingId: "🎨QING.API配置.Volcengine_API_Key", configKey: "volcengine_api_key" },
             { settingId: "🎨QING.API配置.Dashscope_API_Key", configKey: "dashscope_api_key" },
-            { settingId: "🎨QING.API配置.Siliconflow_API_Key", configKey: "siliconflow_api_key" }
+            { settingId: "🎨QING.API配置.Siliconflow_API_Key", configKey: "siliconflow_api_key" },
+            { settingId: "🎨QING.API配置.TencentLkeap_API_Key", configKey: "tencent_lkeap_api_key" },
+            { settingId: "🎨QING.API配置.Moonshot_API_Key", configKey: "moonshot_api_key" }
         ];
     }
     
@@ -341,13 +308,13 @@ app.registerExtension({
     settings: [
         {
             id: "🎨QING.API配置.GLM_API_Key",
-            name: getLocalizedText("glm_api_key_name", "智谱GLM API Key"),
+            name: "智谱GLM API Key",
             type: "text",
             defaultValue: "",
-            tooltip: getLocalizedText("glm_api_key_tooltip", "智谱AI的API密钥，用于GLM语言和视觉模型调用。修改后会实时同步到本地配置文件。"),
+            tooltip: "智谱AI的API密钥，用于GLM语言和视觉模型调用。修改后会实时同步到本地配置文件。",
             attrs: {
                 type: "password",
-                placeholder: getLocalizedText("placeholder", "请输入API Key...")
+                placeholder: "请输入API Key..."
             },
             onChange: (newVal, oldVal) => {
                 if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
@@ -357,13 +324,13 @@ app.registerExtension({
         },
         {
             id: "🎨QING.API配置.Volcengine_API_Key",
-            name: getLocalizedText("volcengine_api_key_name", "火山引擎 API Key"),
+            name: "火山引擎 API Key",
             type: "text",
             defaultValue: "",
-            tooltip: getLocalizedText("volcengine_api_key_tooltip", "火山引擎平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。"),
+            tooltip: "火山引擎平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。",
             attrs: {
                 type: "password",
-                placeholder: getLocalizedText("placeholder", "请输入API Key...")
+                placeholder: "请输入API Key..."
             },
             onChange: (newVal, oldVal) => {
                 if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
@@ -373,13 +340,13 @@ app.registerExtension({
         },
         {
             id: "🎨QING.API配置.Dashscope_API_Key",
-            name: getLocalizedText("dashscope_api_key_name", "阿里云百炼 API Key"),
+            name: "阿里云百炼 API Key",
             type: "text",
             defaultValue: "",
-            tooltip: getLocalizedText("dashscope_api_key_tooltip", "阿里云百炼平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。"),
+            tooltip: "阿里云百炼平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。",
             attrs: {
                 type: "password",
-                placeholder: getLocalizedText("placeholder", "请输入API Key...")
+                placeholder: "请输入API Key..."
             },
             onChange: (newVal, oldVal) => {
                 if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
@@ -389,17 +356,49 @@ app.registerExtension({
         },
         {
             id: "🎨QING.API配置.Siliconflow_API_Key",
-            name: getLocalizedText("siliconflow_api_key_name", "硅基流动 API Key"),
+            name: "硅基流动 API Key",
             type: "text",
             defaultValue: "",
-            tooltip: getLocalizedText("siliconflow_api_key_tooltip", "硅基流动平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。"),
+            tooltip: "硅基流动平台的API密钥，用于各类模型调用。修改后会实时同步到本地配置文件。",
             attrs: {
                 type: "password",
-                placeholder: getLocalizedText("placeholder", "请输入API Key...")
+                placeholder: "请输入API Key..."
             },
             onChange: (newVal, oldVal) => {
                 if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
                     window.qingSettingsSync.syncToLocalConfig(newVal, "siliconflow_api_key");
+                }
+            }
+        },
+        {
+            id: "🎨QING.API配置.TencentLkeap_API_Key",
+            name: "腾讯云 API Key",
+            type: "text",
+            defaultValue: "",
+            tooltip: "腾讯云知识引擎平台的API密钥，用于DeepSeek模型调用。修改后会实时同步到本地配置文件。",
+            attrs: {
+                type: "password",
+                placeholder: "请输入API Key..."
+            },
+            onChange: (newVal, oldVal) => {
+                if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
+                    window.qingSettingsSync.syncToLocalConfig(newVal, "tencent_lkeap_api_key");
+                }
+            }
+        },
+        {
+            id: "🎨QING.API配置.Moonshot_API_Key",
+            name: "月之暗面 API Key",
+            type: "text",
+            defaultValue: "",
+            tooltip: "月之暗面平台的API密钥，用于Kimi模型调用。修改后会实时同步到本地配置文件。",
+            attrs: {
+                type: "password",
+                placeholder: "请输入API Key..."
+            },
+            onChange: (newVal, oldVal) => {
+                if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
+                    window.qingSettingsSync.syncToLocalConfig(newVal, "moonshot_api_key");
                 }
             }
         }

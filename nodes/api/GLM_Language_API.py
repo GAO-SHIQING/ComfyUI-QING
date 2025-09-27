@@ -106,7 +106,7 @@ class GLMLanguageAPI:
         }
     
     RETURN_TYPES = ("STRING", "STRING", "INT")
-    RETURN_NAMES = ("generated_text", "conversation_info", "token_count")
+    RETURN_NAMES = ("generated_text", "conversation_info", "total_tokens")
     FUNCTION = "generate_text"
     CATEGORY = "🎨QING/API调用"
     OUTPUT_NODE = False
@@ -199,13 +199,19 @@ class GLMLanguageAPI:
                 # 更新对话历史
                 self._update_conversation_history(text_input, generated_text, history)
                 
-                # 获取token使用信息
-                token_count = getattr(response.usage, 'total_tokens', 0) if hasattr(response, 'usage') else 0
+                # 计算token使用情况
+                if hasattr(response, 'usage') and response.usage:
+                    total_tokens = response.usage.total_tokens
+                    prompt_tokens = getattr(response.usage, 'prompt_tokens', 0)
+                    completion_tokens = getattr(response.usage, 'completion_tokens', 0)
+                    token_count = total_tokens
+                else:
+                    total_tokens = completion_tokens = prompt_tokens = token_count = 0
                 
                 # 生成对话信息
-                conversation_info = self._generate_conversation_info(model, len(messages), token_count)
+                conversation_info = f"模型: {model} | 历史轮数: {len(self.conversation_history)//2} | 总Tokens: {total_tokens} (输入: {prompt_tokens}, 输出: {completion_tokens}, 限制: {max_tokens})"
                 
-                return (generated_text, conversation_info, token_count)
+                return (generated_text, conversation_info, total_tokens)
             else:
                 error_msg = "错误：API返回空响应"
                 return (error_msg, "API响应异常", 0)
@@ -263,17 +269,6 @@ class GLMLanguageAPI:
         if len(self.conversation_history) > max_messages:
             self.conversation_history = self.conversation_history[-max_messages:]
     
-    def _generate_conversation_info(self, model: str, message_count: int, token_count: int) -> str:
-        """生成对话信息"""
-        history_rounds = len(self.conversation_history) // 2
-        info_lines = [
-            f"模型: {model}",
-            f"本次消息数: {message_count}",
-            f"历史轮数: {history_rounds}",
-            f"Token使用: {token_count}",
-            f"对话状态: 正常"
-        ]
-        return "\n".join(info_lines)
     
     @classmethod
     def IS_CHANGED(cls, **kwargs):

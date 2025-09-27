@@ -28,6 +28,14 @@
     "🎨QING.API配置.Siliconflow_API_Key": {
       "name": "Siliconflow API Key",
       "tooltip": "API key for Siliconflow platform models. Changes will be synced to local configuration file in real-time."
+    },
+    "🎨QING.API配置.TencentLkeap_API_Key": {
+      "name": "Tencent Cloud API Key",
+      "tooltip": "API key for Tencent Cloud Knowledge Engine platform DeepSeek models. Changes will be synced to local configuration file in real-time."
+    },
+    "🎨QING.API配置.Moonshot_API_Key": {
+      "name": "Moonshot API Key",
+      "tooltip": "API key for Moonshot platform Kimi models. Changes will be synced to local configuration file in real-time."
     }
   }
 }

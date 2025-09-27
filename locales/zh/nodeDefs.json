@@ -1062,7 +1062,7 @@
           "tooltip": "包含模型、消息数、历史轮数、token使用等信息"
         },
         "2": {
-          "name": "令牌数量",
+          "name": "总令牌数",
           "tooltip": "本次API调用使用的总token数量"
         }
       }
@@ -1110,22 +1110,22 @@
       },
       "outputs": {
         "0": {
-          "name": "生成文本",
-          "tooltip": "GLM视觉模型对图像的分析和描述文本"
+          "name": "分析结果",
+          "tooltip": "GLM视觉模型对图像的分析和描述结果"
         },
         "1": {
           "name": "对话信息",
-          "tooltip": "包含模型、消息数、历史轮数、token使用等信息"
+          "tooltip": "包含模型、消息数、历史轮数、详细token使用信息（输入/输出/总计/限制）"
         },
         "2": {
-          "name": "令牌数量",
-          "tooltip": "本次API调用使用的总token数量"
+          "name": "总令牌数",
+          "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
         }
       }
     },
     "DeepSeekLanguageAPI": {
       "display_name": "DeepSeek_语言丨API",
-      "description": "DeepSeek模型API调用和文本生成，支持多平台(火山引擎、阿里云百炼、硅基流动)，DeepSeek-V3.1/R1/V3模型，多轮对话记忆",
+      "description": "DeepSeek模型API调用和文本生成，支持多平台(火山引擎、阿里云百炼、硅基流动、腾讯云)，DeepSeek-V3.1/R1/V3模型，多轮对话记忆",
       "inputs": {
         "text_input": {
           "name": "文本框",
@@ -1133,11 +1133,11 @@
         },
         "platform": {
           "name": "服务端",
-          "tooltip": "选择DeepSeek模型的服务平台：火山引擎、阿里云百炼或硅基流动"
+          "tooltip": "选择DeepSeek模型的服务平台：火山引擎、阿里云百炼、硅基流动或腾讯云"
         },
         "model": {
           "name": "模型",
-          "tooltip": "选择要使用的DeepSeek模型（DeepSeek-V3.1/R1/V3）"
+          "tooltip": "选择要使用的DeepSeek模型\n📋 模型说明：\n🔸 DeepSeek-V3.1：最新版本，推理能力最强\n🔸 DeepSeek-R1：推理专用模型，逻辑思维强\n🔸 DeepSeek-V3：稳定版本，平衡性能\n💡 所有平台均支持全部模型"
         },
         "max_tokens": {
           "name": "最大令牌",
@@ -1175,11 +1175,183 @@
         },
         "1": {
           "name": "对话信息",
+          "tooltip": "包含平台、模型、历史轮数、详细token使用信息（输入/输出/总计/限制）"
+        },
+        "2": {
+          "name": "总令牌数",
+          "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
+        }
+      }
+    },
+    "KimiLanguageAPI": {
+      "display_name": "Kimi_语言丨API",
+      "description": "Kimi模型API调用和智能对话，支持多平台(月之暗面、火山引擎、阿里云百炼、硅基流动)，kimi-k2-0905模型，多轮对话记忆",
+      "inputs": {
+        "text_input": {
+          "name": "文本框",
+          "tooltip": "输入要发送给Kimi模型的文本内容"
+        },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "选择Kimi模型的服务平台：月之暗面、火山引擎、阿里云百炼或硅基流动"
+        },
+        "model": {
+          "name": "模型",
+          "tooltip": "选择要使用的Kimi模型（kimi-k2-0905）"
+        },
+        "max_tokens": {
+          "name": "最大令牌",
+          "tooltip": "生成文本的最大令牌数量，控制回复长度"
+        },
+        "history": {
+          "name": "历史轮数",
+          "tooltip": "保持的对话历史轮数，控制模型能记住多少轮之前的对话"
+        },
+        "temperature": {
+          "name": "温度",
+          "tooltip": "控制生成文本的随机性，数值越高越随机"
+        },
+        "top_p": {
+          "name": "核采样",
+          "tooltip": "控制生成文本的多样性，通过核心采样控制词汇选择范围"
+        },
+        "clear_history": {
+          "name": "清空历史",
+          "tooltip": "是否清空对话历史记录"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "生成文本",
+          "tooltip": "Kimi模型生成的文本内容"
+        },
+        "1": {
+          "name": "对话信息",
           "tooltip": "包含对话历史和统计信息的详细数据"
         },
         "2": {
-          "name": "令牌数量",
+          "name": "总令牌数",
           "tooltip": "本次API调用使用的总token数量"
+        }
+      }
+    },
+    "KimiVisionAPI": {
+      "display_name": "Kimi_视觉丨API",
+      "description": "Kimi视觉模型API调用和图像理解分析，仅支持月之暗面平台，kimi-latest系列模型，支持图像问答和多轮对话记忆",
+      "inputs": {
+        "image": {
+          "name": "图像",
+          "tooltip": "输入要分析的图像"
+        },
+        "text_input": {
+          "name": "文本框",
+          "tooltip": "输入关于图像的问题或指令"
+        },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "Kimi视觉API服务提供商（仅支持月之暗面）"
+        },
+        "model": {
+          "name": "模型",
+          "tooltip": "选择要使用的Kimi视觉模型\n📋 模型说明：\n🔸 kimi-latest-8k：适合简单图像分析\n🔸 kimi-latest-32k：平衡性能和质量\n🔸 kimi-latest-128k：最佳质量，适合复杂分析"
+        },
+        "max_tokens": {
+          "name": "最大令牌",
+          "tooltip": "模型生成文本时最多能使用的token数量"
+        },
+        "history": {
+          "name": "历史记录",
+          "tooltip": "保持的历史对话轮数（视觉模型建议较少轮数）"
+        },
+        "temperature": {
+          "name": "温度",
+          "tooltip": "控制生成文本的随机性，视觉任务建议较低值"
+        },
+        "top_p": {
+          "name": "核采样",
+          "tooltip": "控制生成文本的多样性"
+        },
+        "image_quality": {
+          "name": "图像质量",
+          "tooltip": "图像质量设置：auto自动，low低质量快速，high高质量精确"
+        },
+        "clear_history": {
+          "name": "清除历史",
+          "tooltip": "是否清除历史对话记录"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "分析结果",
+          "tooltip": "Kimi视觉模型对图像的分析和理解结果"
+        },
+        "1": {
+          "name": "对话信息",
+          "tooltip": "包含平台、模型、图像质量、历史轮数、详细token使用信息（输入/输出/总计/限制）"
+        },
+        "2": {
+          "name": "总令牌数",
+          "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
+        }
+      }
+    },
+    "DoubaoVisionAPI": {
+      "display_name": "Doubao_视觉丨API",
+      "description": "Doubao视觉模型API调用和图像理解分析，仅支持火山引擎平台，Doubao-Seed-1.6和Doubao-1.5系列模型，支持图像问答和多轮对话记忆",
+      "inputs": {
+        "image": {
+          "name": "图像",
+          "tooltip": "输入要分析的图像"
+        },
+        "text_input": {
+          "name": "文本框",
+          "tooltip": "输入关于图像的问题或指令"
+        },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "Doubao视觉API服务提供商（仅支持火山引擎）"
+        },
+        "model": {
+          "name": "模型",
+          "tooltip": "选择要使用的Doubao视觉模型\n📋 模型说明：\n🔸 Doubao-Seed-1.6：最新种子模型\n🔸 Doubao-Seed-1.6-thinking：思维链推理\n🔸 Doubao-Seed-1.6-flash：快速响应\n🔸 Doubao-Seed-1.6-vision：专业视觉\n🔸 Doubao-1.5-vision-pro：高质量视觉分析\n🔸 Doubao-1.5-vision-lite：轻量级视觉\n🔸 Doubao-1.5-thinking-vision-pro：思维链视觉专业版\n🔸 Doubao-1.5-UI-TARS：UI界面分析专用\n🔸 Doubao-Seed-Translation：翻译专用模型"
+        },
+        "max_tokens": {
+          "name": "最大令牌",
+          "tooltip": "模型生成文本时最多能使用的token数量"
+        },
+        "history": {
+          "name": "历史记录",
+          "tooltip": "保持的历史对话轮数（视觉模型建议较少轮数）"
+        },
+        "temperature": {
+          "name": "温度",
+          "tooltip": "控制生成文本的随机性，视觉任务建议较低值"
+        },
+        "top_p": {
+          "name": "核采样",
+          "tooltip": "控制生成文本的多样性"
+        },
+        "image_quality": {
+          "name": "图像质量",
+          "tooltip": "图像质量设置：auto自动，low低质量快速，high高质量精确"
+        },
+        "clear_history": {
+          "name": "清除历史",
+          "tooltip": "是否清除历史对话记录"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "分析结果",
+          "tooltip": "Doubao视觉模型对图像的分析和理解结果"
+        },
+        "1": {
+          "name": "对话信息",
+          "tooltip": "包含平台、模型、图像质量、历史轮数、详细token使用信息（输入/输出/总计/限制）"
+        },
+        "2": {
+          "name": "总令牌数",
+          "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
         }
       }
     }

@@ -18,29 +18,21 @@
   - 📁 `io_nodes/` - 输入输出节点
 
 ### ⚙️ API密钥管理系统升级
-- **实时双向同步**: 实现ComfyUI设置界面与本地配置文件的实时同步
-- **多平台API支持**: 支持智谱GLM、火山引擎、阿里云百炼、硅基流动四大平台
-- **多层级优先级**: ComfyUI设置 → 环境变量 → 本地文件存储
-- **自动配置管理**: 新增`config.json`文件自动管理API密钥和同步设置
-- **防冲突机制**: 时间戳检查和同步锁，避免配置冲突
-- **本地化存储**: API密钥本地存储，支持离线使用和备份
-- **智能同步频率**: 自适应检查间隔，平衡响应性和性能
+- **实时双向同步**: ComfyUI设置界面与本地配置文件实时同步
+- **多平台支持**: 智谱GLM、月之暗面、火山引擎、阿里云百炼、硅基流动、腾讯云六大平台
+- **智能优先级**: 设置界面 → 环境变量 → 本地文件的多层级管理
+- **离线友好**: 本地存储支持，无需重复配置
 
 ### 🌐 国际化支持
 - **多语言设置**: 支持中文和英文的设置界面
 - **节点分类翻译**: 所有节点分类支持多语言显示
 - **设置项翻译**: API密钥设置支持多语言提示和说明
 
-### 🧹 代码质量提升
-- **代码精简**: 移除所有冗余的`console.log`和`print`语句
-- **依赖清理**: 清除未使用的导入和死代码
-- **错误修复**: 修复节点导入失败和语法错误
-- **性能优化**: 简化日志输出，提升运行效率  
 
 
 ## ✨ 核心亮点  
 - **🎨QING智能设置系统**  
-  全新的实时双向同步设置管理，支持智谱GLM、火山引擎、阿里云百炼、硅基流动四大平台API密钥配置，在ComfyUI设置界面与本地配置文件之间自动同步，支持多语言界面，智能频率调节，一键配置所有AI模型节点。
+  全新的实时双向同步设置管理，支持智谱GLM、月之暗面、火山引擎、阿里云百炼、硅基流动、腾讯云六大平台API密钥配置，在ComfyUI设置界面与本地配置文件之间自动同步，支持多语言界面，智能频率调节，一键配置所有AI模型节点。
 
 - **SVG全链路解决方案**  
   从本地文件加载到高质量格式转换，一站式搞定SVG素材的全流程管理，完美适配图像生成工作流。  
@@ -75,14 +67,14 @@
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **31个专业节点**，覆盖11大功能领域：
+ComfyUI-QING 提供 **32个专业节点**，覆盖11大功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
 | 🎨 **SVG处理** | 5个 | 加载、转换、保存、格式互转 |
 | 🎭 **遮罩工程** | 7个 | 拆分、缩放、混合、扩张、判断、转换、预览 |
 | 📝 **文本处理** | 1个 | 多组对比、条件分支 |
-| 🤖 **API调用** | 3个 | GLM语言/视觉模型、DeepSeek语言模型、多轮对话、智能生成 |
+| 🤖 **API调用** | 4个 | GLM语言/视觉模型、DeepSeek语言模型、Kimi语言模型、多轮对话、智能生成 |
 | 🔄 **数据类型转换** | 6个 | 整数、字符串、布尔值互转、反转 |
 | 🔄 **图像变换** | 3个 | 旋转、翻转、缩放、多种插值算法 |
 | 🎬 **视频合成** | 1个 | 序列帧转视频、多格式支持 |
@@ -123,13 +115,14 @@ ComfyUI-QING 提供 **31个专业节点**，覆盖11大功能领域：
 |---------|----------|----------|
 | **文本对比** | 多组文本比较和条件判断 | • 支持3组独立文本对比<br>• 可配置大小写敏感性<br>• 输出布尔结果用于条件分支 |
 
-### 4. API调用 (3个节点)
+### 4. API调用 (4个节点)
 
 | 节点名称 | 功能描述 | 主要特性 |
 |---------|----------|----------|
 | **GLM_语言丨API** | 智谱GLM语言模型API调用和文本生成 | • 支持16个GLM语言模型（GLM-4.5/4/3系列）<br>• 智能多轮对话记忆（最多18轮）<br>• 精细参数控制（温度、top_p、max_tokens）<br>• 完整错误处理和智能分类<br>• 实时token统计和对话信息<br>• 基于官方zai-sdk，完全兼容 |
 | **GLM_视觉丨API** | 智谱GLM视觉模型API调用和图像理解 | • 支持5个GLM视觉模型（GLM-4.5V/4.1V/4V系列）<br>• 智能参数适配，自动解决1210兼容性问题<br>• 图像+文本多模态输入<br>• 智能图像分析和描述生成<br>• 三种图像质量模式（auto/low/high）<br>• 多轮视觉对话记忆<br>• 多层参数尝试机制，确保所有模型可用 |
-| **DeepSeek_语言丨API** | DeepSeek语言模型API调用和推理生成 | • 支持3个DeepSeek模型（V3.1/R1/V3系列）<br>• 多平台支持（火山引擎/阿里云百炼/硅基流动）<br>• 智能多轮对话记忆（最多20轮）<br>• 精细参数控制（温度、top_p、max_tokens、frequency_penalty）<br>• 完整错误处理和重试机制<br>• 实时token统计和成本计算<br>• 基于OpenAI兼容API，稳定可靠 |
+| **DeepSeek_语言丨API** | DeepSeek语言模型API调用和推理生成 | • 支持3个DeepSeek模型（V3.1/R1/V3系列）<br>• 多平台支持（火山引擎/阿里云百炼/硅基流动/腾讯云）<br>• 智能多轮对话记忆（最多25轮）<br>• 精细参数控制（温度、top_p、max_tokens）<br>• 完整错误处理和重试机制<br>• 详细token统计信息（输入/输出/总计/限制）<br>• 基于OpenAI兼容API，稳定可靠 |
+| **Kimi_语言丨API** | Kimi语言模型API调用和智能对话 | • 支持3个Kimi模型（kimi-k2-0905/0711/turbo系列）<br>• 多平台支持（月之暗面/火山引擎/阿里云百炼/硅基流动）<br>• 超长上下文能力（200万字）和联网搜索特性<br>• 优化参数配置：max_tokens 4096，history 25轮<br>• 创造性参数调优：temperature 0.8，top_p 0.95<br>• 详细token统计信息（输入/输出/总计/限制）<br>• 特别适合长文档分析、复杂推理和深度对话 |
 
 ### 5. 数据类型转换工具 (6个节点)
 
@@ -268,21 +261,10 @@ ComfyUI-QING 提供 **31个专业节点**，覆盖11大功能领域：
 4. 详细信息输出 → 内存占用、数值范围、质量评估
 ```
 
-### 🔧 调试工具工作流程
+### 🔧 调试工具使用
 ```
-【我想看看节点】
-1. 我想看看 → 连接任意数据输出端口
-2. 实时分析 → 显示数据类型、尺寸、运行时长
-3. 系统监控 → 内存使用、GPU占用、时间戳
-4. 透传输出 → 原始数据不变，可继续连接其他节点
-5. 详细查看 → 完整显示数据内容和分析信息
-
-【让我看看节点】
-1. 让我看看 → 连接任意数据输出端口
-2. 纯净显示 → 直接输出原始数据内容
-3. 无格式化 → 不添加任何分析或装饰信息
-4. 透传输出 → 原始数据不变，可继续连接其他节点
-5. 极简查看 → 专注数据内容本身，最小化干扰
+【我想看看】→ 详细数据分析 + 系统监控
+【让我看看】→ 纯净内容显示，无额外信息
 ```
 
 ---
@@ -297,20 +279,22 @@ ComfyUI-QING 提供 **31个专业节点**，覆盖11大功能领域：
    - 通过ComfyUI菜单 → 设置 → 🎨QING → API配置
    - 支持中文/英文界面自动切换
 
-2. **配置API密钥**（支持四大AI平台）
-   - **智谱GLM API Key**: 支持所有GLM语言和视觉模型
-   - **火山引擎 API Key**: 火山引擎平台模型调用
-   - **阿里云百炼 API Key**: 阿里云百炼平台模型调用  
-   - **硅基流动 API Key**: 硅基流动平台模型调用
-   - **实时同步**: 设置界面修改后自动同步到本地配置文件
-   - **双向更新**: 手动修改配置文件也会实时反映到设置界面
-   - **智能频率**: 自适应检查间隔，平衡响应性和性能
+2. **配置API密钥**（支持六大AI平台）
+   - **智谱GLM**: 支持所有GLM语言和视觉模型
+   - **月之暗面**: Kimi系列模型调用
+   - **火山引擎**: DeepSeek、Kimi、Doubao系列模型调用
+   - **阿里云百炼**: DeepSeek、Kimi系列模型调用  
+   - **硅基流动**: DeepSeek、Kimi系列模型调用
+   - **腾讯云**: DeepSeek系列模型调用
+   - **实时同步**: 界面与配置文件自动双向同步
 
 3. **获取API密钥**
    - 智谱GLM: [智谱AI开放平台](https://open.bigmodel.cn/)
+   - 月之暗面: [月之暗面开放平台](https://platform.moonshot.cn/)
    - 火山引擎: [火山引擎开放平台](https://www.volcengine.com/)
    - 阿里云百炼: [阿里云百炼平台](https://dashscope.aliyun.com/)
    - 硅基流动: [硅基流动平台](https://siliconflow.cn/)
+   - 腾讯云: [腾讯云开放平台](https://cloud.tencent.com/)
 
 4. **配置文件位置**
    - 本地配置文件：`nodes/api/config/config.json`
@@ -345,7 +329,7 @@ ComfyUI-QING 提供 **31个专业节点**，覆盖11大功能领域：
 ### ⚠️ 重要提示
 - **视频合成功能**需要系统安装FFmpeg
 - **SVG处理**推荐安装cairosvg以获得最佳效果
-- **API功能**需要配置相应平台API密钥（智谱GLM、火山引擎、阿里云百炼、硅基流动），支持实时同步管理
+- **API功能**需要配置相应平台API密钥（智谱GLM、月之暗面、火山引擎、阿里云百炼、硅基流动、腾讯云），支持实时同步管理
 - 如遇到安装问题，请使用自动化安装脚本进行诊断
 
 
@@ -407,29 +391,21 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
   - 📁 `io_nodes/` - Input/output nodes
 
 ### ⚙️ API Key Management System Upgrade
-- **Real-time Bidirectional Sync**: Implemented real-time synchronization between ComfyUI settings UI and local configuration files
-- **Multi-platform API Support**: Supports four major platforms: Zhipu GLM, Volcengine, Alibaba Dashscope, and Siliconflow
-- **Multi-tier Priority**: ComfyUI settings → Environment variables → Local file storage
-- **Automatic Configuration Management**: Added `config.json` file for automatic API key and sync settings management
-- **Conflict Prevention**: Timestamp checking and sync locks to avoid configuration conflicts
-- **Local Storage**: API key local storage with offline usage and backup support
-- **Smart Sync Frequency**: Adaptive check intervals balancing responsiveness and performance
+- **Real-time Sync**: ComfyUI settings interface and local configuration files sync in real-time
+- **Multi-platform Support**: Zhipu GLM, Moonshot, Volcengine, Alibaba Dashscope, Siliconflow, and Tencent Cloud - six major platforms
+- **Smart Priority**: Settings UI → Environment variables → Local files multi-tier management
+- **Offline Friendly**: Local storage support, no repeated configuration needed
 
 ### 🌐 Internationalization Support
 - **Multi-language Settings**: Support for Chinese and English settings interface
 - **Node Category Translation**: All node categories support multi-language display
 - **Settings Translation**: API key settings support multi-language tooltips and descriptions
 
-### 🧹 Code Quality Enhancement
-- **Code Simplification**: Removed all redundant `console.log` and `print` statements
-- **Dependency Cleanup**: Cleared unused imports and dead code
-- **Bug Fixes**: Fixed node import failures and syntax errors
-- **Performance Optimization**: Simplified logging output for improved runtime efficiency  
 
 
 ## ✨ Core Highlights  
 - **🎨QING Smart Settings System**  
-  Brand new real-time bidirectional sync settings management, supporting API keys for four major platforms (Zhipu GLM, Volcengine, Alibaba Dashscope, Siliconflow), automatically sync between ComfyUI settings interface and local configuration files, supporting multi-language interface with smart frequency adjustment, one-click configuration for all AI model nodes.
+  Brand new real-time bidirectional sync settings management, supporting API keys for six major platforms (Zhipu GLM, Moonshot, Volcengine, Alibaba Dashscope, Siliconflow, Tencent Cloud), automatically sync between ComfyUI settings interface and local configuration files, supporting multi-language interface with smart frequency adjustment, one-click configuration for all AI model nodes.
 
 - **Full SVG Workflow Solution**  
   Seamless management of SVG materials from local file loading to high-quality format conversion, perfectly integrating with image generation workflows.  
@@ -457,14 +433,14 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 
 ## 📊 Node Overview  
-ComfyUI-QING provides **31 professional nodes** covering 11 major functional areas:
+ComfyUI-QING provides **32 professional nodes** covering 11 major functional areas:
 
 | Category | Node Count | Main Functions |
 |----------|------------|----------------|
 | 🎨 **SVG Processing** | 5 nodes | Load, convert, save, format interchange |
 | 🎭 **Mask Engineering** | 7 nodes | Split, scale, blend, expand, judge, convert, preview |
 | 📝 **Text Processing** | 1 node | Multi-group comparison, conditional branching |
-| 🤖 **API Calls** | 3 nodes | GLM language/vision models, DeepSeek language models, multi-turn dialogue, intelligent generation |
+| 🤖 **API Calls** | 4 nodes | GLM language/vision models, DeepSeek language models, Kimi language models, multi-turn dialogue, intelligent generation |
 | 🔄 **Data Type Conversion** | 6 nodes | Integer, string, boolean interconversion, inversion |
 | 🔄 **Image Transformation** | 3 nodes | Scaling, rotation, flipping, multiple interpolation algorithms |
 | 🎬 **Video Synthesis** | 1 node | Frame sequence to video, multi-format support |
@@ -503,13 +479,14 @@ ComfyUI-QING provides **31 professional nodes** covering 11 major functional are
 |-----------|---------------------|--------------|
 | **Text Compare** | Multi-group text comparison and conditional judgment | • Supports 3 independent text comparisons<br>• Configurable case sensitivity<br>• Outputs boolean results for conditional branching |
 
-### 4. API Calls (3 nodes)
+### 4. API Calls (4 nodes)
 
 | Node Name | Function Description | Key Features |
 |-----------|---------------------|--------------|
 | **GLM_Language丨API** | Zhipu GLM language model API calls and text generation | • Supports 16 GLM language models (GLM-4.5/4/3 series)<br>• Smart multi-turn conversation memory (up to 18 rounds)<br>• Fine-grained parameter control (temperature, top_p, max_tokens)<br>• Complete error handling and intelligent classification<br>• Real-time token statistics and conversation info<br>• Based on official zai-sdk, fully compatible |
 | **GLM_Vision丨API** | Zhipu GLM vision model API calls and image understanding | • Supports 5 GLM vision models (GLM-4.5V/4.1V/4V series)<br>• Smart parameter adaptation, auto-solves 1210 compatibility issues<br>• Image + text multi-modal input<br>• Smart image analysis and description generation<br>• Three image quality modes (auto/low/high)<br>• Multi-turn visual conversation memory<br>• Multi-layer parameter retry mechanism, ensures all models work |
-| **DeepSeek_Language丨API** | DeepSeek language model API calls and reasoning generation | • Supports 3 DeepSeek models (V3.1/R1/V3 series)<br>• Multi-platform support (Volcengine/Alibaba Dashscope/Siliconflow)<br>• Smart multi-turn conversation memory (up to 20 rounds)<br>• Fine-grained parameter control (temperature, top_p, max_tokens, frequency_penalty)<br>• Complete error handling and retry mechanism<br>• Real-time token statistics and cost calculation<br>• Based on OpenAI-compatible API, stable and reliable |
+| **DeepSeek_Language丨API** | DeepSeek language model API calls and reasoning generation | • Supports 3 DeepSeek models (V3.1/R1/V3 series)<br>• Multi-platform support (Volcengine/Alibaba Dashscope/Siliconflow/Tencent Cloud)<br>• Smart multi-turn conversation memory (up to 25 rounds)<br>• Fine-grained parameter control (temperature, top_p, max_tokens)<br>• Complete error handling and retry mechanism<br>• Detailed token statistics (input/output/total/limit)<br>• Based on OpenAI-compatible API, stable and reliable |
+| **Kimi_Language丨API** | Kimi language model API calls and intelligent conversation | • Supports 3 Kimi models (kimi-k2-0905/0711/turbo series)<br>• Multi-platform support (Moonshot/Volcengine/Alibaba Dashscope/Siliconflow)<br>• Ultra-long context capability (2M characters) and web search features<br>• Optimized parameters: max_tokens 4096, history 25 rounds<br>• Creative parameter tuning: temperature 0.8, top_p 0.95<br>• Detailed token statistics (input/output/total/limit)<br>• Specially suited for long document analysis, complex reasoning, and deep conversation |
 
 ### 5. Data Type Conversion Tools (6 nodes)
 
@@ -643,20 +620,22 @@ Brand new intelligent settings system with real-time bidirectional sync and mult
    - Navigate to ComfyUI Menu → Settings → 🎨QING → API Configuration
    - Supports automatic Chinese/English interface switching
 
-2. **Configure API Keys** (Four Major AI Platforms Supported)
-   - **Zhipu GLM API Key**: For all GLM language and vision models
-   - **Volcengine API Key**: For Volcengine platform model calls
-   - **Alibaba Dashscope API Key**: For Alibaba Cloud Dashscope platform model calls
-   - **Siliconflow API Key**: For Siliconflow platform model calls
-   - **Real-time Sync**: Settings interface changes automatically sync to local configuration file
-   - **Bidirectional Update**: Manual configuration file changes also reflect in settings interface in real-time
-   - **Smart Frequency**: Adaptive check intervals balancing responsiveness and performance
+2. **Configure API Keys** (Six Major AI Platforms Supported)
+   - **Zhipu GLM**: For all GLM language and vision models
+   - **Moonshot**: For Kimi series model calls
+   - **Volcengine**: For DeepSeek, Kimi, and Doubao series model calls
+   - **Alibaba Dashscope**: For DeepSeek and Kimi series model calls
+   - **Siliconflow**: For DeepSeek and Kimi series model calls
+   - **Tencent Cloud**: For DeepSeek series model calls
+   - **Real-time Sync**: Interface and configuration files sync automatically
 
 3. **Get API Keys**
    - Zhipu GLM: [Zhipu AI Open Platform](https://open.bigmodel.cn/)
+   - Moonshot: [Moonshot Open Platform](https://platform.moonshot.cn/)
    - Volcengine: [Volcengine Open Platform](https://www.volcengine.com/)
    - Alibaba Dashscope: [Alibaba Cloud Dashscope](https://dashscope.aliyun.com/)
    - Siliconflow: [Siliconflow Platform](https://siliconflow.cn/)
+   - Tencent Cloud: [Tencent Cloud Platform](https://cloud.tencent.com/)
 
 4. **Configuration File Location**
    - Local configuration file: `nodes/api/config/config.json`
@@ -690,7 +669,7 @@ After configuration, all AI nodes will automatically use the API keys from setti
 ### ⚠️ Important Notes
 - **Video synthesis** requires system-level FFmpeg installation
 - **SVG processing** recommends cairosvg for best results
-- **API functionality** requires corresponding platform API keys (Zhipu GLM, Volcengine, Alibaba Dashscope, Siliconflow) with real-time sync management
+- **API functionality** requires corresponding platform API keys (Zhipu GLM, Moonshot, Volcengine, Alibaba Dashscope, Siliconflow, Tencent Cloud) with real-time sync management
 - If installation issues occur, use the automated installation script for diagnosis
 
 

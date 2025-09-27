@@ -12,22 +12,38 @@
     
     "glm_api_key": {
       "// ": "🤖 智谱AI (获取: https://open.bigmodel.cn/usercenter/apikeys)",
-      "value": "在此填写智谱AI密钥 (格式: glm-xxxxxx)"
+	##在此填写智谱AI密钥##
+      "value": "" 
     },
     
     "volcengine_api_key": {
       "// ": "🌋 火山引擎 (获取: https://console.volcengine.com/ark)",
-      "value": "在此填写火山引擎密钥 (格式: ak-xxxxxx)"
+	##在此填写火山引擎密钥##
+      "value": ""
     },
     
     "dashscope_api_key": {
       "// ": "☁️ 阿里云百炼 (获取: https://bailian.console.aliyun.com)",
-      "value": "在此填写阿里云百炼密钥 (格式: sk-xxxxxx)"
+	##在此填写阿里云百炼密钥##
+      "value": ""
     },
     
     "siliconflow_api_key": {
       "// ": "💎 硅基流动 (获取: https://cloud.siliconflow.cn/account/ak)",
-      "value": "在此填写硅基流动密钥 (格式: sk-xxxxxx)"
+	##在此填写硅基流动密钥##
+      "value": ""
+    },
+    
+    "tencent_lkeap_api_key": {
+      "// ": "☁️ 腾讯云 (获取: https://console.cloud.tencent.com/cam/capi)",
+	#在此填写腾讯云密钥##
+      "value": ""
+    },
+    
+    "moonshot_api_key": {
+      "// ": "🌙 月之暗面 (获取: https://platform.moonshot.cn/console/api-keys)",
+	##在此填写月之暗面API密钥##
+      "value": ""
     },
     
     "__system_info": {
