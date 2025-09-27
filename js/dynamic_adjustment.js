@@ -109,7 +109,7 @@ class UniversalDynamicModels {
      */
     registerNode(nodeName, config) {
         NODE_CONFIGURATIONS[nodeName] = config;
-        console.log(`🎨QING: 注册动态模型支持 - ${nodeName}`);
+        // console.log(`🎨QING: 注册动态模型支持 - ${nodeName}`);
     }
     
     /**
@@ -157,16 +157,31 @@ class UniversalDynamicModels {
                 originalPlatformCallback.call(this, value, widget, node, pos, event);
             }
             
-            // 更新模型选项
-            this.updateModelOptions(node, modelWidget, value, config);
-            
-            // 强制重绘
-            if (node.onResize) {
-                node.onResize();
-            }
-            if (app.graph) {
-                app.graph.setDirtyCanvas(true, true);
-            }
+            // 延迟执行模型更新，确保DOM已准备好
+            setTimeout(() => {
+                // 更新模型选项
+                this.updateModelOptions(node, modelWidget, value, config);
+                
+                // 强制重绘节点
+                if (node.onResize) {
+                    node.onResize();
+                }
+                
+                // 强制重新计算节点大小
+                if (node.computeSize) {
+                    node.computeSize();
+                }
+                
+                // 强制标记画布为dirty
+                if (app.graph) {
+                    app.graph.setDirtyCanvas(true, true);
+                }
+                
+                // 强制重绘整个应用
+                if (app.canvas) {
+                    app.canvas.draw(true, true);
+                }
+            }, 10);
         };
         
         return true;
@@ -183,20 +198,43 @@ class UniversalDynamicModels {
         const availableModels = config.platformModels[platform] || [];
         const defaultModel = config.defaultModel[platform] || (availableModels[0] || "");
         
-        if (modelWidget && modelWidget.options && availableModels.length > 0) {
-            const currentValue = modelWidget.value;
+        // 确保模型列表存在且不为空
+        if (!modelWidget || !modelWidget.options || availableModels.length === 0) {
+            return;
+        }
+        
+        const currentValue = modelWidget.value;
+        
+        // 强制更新可选值列表
+        modelWidget.options.values = [...availableModels]; // 创建新数组避免引用问题
+        
+        // 触发ComfyUI的widget更新机制
+        if (modelWidget.computeSize) {
+            modelWidget.computeSize();
+        }
+        
+        // 智能选择模型
+        if (!availableModels.includes(currentValue)) {
+            modelWidget.value = defaultModel;
             
-            // 更新可选值列表
-            modelWidget.options.values = availableModels;
-            
-            // 智能选择模型
-            if (!availableModels.includes(currentValue)) {
-                modelWidget.value = defaultModel;
-                
-                // 触发模型widget回调
-                if (modelWidget.callback) {
-                    modelWidget.callback(modelWidget.value, modelWidget, node, null, null);
-                }
+            // 触发模型widget回调
+            if (modelWidget.callback) {
+                modelWidget.callback(modelWidget.value, modelWidget, node, null, null);
+            }
+        }
+        
+        // 强制界面更新
+        if (modelWidget.element) {
+            // 如果是select元素，更新选项
+            if (modelWidget.element.tagName === 'SELECT') {
+                modelWidget.element.innerHTML = '';
+                availableModels.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    option.selected = model === modelWidget.value;
+                    modelWidget.element.appendChild(option);
+                });
             }
         }
     }

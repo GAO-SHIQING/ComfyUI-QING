@@ -7,7 +7,6 @@ DeepSeek Language API节点
 
 import os
 from typing import Optional, List, Dict, Any
-from pathlib import Path
 
 # 定义服务平台配置
 SERVICE_PLATFORMS = {
@@ -16,11 +15,6 @@ SERVICE_PLATFORMS = {
         "api_key_env": "VOLCENGINE_API_KEY",
         "config_key": "volcengine_api_key",
         "platform_key": "volcengine",
-        "models": [
-            "DeepSeek-V3.1",
-            "DeepSeek-R1",
-            "DeepSeek-V3"
-        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-v3-1-250821",
             "DeepSeek-R1": "deepseek-r1-250528",
@@ -32,11 +26,6 @@ SERVICE_PLATFORMS = {
         "api_key_env": "DASHSCOPE_API_KEY", 
         "config_key": "dashscope_api_key",
         "platform_key": "dashscope",
-        "models": [
-            "DeepSeek-V3.1",
-            "DeepSeek-R1",
-            "DeepSeek-V3"
-        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-v3.1",        
             "DeepSeek-R1": "deepseek-r1-0528",       
@@ -48,11 +37,6 @@ SERVICE_PLATFORMS = {
         "api_key_env": "SILICONFLOW_API_KEY",
         "config_key": "siliconflow_api_key",
         "platform_key": "siliconflow",
-        "models": [
-            "DeepSeek-V3.1",
-            "DeepSeek-R1",
-            "DeepSeek-V3"
-        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-ai/DeepSeek-V3.1",
             "DeepSeek-R1": "deepseek-ai/DeepSeek-R1",
@@ -64,11 +48,6 @@ SERVICE_PLATFORMS = {
         "api_key_env": "TENCENT_LKEAP_API_KEY",
         "config_key": "tencent_lkeap_api_key",
         "platform_key": "tencent",
-        "models": [
-            "DeepSeek-V3.1",
-            "DeepSeek-R1",
-            "DeepSeek-V3"
-        ],
         "model_mapping": {
             "DeepSeek-V3.1": "deepseek-v3.1",
             "DeepSeek-R1": "deepseek-r1-0528",
@@ -114,7 +93,7 @@ class DeepSeekLanguageAPI:
                 }),
                 "model": (cls.DEEPSEEK_MODELS, {
                     "default": "DeepSeek-V3.1",
-                    "tooltip": "选择要使用的DeepSeek模型\n📋 模型特点：\n🔸 DeepSeek-V3.1：最新版本，推理能力最强，适合复杂分析\n🔸 DeepSeek-R1：推理专用模型，逻辑思维强，适合数学和编程\n🔸 DeepSeek-V3：稳定版本，平衡性能，适合通用任务\n💡 推荐使用V3.1或R1获得最佳推理效果"
+                    "tooltip": "选择要使用的DeepSeek模型\n📋 模型特点：\n🔸 DeepSeek-V3.1：最新版本，推理能力最强，适合复杂分析\n🔸 DeepSeek-R1：推理专用模型，逻辑思维强，适合数学和编程\n🔸 DeepSeek-V3：稳定版本，平衡性能，适合通用任务\n💡 所有平台均支持这三个模型，推荐使用V3.1或R1获得最佳推理效果"
                 }),
                 "max_tokens": ("INT", {
                     "default": 6144,
@@ -180,18 +159,11 @@ class DeepSeekLanguageAPI:
                 except ImportError:
                     pass
 
-        # 策略3: 回退到旧版API密钥服务（仅支持GLM）
-        if not final_api_key and config_key in ["glm_api_key", "zhipuai_api_key"]:
-            try:
-                from .api_key_server import get_qing_api_key
-                final_api_key = get_qing_api_key()
-            except ImportError:
-                pass
-
-        # 策略4: 从临时文件获取（兼容性）
+        # 策略3: 从临时文件获取（兼容性）
         if not final_api_key:
             try:
                 import tempfile
+                from pathlib import Path
                 temp_file = Path(tempfile.gettempdir()) / f"qing_{config_key}_temp.txt"
                 if temp_file.exists():
                     with open(temp_file, 'r', encoding='utf-8') as f:
@@ -296,9 +268,8 @@ class DeepSeekLanguageAPI:
                 total_tokens = response.usage.total_tokens
                 prompt_tokens = getattr(response.usage, 'prompt_tokens', 0)
                 completion_tokens = getattr(response.usage, 'completion_tokens', 0)
-                token_count = total_tokens
             else:
-                total_tokens = completion_tokens = prompt_tokens = token_count = 0
+                total_tokens = completion_tokens = prompt_tokens = 0
             
             # 生成对话信息
             conversation_info = f"平台: {platform} | 模型: {model} | 历史轮数: {len(current_history)//2} | 总Tokens: {total_tokens} (输入: {prompt_tokens}, 输出: {completion_tokens}, 限制: {max_tokens})"
