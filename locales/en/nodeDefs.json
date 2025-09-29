@@ -249,27 +249,27 @@
       },
       "text_1": {
         "name": "Text 1",
-        "tooltip": "Text for first comparison group"
+        "tooltip": "Text for first contrast group"
       },
-      "subtext_1": {
-        "name": "Subtext 1",
-        "tooltip": "Subtext for first comparison group"
+      "compare_1": {
+        "name": "Contrast Text 1",
+        "tooltip": "Text to contrast with text 1"
       },
       "text_2": {
         "name": "Text 2",
-        "tooltip": "Text for second comparison group"
+        "tooltip": "Text for second contrast group"
       },
-      "subtext_2": {
-        "name": "Subtext 2",
-        "tooltip": "Subtext for second comparison group"
+      "compare_2": {
+        "name": "Contrast Text 2",
+        "tooltip": "Text to contrast with text 2"
       },
       "text_3": {
         "name": "Text 3",
-        "tooltip": "Text for third comparison group"
+        "tooltip": "Text for third contrast group"
       },
-      "subtext_3": {
-        "name": "Subtext 3",
-        "tooltip": "Subtext for third comparison group"
+      "compare_3": {
+        "name": "Contrast Text 3",
+        "tooltip": "Text to contrast with text 3"
       }
     },
     "outputs": {
@@ -1047,6 +1047,10 @@
           "name": "Top P",
           "tooltip": "Controls diversity of generated text (0.0-1.0)"
         },
+        "repetition_penalty": {
+          "name": "Repetition Penalty",
+          "tooltip": "Controls penalty for repeated text (1.0-1.3)"
+        },
         "clear_history": {
           "name": "Clear History",
           "tooltip": "Whether to clear historical conversation records"
@@ -1155,6 +1159,10 @@
           "name": "Top P",
           "tooltip": "Controls diversity of generated text through nucleus sampling, limiting vocabulary selection range"
         },
+        "repetition_penalty": {
+          "name": "Repetition Penalty",
+          "tooltip": "Controls penalty for repeated text (1.0-1.3)"
+        },
         "system_prompt": {
           "name": "System Prompt",
           "tooltip": "System prompt to set AI role and behavior guidelines"
@@ -1214,6 +1222,10 @@
         "top_p": {
           "name": "Top P",
           "tooltip": "Controls diversity of generated text through nucleus sampling, limiting vocabulary selection range"
+        },
+        "repetition_penalty": {
+          "name": "Repetition Penalty",
+          "tooltip": "Controls penalty for repeated text (1.0-1.3)"
         },
         "clear_history": {
           "name": "Clear History",
@@ -1348,6 +1360,126 @@
         "1": {
           "name": "Conversation Info",
           "tooltip": "Information including platform, model, image quality, history rounds, detailed token usage (input/output/total/limit)"
+        },
+        "2": {
+          "name": "Total Tokens",
+          "tooltip": "Total number of tokens used in this API call (including input and output tokens)"
+        }
+      }
+    },
+    "QwenLanguageAPI": {
+      "display_name": "Qwen_Language丨API",
+      "description": "Qwen model API calls and intelligent conversation, supports multi-platform (Aliyun Bailian, Siliconflow), Qwen3-Max/Plus/Turbo series models, multi-turn conversation memory",
+      "inputs": {
+        "text_input": {
+          "name": "Text Input",
+          "tooltip": "Input text content to send to Qwen model"
+        },
+        "platform": {
+          "name": "Platform",
+          "tooltip": "Select Qwen model service platform: Aliyun Bailian or Siliconflow"
+        },
+        "model": {
+          "name": "Model",
+          "tooltip": "Select the Qwen model to use\n📋 Model Features:\n🔸 qwen3-max: Latest version, strongest performance, complex reasoning\n🔸 qwen-plus: High-performance version for complex tasks\n🔸 qwen-max: Flagship model with strongest capabilities\n🔸 qwen-turbo: Fast response version for simple conversations\n🔸 qwq-plus: Logic reasoning enhanced version\n🔸 qwen3-235b: Ultra-large parameter model with strong reasoning\n🔸 qwen3-30b: Medium-sized efficient model\n🔸 qwen3-8b: Lightweight efficient model"
+        },
+        "max_tokens": {
+          "name": "Max Tokens",
+          "tooltip": "Maximum number of tokens for generated text, controls response length"
+        },
+        "history": {
+          "name": "History Rounds",
+          "tooltip": "Number of conversation history rounds to maintain, controls how many previous conversation turns the model can remember"
+        },
+        "temperature": {
+          "name": "Temperature",
+          "tooltip": "Controls randomness of generated text, higher values mean more random"
+        },
+        "top_p": {
+          "name": "Top P",
+          "tooltip": "Controls diversity of generated text through nucleus sampling, limiting vocabulary selection range"
+        },
+        "repetition_penalty": {
+          "name": "Repetition Penalty",
+          "tooltip": "Controls penalty for repeated text (1.0-1.3)"
+        },
+        "system_prompt": {
+          "name": "System Prompt",
+          "tooltip": "System prompt to set AI role and behavior guidelines"
+        },
+        "clear_history": {
+          "name": "Clear History",
+          "tooltip": "Whether to clear conversation history"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "Generated Text",
+          "tooltip": "Text content generated by Qwen model"
+        },
+        "1": {
+          "name": "Conversation Info",
+          "tooltip": "Contains platform, model, history rounds, detailed token usage info (input/output/total/limit)"
+        },
+        "2": {
+          "name": "Total Tokens",
+          "tooltip": "Total number of tokens used in this API call (including input and output tokens)"
+        }
+      }
+    },
+    "QwenVisionAPI": {
+      "display_name": "Qwen_Vision丨API",
+      "description": "Qwen vision model API calling and image understanding, supports multiple platforms (Aliyun Bailian, SiliconFlow), Qwen3-VL series vision models, image analysis and OCR recognition",
+      "inputs": {
+        "image": {
+          "name": "Image",
+          "tooltip": "Image input for analysis"
+        },
+        "text_input": {
+          "name": "Text Input",
+          "tooltip": "Input text question to send to Qwen vision model"
+        },
+        "platform": {
+          "name": "Platform",
+          "tooltip": "Select API service provider (Aliyun Bailian/SiliconFlow)"
+        },
+        "model": {
+          "name": "Model",
+          "tooltip": "Select Qwen vision model to use"
+        },
+        "max_tokens": {
+          "name": "Max Tokens",
+          "tooltip": "Maximum number of tokens the model can use for text generation"
+        },
+        "history": {
+          "name": "History",
+          "tooltip": "Number of historical conversation rounds to maintain"
+        },
+        "temperature": {
+          "name": "Temperature",
+          "tooltip": "Controls randomness of generated text, higher values mean more random"
+        },
+        "top_p": {
+          "name": "Top P",
+          "tooltip": "Controls diversity of generated text through nucleus sampling, limiting vocabulary selection range"
+        },
+        "image_quality": {
+          "name": "Image Quality",
+          "tooltip": "Image processing quality setting"
+        },
+        "clear_history": {
+          "name": "Clear History",
+          "tooltip": "Whether to clear conversation history"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "Analysis Result",
+          "tooltip": "Image analysis result from Qwen vision model"
+        },
+        "1": {
+          "name": "Conversation Info",
+          "tooltip": "Contains platform, model, history rounds and other conversation status information"
         },
         "2": {
           "name": "Total Tokens",
