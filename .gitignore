@@ -11,7 +11,6 @@ nodes/api/.qing_api_key.json
 # 测试和调试文件
 test_*.py
 test_*.html
-debug_*.py
 diagnose_*.py
 *_test.html
 

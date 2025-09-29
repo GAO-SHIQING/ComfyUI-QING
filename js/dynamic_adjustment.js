@@ -85,7 +85,7 @@ const NODE_CONFIGURATIONS = {
         platformModels: {
             "火山引擎": ["DeepSeek-V3.1", "DeepSeek-R1", "DeepSeek-V3"],
             "阿里云百炼": ["DeepSeek-V3.1", "DeepSeek-R1", "DeepSeek-V3"],
-            "硅基流动": ["DeepSeek-V3.1", "DeepSeek-R1", "DeepSeek-V3"],
+            "硅基流动": ["DeepSeek-V3.1-Terminus", "DeepSeek-V3.1", "DeepSeek-R1", "DeepSeek-V3"],
             "腾讯云": ["DeepSeek-V3.1", "DeepSeek-R1", "DeepSeek-V3"]
         },
         defaultModel: {

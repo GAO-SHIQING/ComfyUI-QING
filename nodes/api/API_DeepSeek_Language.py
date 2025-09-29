@@ -75,9 +75,10 @@ class DeepSeekLanguageAPI(BaseLanguageAPINode):
             api_key_env="SILICONFLOW_API_KEY",
             config_key="siliconflow_api_key",
             platform_key="siliconflow",
-            models=["DeepSeek-V3.1", "DeepSeek-R1", "DeepSeek-V3"],
+            models=["DeepSeek-V3.1", "DeepSeek-V3.1-Terminus", "DeepSeek-R1", "DeepSeek-V3"],
             model_mapping={
                 "DeepSeek-V3.1": "deepseek-ai/DeepSeek-V3.1",
+                "DeepSeek-V3.1-Terminus": "deepseek-ai/DeepSeek-V3.1-Terminus",
                 "DeepSeek-R1": "deepseek-ai/DeepSeek-R1",
                 "DeepSeek-V3": "deepseek-ai/DeepSeek-V3"
             },
@@ -117,6 +118,7 @@ class DeepSeekLanguageAPI(BaseLanguageAPINode):
         base_types["required"]["model"][1]["tooltip"] = """选择要使用的DeepSeek模型
 📋 模型特点：
 🔸 DeepSeek-V3.1：最新版本，全面提升的推理和代码能力
+🔸 DeepSeek-V3.1-Terminus：终端版本，针对长文本和复杂推理优化（仅硅基流动）
 🔸 DeepSeek-R1：推理专家版本，擅长复杂逻辑推理
 🔸 DeepSeek-V3：稳定版本，平衡性能和效率
 💡 DeepSeek模型在代码生成、数学问题求解、逻辑推理方面表现卓越"""

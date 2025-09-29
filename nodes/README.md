@@ -1,61 +1,126 @@
 # 🎨QING 节点目录结构
 
-本目录包含所有ComfyUI-QING项目的自定义节点，按功能分类组织：
+本目录包含ComfyUI-QING项目的所有自定义节点，采用扁平化文件组织结构，通过自动发现机制统一管理。
 
-## 📁 目录结构
+## 📁 节点文件列表
 
-### 🤖 **api/** - API集成节点
-- `GLM_Language_API.py` - GLM语言模型API调用
-- `GLM_Vision_API.py` - GLM视觉模型API调用
-- `api_key_server.py` - API密钥管理服务
-- `config_server.py` - 配置服务器
-- `settings_approach.py` - 设置管理方法
+### 🤖 **API集成节点**
+- **`api/`** - API模型调用子目录
+  - `API_DeepSeek_Language.py` - DeepSeek语言模型API
+  - `API_Doubao_Vision.py` - 豆包视觉模型API  
+  - `API_GLM_Language.py` - GLM语言模型API
+  - `API_GLM_Vision.py` - GLM视觉模型API
+  - `API_Kimi_Language.py` - Kimi语言模型API
+  - `API_Kimi_Vision.py` - Kimi视觉模型API
+  - `API_Qwen_Language.py` - Qwen语言模型API
+  - `API_Qwen_Vision.py` - Qwen视觉模型API
+  - `base_api_framework.py` - API框架基础类
+  - `utils/config_server.py` - 配置服务器
+  - `utils/settings_approach.py` - 设置管理方法
 
-### 🖼️ **image_processing/** - 图像处理节点
-- `Custom_load_image.py` - 自定义图像加载
-- `Image_cache.py` - 图像缓存管理
-- `Image_flipping.py` - 图像翻转旋转
-- `Image_mask_converter.py` - 图像遮罩转换
-- `Size_scaling.py` - 尺寸缩放处理
+### 📊 **数据处理节点**
+- **`Data_converter.py`** - 数据类型转换工具集
+  - `IntToString` - 整数到字符串转换
+  - `StringToInt` - 字符串到整数转换  
+  - `StringToBool` - 字符串到布尔转换
+  - `BoolToInt` - 布尔到整数转换
+  - `IntToBool` - 整数到布尔转换
+  - `BoolInvert` - 布尔值反转
 
-### 🎭 **mask_processing/** - 遮罩处理节点
-- `Mask_blend.py` - 遮罩混合
-- `Mask_expansion.py` - 遮罩扩张
-- `Mask_judgment.py` - 遮罩判断
-- `Mask_preview.py` - 遮罩预览
-- `Mask_Splitter.py` - 遮罩分割
+- **`Data_tools.py`** - 数据分析工具集
+  - `ImageDataAnalyzer` - 图像数据分析器（维度、统计、内存占用）
+  - `MaskDataAnalyzer` - 遮罩数据分析器（覆盖率、形状分析）
+  - `TextCompare` - 文本比较工具（支持大小写敏感）
 
-### 🎨 **svg_processing/** - SVG处理节点
-- `Image_to_svg.py` - 图像转SVG
-- `Svg_to_image.py` - SVG转图像
+### 🔧 **调试工具节点**
+- **`Debug_tools.py`** - 调试预览工具集
+  - `LetMeSee` - 我想看看（详细数据分析 + 系统资源监控）
+  - `ShowMePure` - 让我看看（纯净内容显示，无额外信息）
 
-### 📁 **io_operations/** - 输入输出节点
-- `Load_svg.py` - SVG文件加载
-- `Svg_saver.py` - SVG文件保存
+### 🖼️ **图像处理节点**
+- **`Image_cache.py`** - 图像缓存管理器
+  - `ImageCache` - 支持99张图像缓存，自动保存清理
 
-### 📊 **data_types/** - 数据类型节点
-- `Data_preview.py` - 数据预览分析
-- `Text_compare.py` - 文本比较
-- `Type_conversion.py` - 类型转换
+- **`Image_loader.py`** - 图像加载器
+  - `CustomLoadImageWithFormat` - 多格式图像加载（支持SVG）
 
-### 🔧 **debug_tools/** - 调试工具节点
-- `LetMeSee.py` - 通用数据调试预览
+- **`Image_mask_converter.py`** - 图像遮罩转换器
+  - `ImageMaskConverter` - 图像与遮罩相互转换
 
-### 🎬 **video_processing/** - 视频处理节点
-- `Video_combine.py` - 视频合成处理
+- **`Image_to_svg.py`** - 图像转SVG工具
+  - 位图图像转换为矢量SVG格式
+
+- **`Image_transform.py`** - 图像变换工具集
+  - `ImageRotation` - 图像旋转
+  - `ImageFlipping` - 图像翻转
+  - `ImageScaling` - 图像缩放
+  - `MaskScale` - 遮罩缩放
+
+### 🎭 **遮罩处理节点**
+- **`Mask_blend.py`** - 遮罩混合工具
+- **`Mask_expansion.py`** - 遮罩扩张工具  
+- **`Mask_judgment.py`** - 遮罩判断工具
+- **`Mask_preview.py`** - 遮罩预览工具
+- **`Mask_Splitter.py`** - 遮罩分割工具
+
+### 🎨 **SVG处理节点**
+- **`SVG_io.py`** - SVG输入输出工具
+- **`Svg_to_image.py`** - SVG转图像工具
+
+### 🎬 **视频处理节点**
+- **`Video_processor.py`** - 视频处理工具
+
+## 🚀 节点特色功能
+
+### 🔍 **右键快速调试**
+- 任意节点右键 → **🔍 添加：我想看看** → 详细数据分析
+- 任意节点右键 → **👀 添加：让我看看** → 纯净内容显示
+- 自动连接当前节点输出，支持任意数据类型透传
+
+### 📡 **多平台API支持**
+支持主流AI模型平台：
+- **OpenAI系列**：GPT-4、GPT-3.5等
+- **国产模型**：GLM、Qwen、Kimi、DeepSeek、豆包
+- **统一接口**：一套代码适配多个平台
+- **智能重试**：网络异常自动重试
+
+### 🖼️ **图像处理增强**
+- **多格式支持**：PNG、JPG、SVG、GIF、WebP等
+- **缓存机制**：智能图像缓存，提升处理效率  
+- **变换工具**：旋转、翻转、缩放一应俱全
+- **遮罩高级操作**：混合、扩张、分割、判断
+
+### 📊 **数据分析助手**
+- **类型转换**：各种基础类型互转
+- **数据分析**：图像、遮罩的深度分析
+- **文本比较**：支持批量文本对比
+- **透传输出**：分析的同时保持数据完整传递
 
 ## 🔄 自动发现机制
 
-主`__init__.py`文件使用递归搜索自动发现所有子目录中的节点文件，无需手动注册。每个节点文件通过`NODE_CLASS_MAPPINGS`和`NODE_DISPLAY_NAME_MAPPINGS`定义其导出的节点类。
+项目采用智能节点发现系统：
 
-分类目录不需要`__init__.py`文件，保持目录结构简洁干净。
+1. **无需手动注册**：主`__init__.py`自动递归搜索所有`.py`文件
+2. **标准化接口**：每个节点文件定义`NODE_CLASS_MAPPINGS`和`NODE_DISPLAY_NAME_MAPPINGS`
+3. **热重载支持**：重启ComfyUI即可加载新增节点
+4. **错误容错**：单个节点出错不影响其他节点加载
 
 ## 📝 添加新节点
 
-要添加新节点：
-1. 将节点文件放在合适的分类目录中
-2. 确保文件包含`NODE_CLASS_MAPPINGS`和`NODE_DISPLAY_NAME_MAPPINGS`定义
-3. 重启ComfyUI即可自动加载新节点
+### 快速开始
+1. **创建节点文件**：在`nodes/`目录下创建`.py`文件
+2. **定义节点类**：实现ComfyUI标准节点接口
+3. **注册节点**：添加`NODE_CLASS_MAPPINGS`和`NODE_DISPLAY_NAME_MAPPINGS`
+4. **重启加载**：重启ComfyUI自动发现新节点
+
+
+## 📋 项目统计
+
+- **🎯 节点文件**：16个主要文件 + API子目录
+- **🔧 功能节点**：25+ 个独立节点类
+- **🌍 多语言**：支持中英文界面
+- **🚀 活跃开发**：持续更新维护
 
 ---
-*🎨QING项目 - 让ComfyUI更强大、更易用*
+
+*🎨QING项目 - 让ComfyUI更强大、更智能、更易用！*
