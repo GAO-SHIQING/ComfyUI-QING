@@ -36,6 +36,10 @@
     "🎨QING.API配置.Moonshot_API_Key": {
       "name": "月之暗面 API Key",
       "tooltip": "月之暗面平台的API密钥，用于Kimi模型调用。修改后会实时同步到本地配置文件。"
+    },
+    "🎨QING.API配置.Gemini_API_Key": {
+      "name": "Google Gemini API Key",
+      "tooltip": "Google AI Studio平台的API密钥，用于Gemini视觉模型调用。修改后会实时同步到本地配置文件。"
     }
   }
 }

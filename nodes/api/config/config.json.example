@@ -46,6 +46,12 @@
       "value": ""
     },
     
+    "gemini_api_key": {
+      "// ": "🔷 Google AI Studio (获取: https://aistudio.google.com/app/apikey)",
+	##在此填写Gemini API密钥##
+      "value": ""
+    },
+    
     "__system_info": {
       "last_updated": "",
       "source": "manual",

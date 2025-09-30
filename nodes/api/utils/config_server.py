@@ -120,7 +120,7 @@ def get_api_key_by_platform(config_key: str) -> str:
     根据平台配置键获取API密钥
     
     Args:
-        config_key: 配置键名（如: glm_api_key, volcengine_api_key, dashscope_api_key, siliconflow_api_key, tencent_lkeap_api_key, moonshot_api_key）
+        config_key: 配置键名（如: glm_api_key, volcengine_api_key, dashscope_api_key, siliconflow_api_key, tencent_lkeap_api_key, moonshot_api_key, gemini_api_key）
     
     Returns:
         str: API密钥

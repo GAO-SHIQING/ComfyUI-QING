@@ -36,6 +36,10 @@
     "🎨QING.API配置.Moonshot_API_Key": {
       "name": "Moonshot API Key",
       "tooltip": "API key for Moonshot platform Kimi models. Changes will be synced to local configuration file in real-time."
+    },
+    "🎨QING.API配置.Gemini_API_Key": {
+      "name": "Google Gemini API Key",
+      "tooltip": "API key for Google AI Studio Gemini vision models. Changes will be synced to local configuration file in real-time."
     }
   }
 }

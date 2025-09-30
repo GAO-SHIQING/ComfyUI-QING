@@ -46,15 +46,21 @@ class GLMVisionAPI(BaseVisionAPINode):
     # GLM视觉模型列表
     GLM_VISION_MODELS = [
         # GLM-4.5V 系列（最新视觉模型）
-        "glm-4.5v",
+        "GLM-4.5V",
         
         # GLM-4.1V Thinking 系列（支持思维链推理）
-        "glm-4.1v-thinking-flashx", 
+        "GLM-4.1V-Thinking-FlashX", 
         
         # GLM-4V 系列（经典视觉模型）
-        "glm-4v-flash",  # 快速版本
-        "glm-4v",        # 标准版本  
-        "glm-4v-plus",   # 增强版本
+        "GLM-4V-Flash",  # 快速版本
+        "GLM-4V",        # 标准版本  
+        "GLM-4V-Plus",   # 增强版本
+    ]
+    
+    # 硅基流动GLM视觉模型列表
+    SILICONFLOW_GLM_VISION_MODELS = [
+        "GLM-4.5V",
+        "GLM-4.1V-9B-Thinking"
     ]
     
     # 平台配置
@@ -66,14 +72,35 @@ class GLMVisionAPI(BaseVisionAPINode):
             config_key="glm_api_key",
             platform_key="zhipuai_vision",
             models=GLM_VISION_MODELS,
-            model_mapping={model: model for model in GLM_VISION_MODELS},  # GLM模型名称不需要映射
+            model_mapping={
+                "GLM-4.5V": "glm-4.5v",
+                "GLM-4.1V-Thinking-FlashX": "glm-4.1v-thinking-flashx",
+                "GLM-4V-Flash": "glm-4v-flash",
+                "GLM-4V": "glm-4v",
+                "GLM-4V-Plus": "glm-4v-plus"
+            },
+            supports_frequency_penalty=True
+        ),
+        "硅基流动": PlatformConfig(
+            name="硅基流动",
+            base_url="https://api.siliconflow.cn/v1",
+            api_key_env="SILICONFLOW_API_KEY",
+            config_key="siliconflow_api_key",
+            platform_key="glm_vision_siliconflow",
+            models=SILICONFLOW_GLM_VISION_MODELS,
+            model_mapping={
+                "GLM-4.5V": "zai-org/GLM-4.5V",
+                "GLM-4.1V-9B-Thinking": "THUDM/GLM-4.1V-9B-Thinking"
+            },
+            max_tokens_limit=4096,
             supports_frequency_penalty=True
         )
     }
     
     # 平台适配器映射
     PLATFORM_ADAPTERS = {
-        "智谱AI": StandardGLMVisionAdapter
+        "智谱AI": StandardGLMVisionAdapter,
+        "硅基流动": StandardGLMVisionAdapter
     }
     
     @classmethod
@@ -84,12 +111,16 @@ class GLMVisionAPI(BaseVisionAPINode):
         # 自定义GLM视觉的提示信息
         base_types["required"]["text_input"][1]["tooltip"] = "输入要发送给GLM视觉模型的文本问题，GLM擅长图像理解、文档分析和视觉推理"
         base_types["required"]["model"][1]["tooltip"] = """选择要使用的GLM视觉模型
-📋 模型特点：
-🔸 glm-4.5v：最新视觉模型，全面提升的图像理解能力
-🔸 glm-4.1v-thinking-flashx：思维链推理版本，擅长复杂视觉分析
-🔸 glm-4v-flash：快速响应版本，适合实时应用
-🔸 glm-4v：标准视觉版本，平衡性能和效果
-🔸 glm-4v-plus：增强版本，高精度图像理解
+📋 智谱AI模型特点：
+🔸 GLM-4.5V：最新视觉模型，全面提升的图像理解能力
+🔸 GLM-4.1V-Thinking-FlashX：思维链推理版本，擅长复杂视觉分析
+🔸 GLM-4V-Flash：快速响应版本，适合实时应用
+🔸 GLM-4V：标准视觉版本，平衡性能和效果
+🔸 GLM-4V-Plus：增强版本，高精度图像理解
+
+📋 硅基流动模型特点：
+🔸 GLM-4.5V：高性能视觉模型，性价比优秀
+🔸 GLM-4.1V-9B-Thinking：9B参数思维链模型，高效推理
 💡 GLM视觉模型在文档理解、图表分析、场景识别方面表现优异"""
         
         # 重建optional字典以确保参数顺序

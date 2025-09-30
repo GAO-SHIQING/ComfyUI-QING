@@ -1027,6 +1027,10 @@
           "name": "文本框",
           "tooltip": "输入要发送给GLM模型的文本内容"
         },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "选择GLM模型的服务平台：智谱AI官方平台或硅基流动平台"
+        },
         "model": {
           "name": "模型",
           "tooltip": "选择要使用的GLM模型（GLM-4.5/4/3系列）"
@@ -1083,6 +1087,10 @@
           "name": "文本框",
           "tooltip": "输入关于图像的问题或指令"
         },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "选择GLM视觉模型的服务平台：智谱AI官方平台或硅基流动平台"
+        },
         "model": {
           "name": "模型",
           "tooltip": "选择要使用的GLM视觉模型（严格按照官方文档规范，支持GLM-4.5V/4.1V/4V系列）"
@@ -1119,6 +1127,78 @@
         },
         "1": {
           "name": "对话信息",
+          "tooltip": "包含模型、消息数、历史轮数、详细token使用信息（输入/输出/总计/限制）"
+        },
+        "2": {
+          "name": "总令牌数",
+          "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
+        }
+      }
+    },
+    "GeminiEditAPI": {
+      "display_name": "Gemini_编辑丨API",
+      "description": "Gemini图像编辑模型API调用和图像生成，支持多图编辑、风格转换、内容修改，基于Google AI Studio平台",
+      "inputs": {
+        "image1": {
+          "name": "图像1",
+          "tooltip": "输入要编辑的第一张图像（必需）"
+        },
+        "image2": {
+          "name": "图像2", 
+          "tooltip": "输入要编辑的第二张图像（可选）"
+        },
+        "image3": {
+          "name": "图像3",
+          "tooltip": "输入要编辑的第三张图像（可选）"
+        },
+        "text_input": {
+          "name": "编辑指令",
+          "tooltip": "输入图像编辑指令，描述你想要如何修改或生成图像。建议使用简洁明确的指令，如'将背景改为蓝天'、'转换为水彩画风格'等"
+        },
+        "platform": {
+          "name": "服务端",
+          "tooltip": "选择Gemini编辑模型的服务平台（目前支持Google AI Studio）"
+        },
+        "model": {
+          "name": "模型",
+          "tooltip": "选择要使用的Gemini编辑模型（gemini-2.5-flash-image-preview）"
+        },
+        "max_tokens": {
+          "name": "最大令牌",
+          "tooltip": "模型生成文本时最多能使用的token数量（1-4096，图像编辑优化）"
+        },
+        "history": {
+          "name": "历史记录",
+          "tooltip": "保持的历史对话轮数（1-18轮，编辑任务建议4轮）"
+        },
+        "temperature": {
+          "name": "温度",
+          "tooltip": "控制生成结果的随机性，越高越随机（0.0-2.0，编辑建议0.2确保一致性）"
+        },
+        "top_p": {
+          "name": "核采样",
+          "tooltip": "控制生成结果的多样性（0.0-1.0）"
+        },
+        "image_quality": {
+          "name": "图像质量",
+          "tooltip": "图像处理质量：auto(自动选择), low(低质量，速度快), high(高质量，精度高)"
+        },
+        "reasoning_effort": {
+          "name": "推理努力",
+          "tooltip": "推理努力程度：none(无), low(低), medium(中等), high(高) - 影响编辑质量和处理时间"
+        },
+        "clear_history": {
+          "name": "清除历史",
+          "tooltip": "是否清除历史对话记录"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "编辑图像",
+          "tooltip": "Gemini编辑模型生成的编辑后图像"
+        },
+        "1": {
+          "name": "对话信息", 
           "tooltip": "包含模型、消息数、历史轮数、详细token使用信息（输入/输出/总计/限制）"
         },
         "2": {
@@ -1480,6 +1560,70 @@
         "1": {
           "name": "对话信息",
           "tooltip": "包含平台、模型、历史轮数等信息的对话状态"
+        },
+        "2": {
+          "name": "总令牌数",
+          "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
+        }
+      }
+    },
+    "GeminiVisionAPI": {
+      "display_name": "Gemini_视觉丨API",
+      "description": "Google Gemini视觉模型API调用和图像分析，支持多模态理解、代码识别、图表分析、创意生成",
+      "inputs": {
+        "image": {
+          "name": "图像",
+          "tooltip": "输入要分析的图像"
+        },
+        "text_input": {
+          "name": "文本框",
+          "tooltip": "输入要发送给Gemini视觉模型的文本问题"
+        },
+        "platform": {
+          "name": "平台",
+          "tooltip": "选择API服务提供商"
+        },
+        "model": {
+          "name": "模型",
+          "tooltip": "选择要使用的Gemini视觉模型，支持2.5系列的思考功能"
+        },
+        "max_tokens": {
+          "name": "最大令牌数",
+          "tooltip": "模型生成文本时最多能使用的token数量"
+        },
+        "history": {
+          "name": "历史轮数",
+          "tooltip": "保持的历史对话轮数"
+        },
+        "temperature": {
+          "name": "温度",
+          "tooltip": "控制输出的随机性，Gemini建议使用0.4"
+        },
+        "top_p": {
+          "name": "核采样",
+          "tooltip": "控制输出的多样性，Gemini支持高达0.95"
+        },
+        "image_quality": {
+          "name": "图像质量",
+          "tooltip": "图像处理质量：auto(自动选择), low(低质量，速度快), high(高质量，精度高)"
+        },
+        "reasoning_effort": {
+          "name": "推理努力",
+          "tooltip": "推理深度：none(关闭), low(轻度思考), medium(中度思考), high(深度思考) - Gemini 2.5系列特有功能"
+        },
+        "clear_history": {
+          "name": "清空历史",
+          "tooltip": "是否清空对话历史记录"
+        }
+      },
+      "outputs": {
+        "0": {
+          "name": "分析结果",
+          "tooltip": "Gemini视觉模型的图像分析结果"
+        },
+        "1": {
+          "name": "对话信息",
+          "tooltip": "包含平台、模型、历史轮数、推理级别等信息的对话状态"
         },
         "2": {
           "name": "总令牌数",

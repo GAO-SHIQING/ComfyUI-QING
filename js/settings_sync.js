@@ -95,7 +95,8 @@ class QingSettingsSync {
             { settingId: "🎨QING.API配置.Dashscope_API_Key", configKey: "dashscope_api_key" },
             { settingId: "🎨QING.API配置.Siliconflow_API_Key", configKey: "siliconflow_api_key" },
             { settingId: "🎨QING.API配置.TencentLkeap_API_Key", configKey: "tencent_lkeap_api_key" },
-            { settingId: "🎨QING.API配置.Moonshot_API_Key", configKey: "moonshot_api_key" }
+            { settingId: "🎨QING.API配置.Moonshot_API_Key", configKey: "moonshot_api_key" },
+            { settingId: "🎨QING.API配置.Gemini_API_Key", configKey: "gemini_api_key" }
         ];
     }
     
@@ -399,6 +400,22 @@ app.registerExtension({
             onChange: (newVal, oldVal) => {
                 if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
                     window.qingSettingsSync.syncToLocalConfig(newVal, "moonshot_api_key");
+                }
+            }
+        },
+        {
+            id: "🎨QING.API配置.Gemini_API_Key",
+            name: "Google Gemini API Key",
+            type: "text",
+            defaultValue: "",
+            tooltip: "Google AI Studio平台的API密钥，用于Gemini视觉模型调用。修改后会实时同步到本地配置文件。",
+            attrs: {
+                type: "password",
+                placeholder: "请输入API Key..."
+            },
+            onChange: (newVal, oldVal) => {
+                if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
+                    window.qingSettingsSync.syncToLocalConfig(newVal, "gemini_api_key");
                 }
             }
         }
