@@ -1628,7 +1628,103 @@
         "2": {
           "name": "总令牌数",
           "tooltip": "本次API调用使用的总token数量（包含输入和输出tokens）"
-        }
       }
     }
+  },
+  "MaskFill": {
+    "display_name": "遮罩填充",
+    "description": "填充遮罩中的孔洞，使遮罩区域更加完整",
+    "inputs": {
+      "mask": {
+        "name": "遮罩",
+        "tooltip": "输入遮罩"
+      },
+      "invert_fill": {
+        "name": "反转填充",
+        "tooltip": "反转填充：填充外部区域而非内部孔洞"
+      },
+      "size_info": {
+        "name": "尺寸信息",
+        "tooltip": "尺寸信息类型：original(原始张量尺寸) 或 mask_content(遮罩内容区域边界框尺寸)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "遮罩",
+        "tooltip": "填充后的遮罩"
+      },
+      "1": {
+        "name": "宽度",
+        "tooltip": "根据选择输出原始张量宽度或遮罩内容区域宽度（像素）"
+      },
+      "2": {
+        "name": "高度",
+        "tooltip": "根据选择输出原始张量高度或遮罩内容区域高度（像素）"
+      }
+    }
+  },
+  "ConfigExport": {
+    "display_name": "配置文件丨导出",
+    "description": "导出ComfyUI的配置信息、工作流、输入输出文件等，生成ZIP压缩包",
+    "inputs": {
+      "export_node_info": {
+        "name": "节点信息",
+        "tooltip": "导出节点信息（custom_nodes列表和配置）"
+      },
+      "export_frontend_settings": {
+        "name": "前端设置",
+        "tooltip": "导出前端设置（界面配置、用户偏好）"
+      },
+      "export_dependencies": {
+        "name": "环境依赖",
+        "tooltip": "导出环境依赖（requirements.txt、已安装包列表）"
+      },
+      "export_workflows": {
+        "name": "工作文件",
+        "tooltip": "导出工作流文件（workflow目录）"
+      },
+      "export_inputs": {
+        "name": "输入文件",
+        "tooltip": "导出输入文件（input目录，可能较大）"
+      },
+      "export_outputs": {
+        "name": "输出文件",
+        "tooltip": "导出输出文件（output目录，可能较大）"
+      },
+      "output_path": {
+        "name": "输出路径",
+        "tooltip": "自定义保存路径（绝对路径），留空则保存到默认路径（ComfyUI根目录/exports）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "结果分析",
+        "tooltip": "导出结果的详细信息：文件路径、大小、导出内容等"
+      }
+    }
+  },
+  "ConfigImport": {
+    "display_name": "配置文件丨导入",
+    "description": "导入ComfyUI的配置信息、工作流、输入输出文件等，支持ZIP压缩包或文件夹导入",
+    "inputs": {
+      "import_path": {
+        "name": "导入路径",
+        "tooltip": "导入路径（支持ZIP压缩包或文件夹的绝对路径）"
+      },
+      "import_mode": {
+        "name": "导入形式",
+        "tooltip": "导入模式：overwrite(覆盖已存在文件) skip(跳过已存在文件) auto_rename(自动重命名)"
+      },
+      "create_backup": {
+        "name": "创建备份",
+        "tooltip": "导入前创建现有配置的备份（保存到output/config_backups目录）"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "结果分析",
+        "tooltip": "导入结果的详细信息：导入类型、文件数、备份路径、导入内容等"
+      }
+    }
+  }
 }

@@ -1,0 +1,215 @@
+{
+  "id": "dcc53ad1-949a-4166-a6e9-78c4b12e04d6",
+  "revision": 0,
+  "last_node_id": 13,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": 10,
+      "type": "ConfigExport",
+      "pos": [
+        1045.624755859375,
+        846.4111328125
+      ],
+      "size": [
+        270,
+        202
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "result_analysis",
+          "type": "STRING",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-QING",
+        "ver": "149a9b670e3cc56497745220f1206b3f7b8ca0d4",
+        "Node name for S&R": "ConfigExport"
+      },
+      "widgets_values": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        ""
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 12,
+      "type": "ShowMePure",
+      "pos": [
+        1376.1435546875,
+        846.4111328125
+      ],
+      "size": [
+        555.6580810546875,
+        202
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "shape": 7,
+          "type": "*",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-QING",
+        "ver": "149a9b670e3cc56497745220f1206b3f7b8ca0d4",
+        "Node name for S&R": "ShowMePure"
+      },
+      "color": "#1A442E"
+    },
+    {
+      "id": 11,
+      "type": "ConfigImport",
+      "pos": [
+        1045.624755859375,
+        1364.5777587890625
+      ],
+      "size": [
+        270,
+        206.09999084472656
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "result_analysis",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-QING",
+        "ver": "149a9b670e3cc56497745220f1206b3f7b8ca0d4",
+        "Node name for S&R": "ConfigImport"
+      },
+      "widgets_values": [
+        "",
+        "overwrite",
+        true
+      ],
+      "color": "#1A442E"
+    },
+    {
+      "id": 13,
+      "type": "ShowMePure",
+      "pos": [
+        1376.1435546875,
+        1364.5777587890625
+      ],
+      "size": [
+        555.6580810546875,
+        206.09999084472656
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "shape": 7,
+          "type": "*",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-QING",
+        "ver": "149a9b670e3cc56497745220f1206b3f7b8ca0d4",
+        "Node name for S&R": "ShowMePure"
+      },
+      "color": "#1A442E"
+    }
+  ],
+  "links": [
+    [
+      10,
+      10,
+      0,
+      12,
+      0,
+      "*"
+    ],
+    [
+      11,
+      11,
+      0,
+      13,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Group",
+      "bounding": [
+        945.624755859375,
+        682.8111572265625,
+        1086.1768798828125,
+        465.6000061035156
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Group",
+      "bounding": [
+        945.624755859375,
+        1200.977783203125,
+        1086.1768798828125,
+        469.6999816894531
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9090909090909091,
+      "offset": [
+        -378.4027614059786,
+        -533.5019451292577
+      ]
+    },
+    "groupNodes": {},
+    "frontendVersion": "1.27.7"
+  },
+  "version": 0.4
+}

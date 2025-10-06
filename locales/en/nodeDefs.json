@@ -1628,7 +1628,103 @@
         "2": {
           "name": "Total Tokens",
           "tooltip": "Total number of tokens used in this API call (including input and output tokens)"
-        }
       }
     }
+  },
+  "MaskFill": {
+    "display_name": "Mask Fill",
+    "description": "Fill holes in masks to make mask regions more complete",
+    "inputs": {
+      "mask": {
+        "name": "Mask",
+        "tooltip": "Input mask"
+      },
+      "invert_fill": {
+        "name": "Invert Fill",
+        "tooltip": "Invert fill: fill external areas instead of internal holes"
+      },
+      "size_info": {
+        "name": "Size Info",
+        "tooltip": "Size information type: original(original tensor size) or mask_content(mask content bounding box size)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Mask",
+        "tooltip": "Filled mask"
+      },
+      "1": {
+        "name": "Width",
+        "tooltip": "Output original tensor width or mask content width in pixels based on selection"
+      },
+      "2": {
+        "name": "Height",
+        "tooltip": "Output original tensor height or mask content height in pixels based on selection"
+      }
+    }
+  },
+  "ConfigExport": {
+    "display_name": "Config Export",
+    "description": "Export ComfyUI configuration, workflows, input/output files, etc. to a ZIP archive",
+    "inputs": {
+      "export_node_info": {
+        "name": "Node Info",
+        "tooltip": "Export node information (custom_nodes list and configuration)"
+      },
+      "export_frontend_settings": {
+        "name": "Frontend Settings",
+        "tooltip": "Export frontend settings (UI configuration, user preferences)"
+      },
+      "export_dependencies": {
+        "name": "Dependencies",
+        "tooltip": "Export environment dependencies (requirements.txt, installed packages list)"
+      },
+      "export_workflows": {
+        "name": "Workflows",
+        "tooltip": "Export workflow files (workflow directory)"
+      },
+      "export_inputs": {
+        "name": "Input Files",
+        "tooltip": "Export input files (input directory, may be large)"
+      },
+      "export_outputs": {
+        "name": "Output Files",
+        "tooltip": "Export output files (output directory, may be large)"
+      },
+      "output_path": {
+        "name": "Output Path",
+        "tooltip": "Custom save path (absolute path), leave empty to save to default path (ComfyUI root/exports)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Result Analysis",
+        "tooltip": "Detailed information of export results: file path, size, exported content, etc."
+      }
+    }
+  },
+  "ConfigImport": {
+    "display_name": "Config Import",
+    "description": "Import ComfyUI configuration, workflows, input/output files, etc. Support ZIP archive or folder import",
+    "inputs": {
+      "import_path": {
+        "name": "Import Path",
+        "tooltip": "Import path (absolute path to ZIP archive or folder)"
+      },
+      "import_mode": {
+        "name": "Import Mode",
+        "tooltip": "Import mode: overwrite(overwrite existing files) skip(skip existing files) auto_rename(auto rename)"
+      },
+      "create_backup": {
+        "name": "Create Backup",
+        "tooltip": "Create backup of existing configuration before import (save to output/config_backups directory)"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Result Analysis",
+        "tooltip": "Detailed information of import results: import type, file count, backup path, imported content, etc."
+      }
+    }
+  }
 }
