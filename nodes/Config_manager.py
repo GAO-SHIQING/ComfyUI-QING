@@ -100,8 +100,8 @@ class ConfigExport:
                 if not export_dir.is_absolute():
                     return ("❌ 错误：输出路径必须是绝对路径\n当前路径：" + str(export_dir),)
             else:
-                # 默认路径：ComfyUI根目录/exports
-                export_dir = comfyui_root / "exports"
+                # 默认路径：ComfyUI根目录/output/config_backups
+                export_dir = comfyui_root / "output" / "config_backups"
             
             # 创建导出目录
             try:
