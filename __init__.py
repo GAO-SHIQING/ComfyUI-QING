@@ -1,6 +1,5 @@
 import importlib
 import inspect
-import time
 from pathlib import Path
 
 # 导入新版API配置服务
@@ -15,7 +14,6 @@ def _discover_and_register_nodes():
     自动发现并注册nodes目录下的所有节点类
     从各个节点文件中自动提取显示名称，实现完全自动化的节点注册
     """
-    start_time = time.time()
     node_classes = {}
     display_names = {}
     
@@ -65,42 +63,7 @@ def _discover_and_register_nodes():
             # 静默跳过无法导入或处理的模块
             continue
     
-    # 简洁的加载完成信息
-    load_time = time.time() - start_time
-    print(f"🎨QING: 节点加载完成 - 用时 {load_time:.2f}s")
-    
     return node_classes, display_names
-
-
-def get_node_count():
-    """获取已注册的节点数量"""
-    return len(_NODE_CLASSES) if '_NODE_CLASSES' in globals() else 0
-
-
-def get_registered_nodes():
-    """获取已注册的节点列表（用于调试）"""
-    if '_NODE_CLASSES' not in globals():
-        return {}
-    return {name: cls.__module__ for name, cls in _NODE_CLASSES.items()}
-
-
-def get_node_stats():
-    """获取节点统计信息"""
-    if '_NODE_CLASSES' not in globals() or not _NODE_CLASSES:
-        return {"total_nodes": 0, "api_nodes": 0, "processing_nodes": 0, "other_nodes": 0}
-    
-    stats = {"api_nodes": 0, "processing_nodes": 0, "other_nodes": 0}
-    for name, cls in _NODE_CLASSES.items():
-        module_name = cls.__module__.lower()
-        if "api" in module_name:
-            stats["api_nodes"] += 1
-        elif any(keyword in module_name for keyword in ["image", "mask", "video", "svg"]):
-            stats["processing_nodes"] += 1
-        else:
-            stats["other_nodes"] += 1
-    
-    stats["total_nodes"] = sum(stats.values())
-    return stats
 
 
 # 使用动态发现机制注册所有节点（包括子目录中的节点）
@@ -129,8 +92,5 @@ WEB_DIRECTORY = "./js"
 __all__ = [
     "NODE_CLASS_MAPPINGS", 
     "NODE_DISPLAY_NAME_MAPPINGS", 
-    "WEB_DIRECTORY",
-    "get_node_count",
-    "get_registered_nodes", 
-    "get_node_stats"
+    "WEB_DIRECTORY"
 ]

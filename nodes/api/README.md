@@ -198,30 +198,23 @@ class MyModelLanguageAPI(BaseLanguageAPINode):
 
 ### 步骤5：注册设置项
 
-在 `js/settings_sync.js` 中添加设置项注册：
+在 `js/settings_sync/config/api_keys.js` 中添加设置项注册：
 
 ```javascript
-// 在settings数组中添加
+// 在API_KEY_CONFIGS数组中添加
 {
     id: "🎨QING.API配置.MyModel_API_Key",
-    name: "MyModel API Key",
-    type: "text",
-    defaultValue: "",
-    tooltip: "MyModel平台的API密钥，用于模型调用。修改后会实时同步到本地配置文件。",
-    attrs: {
-        type: "password",
-        placeholder: "请输入API Key..."
-    },
-    onChange: (newVal, oldVal) => {
-        if (window.qingSettingsSync && !window.qingSettingsSync.isSyncing) {
-            window.qingSettingsSync.syncToLocalConfig(newVal, "mymodel_api_key");
-        }
-    }
+    provider: "MyModel",
+    configKey: "mymodel_api_key",
+    tooltip: "MyModel平台的API密钥，用于模型调用。修改后会实时同步到本地配置文件。"
 }
-
-// 在getApiKeyMappings()方法中添加映射
-{ settingId: "🎨QING.API配置.MyModel_API_Key", configKey: "mymodel_api_key" }
 ```
+
+**注意**: 模块化重构后，设置项注册更加简洁：
+- ✅ 只需在 `api_keys.js` 中添加配置对象
+- ✅ `generateSettingsDefinitions()` 会自动生成完整的设置定义
+- ✅ `getApiKeyMappings()` 会自动生成映射关系
+- ✅ 不再需要手动编写 `onChange` 回调
 
 ### 步骤6：注册节点
 
@@ -423,12 +416,20 @@ def safe_api_call(self):
 
 ## 📝 更新日志
 
-### v2.0.0 (当前版本)
+### v1.2.0 (当前版本)
+- 🚀 **JavaScript模块化重构**: settings_sync完全模块化
+  - 配置集中管理 (`config/api_keys.js`)
+  - 核心逻辑分离 (`core/` 目录)
+  - 服务解耦 (`services/` 目录)
+- 📦 **设置注册简化**: 单一配置对象自动生成完整定义
+- 🔧 **代码体积优化**: settings_sync.js 从426行减少到13行（97%↓）
+
+### v1.1.0
 - ✨ 重构为统一框架架构
 - 🔧 添加平台适配器系统
 - 🎯 支持10个API节点：
   - 语言模型：GLM、Kimi、Qwen、DeepSeek
-  - 视觉模型：GLM-Vision、Kimi-Vision、Qwen-Vision、Doubao-Vision、Gemini-Vision
+  - 视觉模型：GLM-Vision、Kimi-Vision、Qwen-Vision、Doubao-Vision、Gemini-Vision、Gemini-Edit
 - 🏗️ 支持9个AI平台：智谱AI、月之暗面、阿里云百炼、硅基流动、火山引擎、DeepSeek官方、腾讯云、Google AI Studio
 
 ## 🚀 完整示例：Gemini_视觉丨API节点
@@ -498,37 +499,42 @@ NODE_DISPLAY_NAME_MAPPINGS = {"GeminiVisionAPI": "Gemini_视觉丨API"}
 }
 ```
 
-### JavaScript设置 (`js/settings_sync.js`)
+### JavaScript设置 (`js/settings_sync/config/api_keys.js`)
 ```javascript
+// 在API_KEY_CONFIGS数组中
 {
     id: "🎨QING.API配置.Gemini_API_Key",
-    name: "Google Gemini API Key",
-    type: "text",
-    defaultValue: "",
-    tooltip: "Google AI Studio平台的API密钥",
-    attrs: { type: "password", placeholder: "请输入API Key..." },
-    onChange: (newVal, oldVal) => {
-        window.qingSettingsSync.syncToLocalConfig(newVal, "gemini_api_key");
-    }
+    provider: "Google AI Studio",
+    configKey: "gemini_api_key",
+    tooltip: "Google AI Studio平台的API密钥，用于Gemini视觉模型调用。修改后会实时同步到本地配置文件。"
 }
-
-// 映射配置
-{ settingId: "🎨QING.API配置.Gemini_API_Key", configKey: "gemini_api_key" }
 ```
 
-### 动态调整 (`js/dynamic_adjustment.js`)
+**模块化说明**: 重构后，设置项自动处理同步逻辑，无需手动编写回调函数
+
+### 动态调整 (`js/dynamic_adjustment/config/gemini_vision.js`)
 ```javascript
-"GeminiVisionAPI": {
+// 在 gemini_vision.js 配置文件中
+export const GEMINI_VISION_CONFIG = {
     platformWidget: "platform",
     modelWidget: "model",
     platformModels: {
-        "Google AI Studio": ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"]
+        "Google AI Studio": [
+            "gemini-2.5-flash-lite",
+            "gemini-2.5-flash",
+            "gemini-2.5-pro"
+        ]
     },
     defaultModel: {
         "Google AI Studio": "gemini-2.5-flash-lite"
     }
-}
+};
 ```
+
+**模块化说明**: 
+- 每个API节点的配置独立在 `dynamic_adjustment/config/` 目录
+- 配置自动注册到 `NODE_CONFIGURATIONS`
+- 无需手动修改主文件
 
 ---
 
@@ -541,7 +547,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {"GeminiVisionAPI": "Gemini_视觉丨API"}
 2. ✅ **平台适配器** - 继承`BasePlatformAdapter`实现参数转换
 3. ✅ **节点实现** - 继承`BaseLanguageAPINode`或`BaseVisionAPINode`
 4. ✅ **本地化文件** - `locales/zh/main.json`和`locales/en/main.json`添加设置翻译
-5. ✅ **设置注册** - `js/settings_sync.js`中注册设置项和映射关系
+5. ✅ **设置注册** - `js/settings_sync/config/api_keys.js`中添加配置对象（自动生成完整定义）
 6. ✅ **节点注册** - `NODE_CLASS_MAPPINGS`中注册新节点
 
 ### ⚠️ 常见遗漏项

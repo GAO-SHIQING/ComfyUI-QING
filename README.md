@@ -5,7 +5,7 @@
 
 **让AI创作更简单，让工作流更智能**
 
-ComfyUI-QING是一个专为创作者打造的ComfyUI扩展包，集成了35+精心设计的专业节点。从智能AI对话、图像处理、遮罩工程到SVG矢量图形，从数据分析到视频合成，我们为每一个创作场景都准备了强大而易用的工具。
+ComfyUI-QING是一个专为创作者打造的ComfyUI扩展包，集成了丰富的精心设计的专业节点。从智能AI对话、图像处理、遮罩工程到SVG矢量图形，从数据分析到视频合成，我们为每一个创作场景都准备了强大而易用的工具。
 
 🎯 **为创作者而生** - 无论你是设计师、动画师、AI艺术家还是开发者，都能在这里找到提升效率的利器  
 🚀 **开箱即用** - 精心优化的节点设计，让复杂的工作流变得简单直观  
@@ -13,11 +13,36 @@ ComfyUI-QING是一个专为创作者打造的ComfyUI扩展包，集成了35+精�
 
 ## 🆕 最新更新 <a id="latest-updates"></a>
 
-### 🚀 项目架构全面优化 (2025年9月)
-- **节点文件结构重构**: 采用扁平化设计，将所有节点文件整合到`nodes/`根目录
-  - 📁 `api/` - 10个API调用节点（GLM、DeepSeek、Kimi、Qwen、Doubao、Gemini视觉和编辑模型）
-  - 📄 单文件节点设计，便于维护和调试
-  - 🔧 统一命名规范：`API_ModelName_Type.py`格式
+### 🎨 节点对齐工具 - 全新上线！(2025年10月)
+- **径向菜单设计**: 优雅的 Pizza Slice 风格交互界面
+  - ⌨️ 快捷键 `Alt+A` 快速调出菜单
+  - 🎯 10大对齐功能：上/下/左/右对齐、水平/垂直居中、水平/垂直分布、左右/上下拉伸
+  - 🎨 双色主题设计：蓝色(对齐/分布) + 紫色(居中/拉伸)
+  - ✨ 流畅动画效果：450ms淡入，350ms淡出，发光悬停效果
+- **智能节点操作**: 
+  - 📦 支持节点组(Group)操作
+  - 🔄 所有操作支持撤销(Ctrl+Z)
+  - 💡 智能提示：少于2个节点时自动提醒
+  - 🎯 精准定位：菜单自动显示在选中节点中心
+
+### 🚀 项目架构全面优化 (v1.2.0)
+- **JavaScript模块化重构**: 将大型JS文件重构为模块化架构
+  - 📁 `align_nodes/` - 节点对齐工具模块（UI、逻辑、配置分离）
+  - 📁 `settings_sync/` - 设置同步模块（API客户端、状态管理、同步服务）
+  - 📁 `dynamic_adjustment/` - 动态调整模块（配置管理、模型注册）
+  - ✨ 三层架构设计：入口文件 → 协调器 → 功能模块
+  - 📦 代码体积优化：平均减少84%，提升可维护性
+  - 🔧 依赖注入模式：提升可测试性和模块解耦
+
+- **节点文件结构优化**: 按功能分类组织节点文件
+  - 📁 `nodes/api/` - 10个API调用节点（GLM、DeepSeek、Kimi、Qwen、Doubao、Gemini）
+  - 📁 `nodes/image/` - 图像处理节点（加载、转换、旋转、缩放等）
+  - 📁 `nodes/mask/` - 遮罩处理节点（拆分、混合、扩张、判断等）
+  - 📁 `nodes/svg/` - SVG处理节点（加载、转换、保存）
+  - 📁 `nodes/video/` - 视频处理节点
+  - 📁 `nodes/data/` - 数据处理节点
+  - 📁 `nodes/utils/` - 工具类节点
+  - 🔄 自动发现机制：无需手动注册，支持递归扫描
 
 ### 🎯 用户体验增强
 - **右键快捷菜单**: 任意节点右键可快速添加调试节点
@@ -33,6 +58,9 @@ ComfyUI-QING是一个专为创作者打造的ComfyUI扩展包，集成了35+精�
 
 
 ## ✨ 核心亮点  
+- **🎨 节点对齐工具**  
+  全新的径向菜单交互设计，通过 `Alt+A` 快捷键快速调出，提供10大对齐功能（对齐、居中、分布、拉伸），支持节点组操作，所有操作可撤销。采用优雅的 Pizza Slice 风格，双色主题设计，流畅动画效果，让节点布局变得轻松高效。
+
 - **🎨QING智能设置系统**  
   全新的实时双向同步设置管理，支持智谱AI、月之暗面、火山引擎、阿里云百炼、硅基流动、腾讯云、Google AI Studio七大平台API密钥配置，在ComfyUI设置界面与本地配置文件之间自动同步，支持多语言界面，智能频率调节，一键配置所有AI模型节点。
 
@@ -62,6 +90,7 @@ ComfyUI-QING是一个专为创作者打造的ComfyUI扩展包，集成了35+精�
 
 
 ## 🎯 适用场景  
+- **节点布局优化**：通过对齐工具快速整理工作流，让画布更整洁。支持对齐、居中、分布、拉伸等10大功能，大幅提升布局效率。
 - **创意设计工作流**：集成SVG素材到图像生成，实现矢量图与像素图的无缝衔接。  
 - **精细遮罩处理**：拆分、混合、扩张含文字的复杂遮罩，用于图像编辑、区域替换等场景。  
 - **图像通道操作**：提取特定颜色通道制作遮罩，或将遮罩转换为可视化图像。  
@@ -73,7 +102,7 @@ ComfyUI-QING是一个专为创作者打造的ComfyUI扩展包，集成了35+精�
 
 
 ## 📊 节点总览  
-ComfyUI-QING 提供 **37个专业节点**，覆盖12大功能领域：
+ComfyUI-QING 提供 **丰富的专业节点**，覆盖多个功能领域：
 
 | 分类 | 节点数量 | 主要功能 |
 |------|----------|----------|
@@ -208,6 +237,25 @@ ComfyUI-QING 提供 **37个专业节点**，覆盖12大功能领域：
 ---
 
 ## 💡 使用示例  
+
+### 🎨 节点对齐工作流
+```
+【快速整理布局】
+1. 框选多个节点 → 选中需要整理的节点
+2. Alt + A → 打开对齐菜单
+3. 点击"左对齐" → 统一左边缘
+4. 再次 Alt + A → 点击"垂直分布" → 均匀间距
+
+【批量调整大小】
+1. 选中多个节点
+2. Alt + A → 点击"左右拉伸" → 统一宽度
+3. 或点击"上下拉伸" → 统一高度
+
+【完美居中对齐】
+1. 选中节点 → Alt + A → "水平居中"
+2. 再次 Alt + A → "垂直居中"
+3. 节点完美居中排列
+```
 
 ### 🎨 SVG工作流示例
 ```
@@ -403,7 +451,7 @@ ComfyUI-QING 提供 **37个专业节点**，覆盖12大功能领域：
 | **scipy** | ≥1.7.0 | 科学计算 | 遮罩拆分、遮罩扩张 |
 | **scikit-image** | ≥0.18.0 | 图像分析 | 遮罩拆分 |
 | **cairosvg** | ≥2.5.0 | SVG转换 | SVG转图像、保存SVG预览 |
-| **zai-sdk** | ≥0.0.3.3 | 智谱AI API | GLM_语言丨API、GLM_视觉丨API节点 |
+| **openai** | ≥1.0.0 | AI模型API | 所有API调用节点（GLM、Kimi、DeepSeek等） |
 
 ### ComfyUI内置依赖 (无需安装)
 - **torch**: 张量计算核心
@@ -436,19 +484,28 @@ ComfyUI-QING 提供 **37个专业节点**，覆盖12大功能领域：
 
 ![ComfyUI-QING Banner](https://picsum.photos/seed/qing/1200/300)  
 
-A powerful all-in-one media processing extension tailored for ComfyUI, featuring **34 professional nodes** that simplify complex workflows involving images, SVG, text, video, AI conversation, and visual understanding. Whether for creative design, animation production, AI content generation, or batch processing, it provides precise toolchain support to unleash your creative potential.
+A powerful all-in-one media processing extension tailored for ComfyUI, featuring **comprehensive professional nodes** that simplify complex workflows involving images, SVG, text, video, AI conversation, and visual understanding. Whether for creative design, animation production, AI content generation, or batch processing, it provides precise toolchain support to unleash your creative potential.
 
 ## 🆕 Latest Updates
 
-### 🔧 Project Architecture Optimization (September 2025)
-- **Node Directory Restructuring**: Reorganized node files in the `nodes` directory into functional subdirectories for cleaner and more intuitive structure
-  - 📁 `api/` - API-related nodes and services
-  - 📁 `image_processing/` - Image processing nodes
-  - 📁 `mask_processing/` - Mask processing nodes
-  - 📁 `svg_processing/` - SVG processing nodes
-  - 📁 `data_types/` - Data type conversion nodes
-  - 📁 `video_processing/` - Video processing nodes
-  - 📁 `io_nodes/` - Input/output nodes
+### 🔧 Project Architecture Optimization (v1.2.0)
+- **JavaScript Modular Refactoring**: Refactored large JS files into modular architecture
+  - 📁 `align_nodes/` - Node alignment tool modules (UI, logic, config separation)
+  - 📁 `settings_sync/` - Settings sync modules (API client, state management, sync services)
+  - 📁 `dynamic_adjustment/` - Dynamic adjustment modules (config management, model registration)
+  - ✨ Three-layer architecture: Entry file → Coordinator → Functional modules
+  - 📦 Code size optimization: Average 84% reduction, improved maintainability
+  - 🔧 Dependency injection pattern: Enhanced testability and module decoupling
+
+- **Node Directory Organization**: Organized node files by functional categories
+  - 📁 `nodes/api/` - 10 API call nodes (GLM, DeepSeek, Kimi, Qwen, Doubao, Gemini)
+  - 📁 `nodes/image/` - Image processing nodes (load, convert, rotate, scale, etc.)
+  - 📁 `nodes/mask/` - Mask processing nodes (split, blend, expand, judge, etc.)
+  - 📁 `nodes/svg/` - SVG processing nodes (load, convert, save)
+  - 📁 `nodes/video/` - Video processing nodes
+  - 📁 `nodes/data/` - Data processing nodes
+  - 📁 `nodes/utils/` - Utility nodes
+  - 🔄 Auto-discovery mechanism: No manual registration needed, supports recursive scanning
 
 ### ⚙️ API Key Management System Upgrade
 - **Real-time Sync**: ComfyUI settings interface and local configuration files sync in real-time
@@ -493,7 +550,7 @@ A powerful all-in-one media processing extension tailored for ComfyUI, featuring
 
 
 ## 📊 Node Overview  
-ComfyUI-QING provides **34 professional nodes** covering 11 major functional areas:
+ComfyUI-QING provides **comprehensive professional nodes** covering multiple functional areas:
 
 | Category | Node Count | Main Functions |
 |----------|------------|----------------|

@@ -22,7 +22,6 @@ REQUIRED_PACKAGES = {
 
 # AI API依赖
 AI_API_PACKAGES = {
-    'zai-sdk': '>=0.0.3.3',
     'openai': '>=1.0.0',
 }
 
@@ -40,7 +39,7 @@ def check_package_installed(package_name):
         import_name_map = {
             'opencv-python': 'cv2',
             'scikit-image': 'skimage',
-            'zai-sdk': 'zai_sdk',
+            'openai': 'openai',
             'Pillow': 'PIL',
         }
         

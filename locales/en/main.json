@@ -10,9 +10,46 @@
   },
   "settingsCategories": {
     "🎨QING": "🎨QING",
+    "节点对齐": "Node Alignment",
     "API配置": "API Configuration"
   },
   "settings": {
+    "🎨QING.节点对齐.外圈半径": {
+      "name": "Menu Outer Radius",
+      "tooltip": "Adjust the outer circle size of the alignment menu (pixels). Larger menus are easier to select but occupy more screen space."
+    },
+    "🎨QING.节点对齐.内圈半径": {
+      "name": "Menu Inner Radius",
+      "tooltip": "Adjust the inner circle size of the alignment menu (pixels). The inner circle is the cancel area; releasing the mouse in this area will not perform any alignment operation."
+    },
+    "🎨QING.节点对齐.主色调": {
+      "name": "Primary Color",
+      "tooltip": "Set the primary color for menu sectors (Top Align, Right Align, Bottom Align, Left Align, Vertical Distribute, Horizontal Distribute)."
+    },
+    "🎨QING.节点对齐.次色调": {
+      "name": "Secondary Color",
+      "tooltip": "Set the secondary color for menu sectors (Vertical Center, Horizontal Center, Stretch Vertically, Stretch Horizontally)."
+    },
+    "🎨QING.节点对齐.动画速度": {
+      "name": "Animation Speed",
+      "tooltip": "Adjust the animation speed for menu show/hide. Fast mode is more responsive, slow mode has more elegant animations."
+    },
+    "🎨QING.节点对齐.Tooltip偏移": {
+      "name": "Tooltip Offset",
+      "tooltip": "Adjust the horizontal offset distance of the tooltip next to the mouse (pixels)."
+    },
+    "🎨QING.节点对齐.消息持续时间": {
+      "name": "Message Duration",
+      "tooltip": "Adjust the display time of operation messages (milliseconds)."
+    },
+    "🎨QING.节点对齐.撤回历史记录": {
+      "name": "Undo History",
+      "tooltip": "Number of alignment operations that can be undone (Ctrl+Z). Higher values use more memory but allow more undo steps."
+    },
+    "🎨QING.节点对齐.快捷键": {
+      "name": "Menu Shortcut",
+      "tooltip": "Set the keyboard shortcut to open the alignment menu. Refresh the page after modification to take effect."
+    },
     "🎨QING.API配置.GLM_API_Key": {
       "name": "Zhipu GLM API Key",
       "tooltip": "API key for Zhipu AI GLM language and vision models. Changes will be synced to local configuration file in real-time."

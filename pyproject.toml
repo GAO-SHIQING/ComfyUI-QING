@@ -1,37 +1,157 @@
 [project]
 name = "ComfyUI-QING"
-description = "A variety of exquisite nodes provide more efficient assistance for building your workflow."
-version = "1.1.3"
-license = {file = "LICENSE"} 
-# classifiers = [
-#     # For OS-independent nodes (works on all operating systems)
-#     "Operating System :: OS Independent",
-#
-#     # OR for OS-specific nodes, specify the supported systems:
-#     "Operating System :: Microsoft :: Windows",  # Windows specific
-#     "Operating System :: POSIX :: Linux",  # Linux specific
-#     "Operating System :: MacOS",  # macOS specific
-#
-#     # GPU Accelerator support. Pick the ones that are supported by your extension.
-#     "Environment :: GPU :: NVIDIA CUDA",    # NVIDIA CUDA support
-#     "Environment :: GPU :: AMD ROCm",       # AMD ROCm support
-#     "Environment :: GPU :: Intel Arc",      # Intel Arc support
-#     "Environment :: NPU :: Huawei Ascend",  # Huawei Ascend support
-#     "Environment :: GPU :: Apple Metal",    # Apple Metal support
-# ]
+description = "A powerful all-in-one ComfyUI extension with comprehensive professional nodes for AI models, image/mask/SVG processing, video synthesis, and workflow management. Features modular architecture with node alignment tool and multi-platform API support."
+version = "1.2.0"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+keywords = [
+    "comfyui",
+    "comfyui-custom-nodes",
+    "image-processing",
+    "mask-processing",
+    "svg-processing",
+    "video-synthesis",
+    "ai-models",
+    "workflow-automation",
+    "node-alignment",
+    "api-integration"
+]
 
-dependencies = ["# 核心依赖 (ComfyUI已包含)", "# torch - ComfyUI核心依赖，无需重复安装", "# numpy - ComfyUI核心依赖，无需重复安装", "# 图像处理核心库", "Pillow>=9.0.0", "opencv-python>=4.5.0", "scipy>=1.7.0", "scikit-image>=0.18.0", "# SVG处理专用库", "cairosvg>=2.5.0", "# 可选依赖 (用于SVG处理的备用方案)", "# svglib>=1.4.0  # 取消注释以启用SVG备用转换器", "# reportlab>=3.6.0  # svglib的依赖", "# 视频处理依赖", "# 注意：FFmpeg需要单独安装系统级依赖", "# Windows: 从 https://ffmpeg.org/download.html 下载", "# Linux: sudo apt-get install ffmpeg", "# macOS: brew install ffmpeg", "# AI模型API依赖", "zai-sdk>=0.0.3.3"]
+classifiers = [
+    # Development Status
+    "Development Status :: 4 - Beta",
+    
+    # Intended Audience
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    
+    # Operating System Support
+    "Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    
+    # GPU Accelerator Support
+    "Environment :: GPU :: NVIDIA CUDA",
+    "Environment :: GPU :: AMD ROCm",
+    "Environment :: GPU :: Intel Arc",
+    "Environment :: GPU :: Apple Metal",
+    
+    # Programming Language
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: JavaScript",
+    
+    # Topics
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Editors",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+
+# Core dependencies (ComfyUI already includes torch and numpy)
+dependencies = [
+    # Image Processing
+    "Pillow>=9.0.0",
+    "opencv-python>=4.5.0",
+    "scipy>=1.7.0",
+    "scikit-image>=0.18.0",
+    
+    # SVG Processing
+    "cairosvg>=2.5.0",
+    
+    # AI Model API
+    "openai>=1.0.0",
+]
+
+[project.optional-dependencies]
+# Optional dependencies for enhanced SVG processing
+svg = [
+    "svglib>=1.4.0",
+    "reportlab>=3.6.0",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
+# All optional dependencies
+all = [
+    "svglib>=1.4.0",
+    "reportlab>=3.6.0",
+]
 
 [project.urls]
+Homepage = "https://github.com/GAO-SHIQING/ComfyUI-QING"
 Repository = "https://github.com/GAO-SHIQING/ComfyUI-QING"
-#  Used by Comfy Registry https://registry.comfy.org
-Documentation = "https://github.com/GAO-SHIQING/ComfyUI-QING/wiki"
+Documentation = "https://github.com/GAO-SHIQING/ComfyUI-QING#readme"
 "Bug Tracker" = "https://github.com/GAO-SHIQING/ComfyUI-QING/issues"
+Changelog = "https://github.com/GAO-SHIQING/ComfyUI-QING/releases"
 
 [tool.comfy]
 PublisherId = "shiqing"
 DisplayName = "ComfyUI-QING"
 Icon = ""
-includes = [] 
-# "requires-comfyui" = ">=1.0.0"  # ComfyUI version compatibility
+
+# ComfyUI version compatibility
+# Requires ComfyUI with modern extension API support
+# requires-comfyui = ">=1.0.0"
+
+# File includes/excludes for packaging
+includes = []
+excludes = [
+    "**/__pycache__",
+    "**/*.pyc",
+    "**/*.pyo",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+]
+
+# Extension metadata
+[tool.comfy.extension]
+name = "ComfyUI-QING"
+version = "1.2.0"
+description = "Professional node suite for AI models, image/mask/SVG processing, video synthesis, and workflow automation"
+categories = [
+    "Image Processing",
+    "Mask Processing",
+    "SVG Processing",
+    "Video Synthesis",
+    "AI Models",
+    "Workflow Tools",
+]
+features = [
+    "Node Alignment Tool with Radial Menu (Alt+A)",
+    "Comprehensive Node Suite across Multiple Categories",
+    "Multi-Platform AI Model API Integration",
+    "Multi-language Support (Chinese/English)",
+    "Real-time Settings Sync",
+    "Dynamic Model Selection",
+    "Modular JavaScript Architecture",
+    "Image/Mask/SVG/Video Processing",
+]
+
+# System requirements notes
+[tool.comfy.requirements]
+# FFmpeg is required for video processing features
+# Windows: Download from https://ffmpeg.org/download.html
+# Linux: sudo apt-get install ffmpeg
+# macOS: brew install ffmpeg
+system-packages = [
+    "ffmpeg",  # Required for video synthesis
+]
+
+# Python build system configuration
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
+build-backend = "setuptools.build_meta"
 
