@@ -2,7 +2,10 @@
  * 节点对齐工具 - 统一设置配置
  */
 
+import { HotkeyCapture } from '../utils/hotkey_input.js';
+
 export const DEFAULT_CONFIG = {
+    enabled: true,
     outerRadius: 160,
     innerRadius: 72,
     sliceCount: 10,
@@ -36,6 +39,18 @@ export const DEFAULT_CONFIG = {
  * ComfyUI设置项定义
  */
 export const SETTINGS_DEFINITIONS = [
+    {
+        id: "🎨QING.节点对齐.启用",
+        name: "启用节点对齐工具",
+        type: "boolean",
+        defaultValue: true,
+        tooltip: "开启或关闭节点对齐工具。关闭后快捷键将被禁用，但仍可通过API调用对齐功能。",
+        onChange: (newVal) => {
+            if (window.QINGAlignMenu) {
+                window.QINGAlignMenu.setEnabled(newVal);
+            }
+        }
+    },
     {
         id: "🎨QING.节点对齐.外圈半径",
         name: "菜单外圈半径",
@@ -181,23 +196,19 @@ export const SETTINGS_DEFINITIONS = [
     {
         id: "🎨QING.节点对齐.快捷键",
         name: "菜单快捷键",
-        type: "combo",
-        defaultValue: JSON.stringify({ key: 'a', modifiers: ['alt'] }),
-        options: [
-            { text: "Alt + A（默认）", value: JSON.stringify({ key: 'a', modifiers: ['alt'] }) },
-            { text: "Alt + Q", value: JSON.stringify({ key: 'q', modifiers: ['alt'] }) },
-            { text: "Alt + W", value: JSON.stringify({ key: 'w', modifiers: ['alt'] }) },
-            { text: "Ctrl + Alt + A", value: JSON.stringify({ key: 'a', modifiers: ['ctrl', 'alt'] }) },
-            { text: "Shift + Alt + A", value: JSON.stringify({ key: 'a', modifiers: ['shift', 'alt'] }) }
-        ],
-        tooltip: "设置打开对齐菜单的快捷键组合。修改后刷新页面生效。",
+        type: "text",
+        defaultValue: "Alt + A",
+        tooltip: "点击输入框后按下键盘组合设置快捷键。支持 Ctrl、Alt、Shift + 字母/数字键。",
+        attrs: {
+            readonly: true,  // 使用 readonly 阻止用户输入
+            placeholder: "点击后按下快捷键...",
+            autocomplete: "off",
+            spellcheck: "false"
+        },
         onChange: (newVal) => {
+            // onChange 由快捷键输入处理器触发
             if (window.QINGAlignMenu) {
-                try {
-                    window.QINGAlignMenu.config.hotkey = JSON.parse(newVal);
-                } catch (e) {
-                    console.warn('快捷键配置解析失败:', e);
-                }
+                window.QINGAlignMenu.updateHotkeyFromDisplay(newVal);
             }
         }
     }
@@ -209,6 +220,10 @@ export const SETTINGS_DEFINITIONS = [
 export function loadUserSettings(app, config) {
     try {
         if (!app.extensionManager?.setting) return;
+        
+        // 加载启用状态
+        const enabled = app.extensionManager.setting.get('🎨QING.节点对齐.启用');
+        if (enabled !== undefined) config.enabled = enabled;
         
         const outerRadius = app.extensionManager.setting.get('🎨QING.节点对齐.外圈半径');
         if (outerRadius !== undefined) config.outerRadius = outerRadius;
@@ -255,12 +270,22 @@ export function loadUserSettings(app, config) {
             config.undo.maxHistorySize = maxHistory;
         }
         
+        // 加载快捷键配置 - 兼容新旧格式
         const hotkeyConfig = app.extensionManager.setting.get('🎨QING.节点对齐.快捷键');
         if (hotkeyConfig) {
+            // 尝试作为 JSON 解析（旧格式）
             try {
-                config.hotkey = JSON.parse(hotkeyConfig);
+                const parsed = JSON.parse(hotkeyConfig);
+                if (parsed.key && Array.isArray(parsed.modifiers)) {
+                    config.hotkey = parsed;
+                }
             } catch (e) {
-                console.warn('快捷键配置解析失败:', e);
+                // 新格式：显示文本（如 "Alt + A"）
+                // 使用工具函数解析
+                const parsed = HotkeyCapture.parseHotkeyDisplay(hotkeyConfig);
+                if (parsed) {
+                    config.hotkey = parsed;
+                }
             }
         }
         

@@ -62,6 +62,11 @@ export class EventManager {
      */
     setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
+            // 检查是否启用
+            if (this.config.enabled === false) {
+                return;
+            }
+            
             // Ctrl+Z 撤销
             if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
                 if (!this.isVisible) {
@@ -83,6 +88,11 @@ export class EventManager {
         }, true);
         
         document.addEventListener('keyup', (e) => {
+            // 检查是否启用
+            if (this.config.enabled === false) {
+                return;
+            }
+            
             const modifiers = this.config.hotkey.modifiers || [];
             let shouldTrigger = false;
             
