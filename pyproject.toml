@@ -13,7 +13,7 @@ known_first_party = ["nodes"]
 
 [project]
 name = "ComfyUI-QING"
-version = "1.2.0"
+version = "1.2.1"
 description = "A powerful all-in-one ComfyUI extension with comprehensive professional nodes for AI models, image/mask/SVG processing, video synthesis, and workflow management. Features modular architecture with node alignment tool and multi-platform API support."
 readme = "README.md"
 requires-python = ">=3.9"
