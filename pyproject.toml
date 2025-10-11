@@ -1,167 +1,51 @@
+[tool.black]
+line-length = 120
+target-version = ['py39']
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = ["nodes"]
+
 [project]
 name = "ComfyUI-QING"
-description = "A powerful all-in-one ComfyUI extension with comprehensive professional nodes for AI models, image/mask/SVG processing, video synthesis, and workflow management. Features modular architecture with node alignment tool and multi-platform API support."
 version = "1.2.0"
+description = "A powerful all-in-one ComfyUI extension with comprehensive professional nodes for AI models, image/mask/SVG processing, video synthesis, and workflow management. Features modular architecture with node alignment tool and multi-platform API support."
 readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
 
-# 作者信息
 authors = [
-    {name = "GAO-SHIQING", email = "gaoshiqing@example.com"}
+    {name = "GAO-SHIQING", email = "ab1314625@qq.com"}
 ]
 
-maintainers = [
-    {name = "GAO-SHIQING"}
-]
-
-keywords = [
-    "comfyui",
-    "comfyui-custom-nodes",
-    "image-processing",
-    "mask-processing",
-    "svg-processing",
-    "video-synthesis",
-    "ai-models",
-    "workflow-automation",
-    "node-alignment",
-    "api-integration"
-]
-
-classifiers = [
-    # Development Status
-    "Development Status :: 4 - Beta",
-    
-    # Intended Audience
-    "Intended Audience :: Developers",
-    "Intended Audience :: End Users/Desktop",
-    
-    # Operating System Support
-    "Operating System :: OS Independent",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX :: Linux",
-    "Operating System :: MacOS",
-    
-    # GPU Accelerator Support
-    "Environment :: GPU :: NVIDIA CUDA",
-    "Environment :: GPU :: AMD ROCm",
-    "Environment :: GPU :: Intel Arc",
-    "Environment :: GPU :: Apple Metal",
-    
-    # Programming Language
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: JavaScript",
-    
-    # Topics
-    "Topic :: Multimedia :: Graphics",
-    "Topic :: Multimedia :: Graphics :: Editors",
-    "Topic :: Multimedia :: Video",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Scientific/Engineering :: Image Processing",
-]
-
-# Core dependencies (ComfyUI already includes torch and numpy)
 dependencies = [
-    # Image Processing
     "Pillow>=9.0.0",
     "opencv-python>=4.5.0",
     "scipy>=1.7.0",
     "scikit-image>=0.18.0",
-    
-    # SVG Processing
     "cairosvg>=2.5.0",
-    
-    # AI Model API
     "openai>=1.0.0",
 ]
 
 [project.optional-dependencies]
-# Optional dependencies for enhanced SVG processing
-svg = [
-    "svglib>=1.4.0",
-    "reportlab>=3.6.0",
-]
-
-# Development dependencies
-dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "black>=23.0.0",
-    "flake8>=6.0.0",
-]
-
-# All optional dependencies
-all = [
-    "svglib>=1.4.0",
-    "reportlab>=3.6.0",
-]
+svg = ["svglib>=1.4.0", "reportlab>=3.6.0"]
 
 [project.urls]
-Homepage = "https://github.com/GAO-SHIQING/ComfyUI-QING"
 Repository = "https://github.com/GAO-SHIQING/ComfyUI-QING"
-# Used by ComfyUI Registry: https://registry.comfy.org
-Documentation = "https://github.com/GAO-SHIQING/ComfyUI-QING#readme"
+Documentation = "https://github.com/GAO-SHIQING/ComfyUI-QING/wiki"
 "Bug Tracker" = "https://github.com/GAO-SHIQING/ComfyUI-QING/issues"
-Changelog = "https://github.com/GAO-SHIQING/ComfyUI-QING/releases"
 
 [tool.comfy]
-PublisherId = "shiqing"  # ComfyUI Registry Publisher ID
+PublisherId = "shiqing"
 DisplayName = "ComfyUI-QING"
 Icon = ""
 
-# ComfyUI version compatibility (uncomment if needed)
-# requires-comfyui = ">=1.0.0"
-
-# File includes/excludes for packaging
-includes = []
-excludes = [
-    "**/__pycache__",
-    "**/*.pyc",
-    "**/*.pyo",
-    "**/.DS_Store",
-    "**/Thumbs.db",
-]
-
-# Extension metadata
-[tool.comfy.extension]
-name = "ComfyUI-QING"
-version = "1.2.0"
-description = "Professional node suite for AI models, image/mask/SVG processing, video synthesis, and workflow automation"
-categories = [
-    "Image Processing",
-    "Mask Processing",
-    "SVG Processing",
-    "Video Synthesis",
-    "AI Models",
-    "Workflow Tools",
-]
-features = [
-    "Node Alignment Tool with Radial Menu (Alt+A)",
-    "Comprehensive Node Suite across Multiple Categories",
-    "Multi-Platform AI Model API Integration",
-    "Multi-language Support (Chinese/English)",
-    "Real-time Settings Sync",
-    "Dynamic Model Selection",
-    "Modular JavaScript Architecture",
-    "Image/Mask/SVG/Video Processing",
-]
-
-# System requirements notes
-[tool.comfy.requirements]
-# FFmpeg is required for video processing features
-# Windows: Download from https://ffmpeg.org/download.html
-# Linux: sudo apt-get install ffmpeg
-# macOS: brew install ffmpeg
-system-packages = [
-    "ffmpeg",  # Required for video synthesis
-]
-
-# Python build system configuration
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools-scm>=6.2"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
