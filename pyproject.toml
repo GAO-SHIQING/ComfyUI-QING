@@ -5,6 +5,16 @@ version = "1.2.0"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
+
+# 作者信息
+authors = [
+    {name = "GAO-SHIQING", email = "gaoshiqing@example.com"}
+]
+
+maintainers = [
+    {name = "GAO-SHIQING"}
+]
+
 keywords = [
     "comfyui",
     "comfyui-custom-nodes",
@@ -93,17 +103,17 @@ all = [
 [project.urls]
 Homepage = "https://github.com/GAO-SHIQING/ComfyUI-QING"
 Repository = "https://github.com/GAO-SHIQING/ComfyUI-QING"
+# Used by ComfyUI Registry: https://registry.comfy.org
 Documentation = "https://github.com/GAO-SHIQING/ComfyUI-QING#readme"
 "Bug Tracker" = "https://github.com/GAO-SHIQING/ComfyUI-QING/issues"
 Changelog = "https://github.com/GAO-SHIQING/ComfyUI-QING/releases"
 
 [tool.comfy]
-PublisherId = "shiqing"
+PublisherId = "shiqing"  # ComfyUI Registry Publisher ID
 DisplayName = "ComfyUI-QING"
 Icon = ""
 
-# ComfyUI version compatibility
-# Requires ComfyUI with modern extension API support
+# ComfyUI version compatibility (uncomment if needed)
 # requires-comfyui = ">=1.0.0"
 
 # File includes/excludes for packaging
